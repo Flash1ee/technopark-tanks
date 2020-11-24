@@ -3,3 +3,5 @@
 *.dat
 */vscode
 *.out
+
+cmake-build-debug
