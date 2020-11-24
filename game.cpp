@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Tanks");
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Tanks");
 
     sf::Image tankImage;
     tankImage.loadFromFile("../pltank.bmp");
@@ -17,13 +17,13 @@ int main() {
     tankSprite.setPosition(100,100);
     tankSprite.setScale(3,3);
 
-	while (window.isOpen()) {
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed) {
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
                 window.close();
             }
-		}
+        }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             tankSprite.setTextureRect(sf::IntRect(34, 2, 29, 29));
@@ -45,5 +45,5 @@ int main() {
         window.clear();
         window.draw(tankSprite);
         window.display();
-	}
+    }
 }
