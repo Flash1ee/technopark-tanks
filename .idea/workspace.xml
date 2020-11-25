@@ -29,9 +29,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="32d93a2b-b00b-42d4-acc5-6a4d3302645e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game.cpp" afterDir="false" />
+    <list default="true" id="0c4ec8c7-7b7b-418d-839f-3dc68fe03a4e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pltank.bmp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,9 +48,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
-    <option name="directoryName" value="vb10wg9z" />
+    <option name="directoryName" value="xwa5r0gv" />
   </component>
-  <component name="ProjectId" id="1kk7BtN8UNUhUXTYYqasgbLf3lI" />
+  <component name="ProjectId" id="1kkoU5lbi6zhWFzXwNPESe9uwQp" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -79,19 +81,22 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="32d93a2b-b00b-42d4-acc5-6a4d3302645e" name="Default Changelist" comment="" />
-      <created>1606232602104</created>
+      <changelist id="0c4ec8c7-7b7b-418d-839f-3dc68fe03a4e" name="Default Changelist" comment="" />
+      <created>1606253962457</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1606232602104</updated>
-      <workItem from="1606232604175" duration="1977000" />
-      <workItem from="1606234722422" duration="1243000" />
-      <workItem from="1606236442128" duration="139000" />
-      <workItem from="1606236642017" duration="52000" />
-      <workItem from="1606236706274" duration="573000" />
-      <workItem from="1606237280932" duration="1194000" />
-      <workItem from="1606250500194" duration="2154000" />
+      <updated>1606253962457</updated>
+      <workItem from="1606253963979" duration="375000" />
+      <workItem from="1606320289695" duration="102000" />
     </task>
+    <task id="LOCAL-00001" summary="Tank">
+      <created>1606254267218</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1606254267218</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -109,34 +114,26 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Tank" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tank" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="743" y="282" width="424" height="491" key="FileChooserDialogImpl" timestamp="1606237246898">
+    <state width="1874" height="256" key="GridCell.Tab.0.bottom" timestamp="1606320385415">
       <screen x="0" y="27" width="1920" height="995" />
     </state>
-    <state x="743" y="282" width="424" height="491" key="FileChooserDialogImpl/0.27.1920.995@0.27.1920.995" timestamp="1606237246898" />
-    <state width="1874" height="256" key="GridCell.Tab.0.bottom" timestamp="1606252720762">
+    <state width="1874" height="256" key="GridCell.Tab.0.bottom/0.27.1920.995@0.27.1920.995" timestamp="1606320385415" />
+    <state width="1874" height="256" key="GridCell.Tab.0.center" timestamp="1606320385414">
       <screen x="0" y="27" width="1920" height="995" />
     </state>
-    <state width="1874" height="256" key="GridCell.Tab.0.bottom/0.27.1920.995@0.27.1920.995" timestamp="1606252720762" />
-    <state width="1874" height="256" key="GridCell.Tab.0.center" timestamp="1606252720761">
+    <state width="1874" height="256" key="GridCell.Tab.0.center/0.27.1920.995@0.27.1920.995" timestamp="1606320385414" />
+    <state width="1874" height="256" key="GridCell.Tab.0.left" timestamp="1606320385413">
       <screen x="0" y="27" width="1920" height="995" />
     </state>
-    <state width="1874" height="256" key="GridCell.Tab.0.center/0.27.1920.995@0.27.1920.995" timestamp="1606252720761" />
-    <state width="1874" height="256" key="GridCell.Tab.0.left" timestamp="1606252720761">
+    <state width="1874" height="256" key="GridCell.Tab.0.left/0.27.1920.995@0.27.1920.995" timestamp="1606320385413" />
+    <state width="1874" height="256" key="GridCell.Tab.0.right" timestamp="1606320385414">
       <screen x="0" y="27" width="1920" height="995" />
     </state>
-    <state width="1874" height="256" key="GridCell.Tab.0.left/0.27.1920.995@0.27.1920.995" timestamp="1606252720761" />
-    <state width="1874" height="256" key="GridCell.Tab.0.right" timestamp="1606252720762">
-      <screen x="0" y="27" width="1920" height="995" />
-    </state>
-    <state width="1874" height="256" key="GridCell.Tab.0.right/0.27.1920.995@0.27.1920.995" timestamp="1606252720762" />
-    <state width="640" height="204" key="ImportCMakeProjectWizard.bottomPanel" timestamp="1606237276419">
-      <screen x="0" y="27" width="1920" height="995" />
-    </state>
-    <state width="640" height="204" key="ImportCMakeProjectWizard.bottomPanel/0.27.1920.995@0.27.1920.995" timestamp="1606237276419" />
-    <state width="640" height="476" key="ImportCMakeProjectWizard.topPanel" timestamp="1606237276419">
-      <screen x="0" y="27" width="1920" height="995" />
-    </state>
-    <state width="640" height="476" key="ImportCMakeProjectWizard.topPanel/0.27.1920.995@0.27.1920.995" timestamp="1606237276419" />
+    <state width="1874" height="256" key="GridCell.Tab.0.right/0.27.1920.995@0.27.1920.995" timestamp="1606320385414" />
   </component>
 </project>

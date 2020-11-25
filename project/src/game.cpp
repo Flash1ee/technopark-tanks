@@ -4,7 +4,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Tanks");
 
     sf::Image tankImage;
-    tankImage.loadFromFile("../pltank.bmp");
+    tankImage.loadFromFile("../textures/pltank.bmp");
     tankImage.createMaskFromColor(sf::Color(255, 255, 255));
 
     sf::Texture tankTexture;

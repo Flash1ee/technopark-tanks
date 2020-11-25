@@ -9,6 +9,6 @@ find_package(SFML 2 COMPONENTS system window graphics audio REQUIRED)
 
 include_directories(${SFML_INCLUDE_DIR})
 
-add_executable(tanks_2d_udp game.cpp)
+add_executable(tanks_2d_udp project/src/game.cpp)
 
 target_link_libraries(tanks_2d_udp ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
