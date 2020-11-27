@@ -3,6 +3,6 @@
 *.dat
 */vscode
 *.out
-
+.vscode/
 cmake-build-debug
 .idea
