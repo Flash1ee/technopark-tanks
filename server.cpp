@@ -9,7 +9,7 @@ int main()
     bool done = false;
     std::vector<sf::TcpSocket*>clients;
     listener.getLocalPort();
-    listener.listen(2000);
+    listener.listen(2003);
     selector.add(listener);
 
     while (!done)
@@ -20,10 +20,27 @@ int main()
             {
                 sf::TcpSocket *socket = new sf::TcpSocket;
 
+                int id;
+
                 if(listener.accept(*socket) == sf::Socket::Done)
                 {
-                    std::cout << "New connection accepted" << std::endl;
+                    id = clients.size();
+                    std::cout << "New connection with id = " << id << "accepted" << std::endl;
+                    
+                    sf::Packet packet;
+                    packet << id;
+                    if(socket->send(packet) != sf::Socket::Done)
+                    {
+                        std::cout << "can't inform user about its id" << std::endl;
+                    }
+                    clients.push_back(socket);
+                    selector.add(*socket);
                 }
+                else
+                {
+                        std::cout << "can't accept connection" << std::endl;
+                }
+                
 
                 // sf::Packet packet;
                 // std::string id;
@@ -31,12 +48,11 @@ int main()
                 // if (socket->receive(packet) == sf::Socket::Done)
                 //     packet >> id>>status;
                 // std::cout << id << " has "<<status;
-                clients.push_back(socket);
-                selector.add(*socket);
+
             }
             else
             {
-                for (int i = 0;i < clients.size();i++)
+                for (int i = 0; i < clients.size(); ++i)
                 {
                     if (selector.isReady(*clients[i]))
                     {
@@ -44,8 +60,20 @@ int main()
                         if (clients[i]->receive(packet) == sf::Socket::Done)
                         {
                             std::string text;
-                            packet >> text;
-                            std::cout << "Recieved data: " << text << std::endl;
+                            int id;
+                            packet >> id >> text;
+                            std::cout << "Recieved data from id = " << id << ". Text = " << text << std::endl;
+
+                            for(int j = 0; j < clients.size(); ++j)
+                            {
+                                if(i != j)
+                                {
+                                    if(clients[j]->send(packet) != sf::Socket::Done)
+                                    {
+                                        std::cout << "Error while sending data to all users" << std::endl;
+                                    }
+                                }
+                            }
                         }
                     }
                 }

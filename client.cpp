@@ -9,10 +9,31 @@ int main()
     sf::IpAddress ip = sf::IpAddress::getLocalAddress();
     std::cout << "Current IP" << ip << std::endl;
 
-    sf::TcpSocket socket;
-    if(socket.connect(ip, 2000) == sf::Socket::Done)
+    int MyID;
+
+    sf::TcpSocket *socket = new sf::TcpSocket;
+    sf::SocketSelector selector;
+    sf::Packet packet;
+    
+    if(socket->connect(ip, 2003) == sf::Socket::Done)
     {
         std::cout << "connected!" << std::endl;
+        socket->setBlocking(false);
+
+        while (socket->receive(packet) != sf::Socket::Done) {}
+        if(packet.getDataSize() > 0)
+        {
+            packet >> MyID;
+            std::cout << "My ID is " << MyID << std::endl;
+        }
+        else
+        {
+            std::cout << "Cant get my ID" << std::endl;
+            return -1;
+        }
+
+        selector.add(*socket);
+        
     }
     else
     {
@@ -24,14 +45,31 @@ int main()
     std::cout << "Now you may send data to server" << std::endl;
     while(true)
     {
-        std::cout << "Enter number id: ";
-        std::string id;
-        std::cin >> id;
+        //if(selector.isReady(*socket))
+        //{
+            if(socket->receive(packet) == sf::Socket::Done)
+            {
+                int other_ID;
+                std::string text;
+                packet >> other_ID >> text;
+                std::cout << "Message from user with ID " << other_ID << ": " << text << std::endl;
+            }
+            // else
+            // {
+            //     std::cout << "Can't recieve message!" << std::endl;
+            // }
+        //}
+
+
+
+        std::cout << "Enter text: ";
+        std::string text;
+        std::cin >> text;
 
         sf::Packet packet;
-        packet << id;
+        packet << MyID << text;
 
-        if(socket.send(packet) == sf::Socket::Done)
+        if(socket->send(packet) == sf::Socket::Done)
         {
             std::cout << "Sent!" << std::endl;
         }
@@ -39,8 +77,8 @@ int main()
         {
             std::cout << "Can't send!" << std::endl;
         }
-        
-        socket.setBlocking(false);
+
+        socket->setBlocking(false);
 
     }
 }
