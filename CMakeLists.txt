@@ -3,13 +3,15 @@ project(tanks_2d_udp)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(MODULES game.cpp objects.cpp)
+set(MODULES game.cpp objects.cpp game_map.cpp)
 
 set(MODULES_PATH "project/src/")
 
 set(INCLUDE_PATH "project/includes/")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+
+set(CMAKE_CXX_FLAGS, "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Werror -Wpedantic -Wextra")
 
 find_package(SFML 2 COMPONENTS system window graphics audio REQUIRED)
 
