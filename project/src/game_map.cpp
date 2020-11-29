@@ -1,7 +1,7 @@
-#include "game_map.hpp"
-
 #include <fstream>
 #include <iostream>
+
+#include "game_map.hpp"
 
 auto block_size = 8;
 std::map<char, entities> map_entity = {{'.', EMPTY}, {'#', WALL}};

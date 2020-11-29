@@ -1,17 +1,19 @@
 #ifndef _GAME_MAP_H_
 #define _GAME_MAP_H_
 
+#include <SFML/Graphics.hpp>
 #include <istream>
 #include <map>
 #include <vector>
 #include <memory>
+
 #include "objects.h"
 
 typedef enum
 {
     EMPTY,
     WALL,
-    COUNT
+    COUNT_W
 } entities;
 
 

@@ -3,17 +3,18 @@
 Object::Object(sf::String textureFile, float x, float y, float left, float top, float width, float height) 
     : x(x), y(y), left(left), top(top), width(width), height(height), dx(0), dy(0), speed(0.5) {
     this->image.loadFromFile(textureFile);
-    // this->image.createMaskFromColor(sf::Color(255, 255, 255));
+    this->image.createMaskFromColor(sf::Color(255, 255, 255));
 
     this->texture.loadFromImage(this->image);
 
     this->sprite.setTexture(this->texture);
-    this->sprite.setTextureRect(sf::IntRect(this->m_left, this->m_top, this->m_width, this->m_height));
-    this->sprite.setPosition(this->m_x * height,this->m_y * width);
+    this->sprite.setOrigin(this->width/2, this->height/2);
+    this->sprite.setTextureRect(sf::IntRect(this->left, this->top, this->width, this->height));
+    this->sprite.setPosition(this->x, this->y);
+    // this->sprite.setScale(40,40);
 }
 
-sf::Sprite Object::getSprite() const {
-    return this->sprite;
+void Tank::move(float time) {
     switch (dir) {
             case RIGHT: dx = speed; dy = 0; break;//по иксу задаем положительную скорость, по игреку зануляем. получаем, что персонаж идет только вправо
             case LEFT: dx = -speed; dy = 0; break;//по иксу задаем отрицательную скорость, по игреку зануляем. получается, что персонаж идет только влево
@@ -27,7 +28,7 @@ sf::Sprite Object::getSprite() const {
     sprite.setPosition(x,y); //выводим спрайт в позицию x y , посередине. бесконечно выводим в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
-sf::Sprite& Tank::getSprite() {
+sf::Sprite& Object::getSprite() {
     return this->sprite;
 }
 
@@ -67,3 +68,4 @@ int Tank::makeAction(float time) {
     }
     return moveAction::ERROR;
 }
+
