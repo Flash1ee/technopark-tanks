@@ -1,41 +1,64 @@
 #include "objects.h"
 
-Object::Object(sf::String textureFile, float x, float y, float left, float top, float width, float height) 
-    : x(x), y(y), left(left), top(top), width(width), height(height), dx(0), dy(0), speed(0.5) {
+Object::Object(sf::String textureFile, float x, float y, float left, float top,
+               float width, float height)
+    : x(x),
+      y(y),
+      left(left),
+      top(top),
+      width(width),
+      height(height),
+      dx(0),
+      dy(0),
+      speed(0.5) {
     this->image.loadFromFile(textureFile);
     this->image.createMaskFromColor(sf::Color(255, 255, 255));
 
     this->texture.loadFromImage(this->image);
 
     this->sprite.setTexture(this->texture);
-    this->sprite.setOrigin(this->width/2, this->height/2);
-    this->sprite.setTextureRect(sf::IntRect(this->left, this->top, this->width, this->height));
+    this->sprite.setOrigin(this->width / 2, this->height / 2);
+    this->sprite.setTextureRect(
+        sf::IntRect(this->left, this->top, this->width, this->height));
     this->sprite.setPosition(this->x, this->y);
-    // this->sprite.setScale(40,40);
+    // this->sprite.setScale(5,5);
 }
 
 void Tank::move(float time) {
     switch (dir) {
-            case RIGHT: dx = speed; dy = 0; break;//по иксу задаем положительную скорость, по игреку зануляем. получаем, что персонаж идет только вправо
-            case LEFT: dx = -speed; dy = 0; break;//по иксу задаем отрицательную скорость, по игреку зануляем. получается, что персонаж идет только влево
-            case DOWN: dx = 0; dy = speed; break;//по иксу задаем нулевое значение, по игреку положительное. получается, что персонаж идет только вниз
-            case UP: dx = 0; dy = -speed; break;//по иксу задаем нулевое значение, по игреку отрицательное. получается, что персонаж идет только вверх
+        case RIGHT:
+            dx = speed;
+            dy = 0;
+            break;  //по иксу задаем положительную скорость, по игреку зануляем.
+                    //получаем, что персонаж идет только вправо
+        case LEFT:
+            dx = -speed;
+            dy = 0;
+            break;  //по иксу задаем отрицательную скорость, по игреку зануляем.
+                    //получается, что персонаж идет только влево
+        case DOWN:
+            dx = 0;
+            dy = speed;
+            break;  //по иксу задаем нулевое значение, по игреку положительное.
+                    //получается, что персонаж идет только вниз
+        case UP:
+            dx = 0;
+            dy = -speed;
+            break;  //по иксу задаем нулевое значение, по игреку отрицательное.
+                    //получается, что персонаж идет только вверх
     }
 
-    x += dx*time;
-    y += dy*time;
+    x += dx * time;
+    y += dy * time;
     // speed = 0;
-    sprite.setPosition(x,y); //выводим спрайт в позицию x y , посередине. бесконечно выводим в этой функции, иначе бы наш спрайт стоял на месте.
+    sprite.setPosition(
+        x, y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+                //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
-sf::Sprite& Object::getSprite() {
-    return this->sprite;
-}
+sf::Sprite& Object::getSprite() { return this->sprite; }
 
-void Tank::setDir(moveAction dir) {
-    this->dir = dir;
-}
-
+void Tank::setDir(moveAction dir) { this->dir = dir; }
 
 void Tank::setTexture(int px, int py, int width, int height) {
     this->sprite.setTextureRect(sf::IntRect(px, py, width, height));
@@ -68,4 +91,3 @@ int Tank::makeAction(float time) {
     }
     return moveAction::ERROR;
 }
-
