@@ -6,10 +6,10 @@
 auto block_size = 8;
 std::map<char, entities> map_entity = {{'.', EMPTY}, {'#', WALL}};
 
-std::map<char, std::vector<float>> coords = {
-    {'.',
+std::map<entities, std::vector<float>> coords = {
+    {WALL,
      {256, 0, static_cast<float>(block_size), static_cast<float>(block_size)}},
-    {'#',
+    {EMPTY,
      {336, 0, static_cast<float>(block_size), static_cast<float>(block_size)}}};
 
 void Map::set_pos(size_t i, size_t j, std::shared_ptr<Object> p) {
@@ -47,7 +47,8 @@ Map::Map(std::string map, std::string sprite) : m_block_size(block_size) {
             if (!map_entity.count(cur)) {
                 throw std::invalid_argument("Unknown map entity");
             }
-            std::vector<float> cord = coords[cur];
+            auto flag = map_entity[cur];
+            std::vector<float> cord = coords[flag];
             auto p = std::make_shared<Object>(sprite, i, j, cord[0], cord[1],
                                               cord[2], cord[3]);
             set_pos(i, j, p);
