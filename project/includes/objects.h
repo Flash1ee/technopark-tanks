@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _OBJECTS_H_
+#define _OBJECTS_H_
+
 #include <SFML/Graphics.hpp>
 
 enum moveAction {
@@ -22,7 +24,11 @@ protected:
     sf::Texture texture;
     sf::Sprite sprite;
     Object();
+public:
+    sf::Sprite& getSprite();
     Object(sf::String textureFile, float x, float y, float left, float top, float width, float height);
+
+
 };
 
 // class Bullet : public Object {
@@ -37,7 +43,6 @@ protected:
     Tank(sf::String textureFile, float x, float y, float left, float top, float width, float height, int hp)
         : Object(textureFile, x, y, left, top, width, height), hp(hp) {};
 public:
-    sf::Sprite& getSprite();
     void setDir(moveAction dir);
     void setTexture(int px, int py, int width, int height);
     void move(float time);
@@ -51,3 +56,4 @@ public:
         : Tank(textureFile, x, y, left, top, width, height, hp),
         Object(textureFile, x, y, left, top, width, height) {};
 };
+#endif  // _OBJECTS_H_

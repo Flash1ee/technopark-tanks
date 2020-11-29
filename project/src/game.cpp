@@ -1,10 +1,12 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include "game.h"
+#include "game_map.hpp"
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Tanks");
+	sf::RenderWindow window(sf::VideoMode(1024, 768), "Tanks");
     Player player(playerTankImage, 100, 100, 1, 2, 13, 13, 100);
+    Map map(map_one, playerTankImage);
     sf::Clock clock;
 
 	while (window.isOpen()) {
@@ -22,7 +24,8 @@ int main() {
         player.makeAction(time);
 
         window.clear();
-        window.draw(player.getSprite());
+        map.drawMap(window);
+        // window.draw(player.getSprite());
         window.display();
 	}
 }

@@ -3,7 +3,7 @@
 Object::Object(sf::String textureFile, float x, float y, float left, float top, float width, float height) 
     : x(x), y(y), left(left), top(top), width(width), height(height), dx(0), dy(0), speed(0.5) {
     this->image.loadFromFile(textureFile);
-    // this->image.createMaskFromColor(sf::Color(255, 255, 255));
+    this->image.createMaskFromColor(sf::Color(255, 255, 255));
 
     this->texture.loadFromImage(this->image);
 
@@ -11,7 +11,7 @@ Object::Object(sf::String textureFile, float x, float y, float left, float top, 
     this->sprite.setOrigin(this->width/2, this->height/2);
     this->sprite.setTextureRect(sf::IntRect(this->left, this->top, this->width, this->height));
     this->sprite.setPosition(this->x, this->y);
-    // this->sprite.setScale(3,3);
+    // this->sprite.setScale(40,40);
 }
 
 void Tank::move(float time) {
@@ -28,7 +28,7 @@ void Tank::move(float time) {
     sprite.setPosition(x,y); //выводим спрайт в позицию x y , посередине. бесконечно выводим в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
-sf::Sprite& Tank::getSprite() {
+sf::Sprite& Object::getSprite() {
     return this->sprite;
 }
 
