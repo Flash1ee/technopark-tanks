@@ -39,11 +39,6 @@ Map::Map(std::string map, std::string sprite) : m_block_size(block_size) {
         row.resize(m_cols);
     }
 
-    // this->image.loadFromFile(sprite);
-    // this->image.createMaskFromColor(sf::Color(255, 255, 255));
-    // this->texture.loadFromImage(this->image);
-    // this->sprite.setTexture(this->texture);
-
     std::string line;
     for (size_t i = 0; i < m_rows; i++) {
         in >> line;
@@ -52,15 +47,9 @@ Map::Map(std::string map, std::string sprite) : m_block_size(block_size) {
             if (!map_entity.count(cur)) {
                 throw std::invalid_argument("Unknown map entity");
             }
-
             std::vector<float> cord = coords[cur];
-            auto p = std::make_shared<Object>(sprite, i, j, 256, 0, 8, 8);
+            auto p = std::make_shared<Object>(sprite, i, j, cord[0], cord[1], cord[2], cord[3]);
             set_pos(i, j, p);
-
-            // this->sprite.setTextureRect(
-                // sf::IntRect(cord[0], cord[1], cord[2], cord[3]));
-            // sprite.scale(9, 9);
-            // this->sprite.setPosition(i * block_size, j * block_size);
         }
     }
     if (!in.eof()) {

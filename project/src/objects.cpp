@@ -9,8 +9,7 @@ Object::Object(std::string filename, int x, int y, float left, float top, float 
 
     this->sprite.setTexture(this->texture);
     this->sprite.setTextureRect(sf::IntRect(this->m_left, this->m_top, this->m_width, this->m_height));
-    this->sprite.scale(9, 9);
-    this->sprite.setPosition(this->m_x,this->m_x);
+    this->sprite.setPosition(this->m_x * height,this->m_y * width);
 }
 
 sf::Sprite Object::getSprite() const {
