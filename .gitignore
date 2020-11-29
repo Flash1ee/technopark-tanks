@@ -33,3 +33,5 @@
 
 .vscode
 .clang-format
+/build
+workspace.code-workspace
