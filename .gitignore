@@ -1,7 +1,7 @@
 
 *.o
 *.dat
-*/vscode
+*.vscode/
 *.out
 .vscode/
 cmake-build-debug
