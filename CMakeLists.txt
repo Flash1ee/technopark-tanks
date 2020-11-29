@@ -3,7 +3,7 @@ project(tanks_2d_udp)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(MODULES game.cpp objects.cpp game_map.cpp)
+set(MODULES game.cpp objects.cpp game_map.cpp cam.cpp)
 
 set(MODULES_PATH "project/src/")
 

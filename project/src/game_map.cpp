@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 
-auto block_size = 8;
+auto block_size = 16;
 std::map<char, entities> map_entity = {{'.', EMPTY}, {'#', WALL}};
 
 std::map<entities, std::vector<float>> coords = {

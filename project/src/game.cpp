@@ -1,15 +1,16 @@
 #include "game.h"
+#include "cam.h"
+#include "game_map.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "game_map.hpp"
-
 int main() {
     sf::RenderWindow window(sf::VideoMode(640, 480), "Tanks");
-    Player player(playerTankImage, 100, 100, 1, 2, 13, 13, 100);
+    Player player(playerTankImage, 200, 200, 1, 2, 13, 13, 100);
     Map map(map_one, playerTankImage);
     sf::Clock clock;
+    Cam cam;
 
     while (window.isOpen()) {
         double time =
@@ -26,8 +27,12 @@ int main() {
         }
 
         player.makeAction(time);
+        cam.changeViewCoords(player.getX(), player.getY());
+        cam.changeView();
 
+        window.setView(cam.view);//"оживляем" камеру в окне sfml
         window.clear();
+
         map.drawMap(window);
         window.draw(player.getSprite());
         window.display();
