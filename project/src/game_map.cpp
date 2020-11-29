@@ -1,7 +1,7 @@
+#include "game_map.hpp"
+
 #include <fstream>
 #include <iostream>
-
-#include "game_map.hpp"
 
 auto block_size = 8;
 std::map<char, entities> map_entity = {{'.', EMPTY}, {'#', WALL}};
@@ -48,7 +48,8 @@ Map::Map(std::string map, std::string sprite) : m_block_size(block_size) {
                 throw std::invalid_argument("Unknown map entity");
             }
             std::vector<float> cord = coords[cur];
-            auto p = std::make_shared<Object>(sprite, i, j, cord[0], cord[1], cord[2], cord[3]);
+            auto p = std::make_shared<Object>(sprite, i, j, cord[0], cord[1],
+                                              cord[2], cord[3]);
             set_pos(i, j, p);
         }
     }
@@ -57,10 +58,12 @@ Map::Map(std::string map, std::string sprite) : m_block_size(block_size) {
     }
     in.close();
 }
-void Map::drawMap(sf::RenderWindow &window) {
-  for (auto row = 0; row < m_rows; row++) {
-    for (auto cols = 0; cols < m_cols; cols++) {
-      window.draw(m_field[row][cols]->getSprite());
+void Map::drawMap(sf::RenderWindow& window) {
+    for (auto row = 0; row < m_rows; row++) {
+        for (auto col = 0; col < m_cols; col++) {
+            sf::Sprite temp = m_field[row][col]->getSprite();
+            temp.setPosition(row * block_size, col * block_size);
+            window.draw(temp);
+        }
     }
-  }
 }
