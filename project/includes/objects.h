@@ -1,36 +1,53 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+enum moveAction {
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT,
+    COUNT,
+    ERROR
+};
+
 class Object {
-public:
-    double x, y; //координаты
+protected:
+    float x, y; //координаты
+    float dx, dy; //current delta coordinats
+    float left, top;
+    float width, height;
     int dir; //направление движения
-    //double speed; //скорость (множитель времени)
+    float speed; //скорость (множитель времени)
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
-    virtual void move(double x, double y) = 0;
+    Object();
+    Object(sf::String textureFile, float x, float y, float left, float top, float width, float height);
 };
 
 // class Bullet : public Object {
 // };
 
-class Tank : protected Object { //класс любого танка
+class Tank : virtual public Object { //класс любого танка
 protected:
-    sf::String name;
+    // sf::String name;
     int hp;
-    size_t armor;
-    size_t power;
+    // size_t armor;
+    // size_t power;
+    Tank(sf::String textureFile, float x, float y, float left, float top, float width, float height, int hp)
+        : Object(textureFile, x, y, left, top, width, height), hp(hp) {};
 public:
     sf::Sprite& getSprite();
+    void setDir(moveAction dir);
     void setTexture(int px, int py, int width, int height);
-    Tank(sf::String textureFile, double x, double y);
-    void move(double x, double y) override;
+    void move(float time);
+    int makeAction(float time);
+    // virtual void shoot(double x, double y) = 0;
 };
 
 class Player : public Tank { //класс игрока
 public:
-    Player(sf::String textureFile, double x, double y)
-        : Tank(textureFile, x, y) {};
-    Player();
+    Player(sf::String textureFile, float x, float y, float left, float top, float width, float height, int hp)
+        : Tank(textureFile, x, y, left, top, width, height, hp),
+        Object(textureFile, x, y, left, top, width, height) {};
 };
