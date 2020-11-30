@@ -1,6 +1,42 @@
+# Prerequisites
+*.d
 
+# Compiled Object files
+*.slo
+*.lo
 *.o
-*.dat
-.vscode/
 *.out
 *-out
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+.vscode/
+.clang-format
+/build
+.idea
+workspace.code-workspace
+cmake-build-debug
+*.dat
