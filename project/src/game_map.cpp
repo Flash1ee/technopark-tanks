@@ -50,7 +50,7 @@ Map::Map(std::string map, std::string sprite) : m_block_size(block_size) {
             auto flag = map_entity[cur];
             std::vector<float> cord = coords[flag];
             auto p = std::make_shared<Object>(sprite, i, j, cord[0], cord[1],
-                                              cord[2], cord[3]);
+                                              cord[2], cord[3], 0);
             set_pos(i, j, p);
         }
     }

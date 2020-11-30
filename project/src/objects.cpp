@@ -1,7 +1,7 @@
 #include "objects.h"
 
 Object::Object(sf::String textureFile, float x, float y, float left, float top,
-               float width, float height)
+               float width, float height, float speed)
     : x(x),
       y(y),
       left(left),
@@ -10,9 +10,9 @@ Object::Object(sf::String textureFile, float x, float y, float left, float top,
       height(height),
       dx(0),
       dy(0),
-      speed(0.5) {
+      speed(speed) {
     this->image.loadFromFile(textureFile);
-    this->image.createMaskFromColor(sf::Color(255, 255, 255));
+    this->image.createMaskFromColor(sf::Color(0, 0, 0));
 
     this->texture.loadFromImage(this->image);
 
@@ -50,18 +50,41 @@ void Tank::move(float time) {
 
     x += dx * time;
     y += dy * time;
-    // speed = 0;
-    sprite.setPosition(
-        x, y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+    sprite.setPosition(x, y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
                 //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
-sf::Sprite& Object::getSprite() { return this->sprite; }
+void Bullet::move(float time) {
+    switch (dir) {
+        case RIGHT:
+            dx = speed;
+            dy = 0;
+            break;
+        case LEFT:
+            dx = -speed;
+            dy = 0;
+            break;
+        case DOWN:
+            dx = 0;
+            dy = speed;
+            break;
+        case UP:
+            dx = 0;
+            dy = -speed;
+            break;
+    }
 
-void Tank::setDir(moveAction dir) { this->dir = dir; }
+    x += dx * time;
+    y += dy * time;
+    sprite.setPosition(x, y);
+}
 
-void Tank::setTexture(int px, int py, int width, int height) {
-    this->sprite.setTextureRect(sf::IntRect(px, py, width, height));
+sf::Sprite& Object::getSprite() {
+    return this->sprite;
+}
+
+int Tank::getDir() const {
+    return this->dir;
 }
 
 int Tank::makeAction(float time) {
@@ -89,13 +112,37 @@ int Tank::makeAction(float time) {
         this->move(time);
         return 0;
     }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        this->shot = true;
+        return 0;
+    }
     return moveAction::ERROR;
 }
 
-float Object::getX() {
+float Object::getX() const {
     return this->x;
 }
 
-float Object::getY() {
+float Object::getY() const {
     return this->y;
+}
+
+void Tank::setShot(bool shot) {
+    this->shot = shot;
+}
+
+bool Tank::getShot() const {
+    return this->shot;
+}
+
+void Object::setY(float y) {
+    this->y = y;
+}
+
+void Object::setX(float x) {
+    this->x = x;
+}
+
+void Bullet::setDir(int dir) {
+    this->dir = dir;
 }

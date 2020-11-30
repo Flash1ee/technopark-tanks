@@ -18,44 +18,56 @@ protected:
     float dx, dy; //current delta coordinats
     float left, top;
     float width, height;
-    int dir; //направление движения
     float speed; //скорость (множитель времени)
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
     Object();
 public:
-    float getX();
-    float getY();
+    float getX() const;
+    float getY() const;
+    void setX(float x);
+    void setY(float y);
     sf::Sprite& getSprite();
-    Object(sf::String textureFile, float x, float y, float left, float top, float width, float height);
-
-
+    Object(sf::String textureFile, float x, float y, float left, float top,
+           float width, float height, float speed);
 };
 
-// class Bullet : public Object {
-// };
+class Bullet : public Object {
+private:
+    int dir; //направление движения
+public:
+    Bullet(sf::String textureFile, float x, float y, float left, float top,
+           float width, float height,float speed, int dir)
+        : Object(textureFile, x, y, left, top, width, height, speed), dir(dir) {};
+    void move(float time);
+    void setDir(int dir);
+};
 
 class Tank : virtual public Object { //класс любого танка
 protected:
     // sf::String name;
     int hp;
+    int dir;
+    bool shot;
     // size_t armor;
     // size_t power;
-    Tank(sf::String textureFile, float x, float y, float left, float top, float width, float height, int hp)
-        : Object(textureFile, x, y, left, top, width, height), hp(hp) {};
+    Tank(sf::String textureFile, float x, float y, float left, float top, float width,
+         float height, int hp, float speed)
+        : Object(textureFile, x, y, left, top, width, height, speed), hp(hp), shot(false) {};
 public:
-    void setDir(moveAction dir);
-    void setTexture(int px, int py, int width, int height);
     void move(float time);
     int makeAction(float time);
-    // virtual void shoot(double x, double y) = 0;
+    int getDir() const;
+    bool getShot() const;
+    void setShot(bool shot);
 };
 
 class Player : public Tank { //класс игрока
 public:
-    Player(sf::String textureFile, float x, float y, float left, float top, float width, float height, int hp)
-        : Tank(textureFile, x, y, left, top, width, height, hp),
-        Object(textureFile, x, y, left, top, width, height) {};
+    Player(sf::String textureFile, float x, float y, float left, float top, float width,
+           float height, int hp, float speed)
+        : Tank(textureFile, x, y, left, top, width, height, hp, speed),
+          Object(textureFile, x, y, left, top, width, height, speed) {};
 };
 #endif  // _OBJECTS_H_
