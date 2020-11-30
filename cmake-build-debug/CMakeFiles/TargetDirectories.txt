@@ -1,3 +1,0 @@
-/home/daniil/Table/tanks_2d_udp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/daniil/Table/tanks_2d_udp/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/daniil/Table/tanks_2d_udp/cmake-build-debug/CMakeFiles/tanks_2d_udp.dir
