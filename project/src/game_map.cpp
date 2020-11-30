@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 
-auto block_size = 16;
+constexpr int block_size = 16;
 std::map<char, entities> map_entity = {{'.', EMPTY}, {'#', WALL}};
 
 std::map<entities, std::vector<float>> coords = {
@@ -31,7 +31,8 @@ Map::Map(std::string map, std::string sprite) : m_block_size(block_size) {
     }
     in >> m_rows >> m_cols;
     if (!m_rows || !m_cols) {
-        throw "Empty play field";
+        std::cout << "Empty play field" << std::endl;
+        exit(-1);
     }
 
     m_field.resize(m_rows);
@@ -55,7 +56,8 @@ Map::Map(std::string map, std::string sprite) : m_block_size(block_size) {
         }
     }
     if (!in.eof()) {
-        throw "read error, not found eof";
+        std::cout << "read error, not found eof" << std::endl;
+        exit(-1);
     }
     in.close();
 }

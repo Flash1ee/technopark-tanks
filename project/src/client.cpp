@@ -3,12 +3,27 @@
 #include <ctime>
 #include <chrono>
 #include <thread>
+#include "client_server_config.h"
+
 
 Client::Client(sf::IpAddress ip_address, int port) : m_ip_adress(ip_address), m_port(port)
 {
+
+}
+
+Client::Client(std::string str_ip, int port)
+{
+    Client(sf::IpAddress(str_ip), port);
+}
+
+bool Client::connectToServer(std::string server_ip, int server_port)
+{
+    m_ip_adress = server_ip;
+    m_port = server_port;
+    
     sf::TcpSocket *m_socket = new sf::TcpSocket;
 
-    if(m_socket->connect(ip_address, port) == sf::Socket::Done)
+    if(m_socket->connect(m_ip_adress, m_port) == sf::Socket::Done)
     {
         std::cout << "connected!" << std::endl;
         m_socket->setBlocking(false);
@@ -21,8 +36,7 @@ Client::Client(sf::IpAddress ip_address, int port) : m_ip_adress(ip_address), m_
             std::cout << "My ID is " << m_id << std::endl;
         }
         else
-        {#include <chrono>
-#include <thread>
+        {
             std::cout << "Cant get my ID" << std::endl;
             throw std::runtime_error("Can't get user ID\n");
         }
@@ -33,13 +47,9 @@ Client::Client(sf::IpAddress ip_address, int port) : m_ip_adress(ip_address), m_
         std::cout << "can not connect!" << std::endl;
         throw std::runtime_error("Can't connect to server\n");
     }
-}
 
-Client::Client(std::string str_ip, int port)
-{
-    Client(sf::IpAddress(str_ip), port);
+    return true;
 }
-
 
 Client::~Client()
 {
@@ -58,9 +68,7 @@ void Client::RunClient()
 
     while(true)
     {
-        auto t1 = std::chrono::high_resolution_clock::now();
-
-        auto t2 = std::chrono::high_resolution_clock::now();
+        
     }
 }
 
@@ -90,25 +98,19 @@ bool Client::SendToServer()
     return true;
 }
 
-bool Client::RecieveFromServer()
+bool Client::RecieveFromServer(sf::Packet& packet)
 {
-    if(m_socket->receive(packet) == sf::Socket::Done)
-    {
-        int other_ID;
-        std::string text;
-        packet >> other_ID >> text;
-        std::cout << "Message from user with ID " << other_ID << ": " << text << std::endl;
-    }
-    else
+    if(m_socket->receive(packet) != sf::Socket::Done)
     {
         std::cout << "Can't recieve message!" << std::endl;
+        return false;
     }
         
     return true;
 }
 
-int main()
-{
+// int main()
+// {
     // sf::IpAddress ip = sf::IpAddress::getLocalAddress();
     // std::cout << "Current IP" << ip << std::endl;
 
@@ -172,9 +174,9 @@ int main()
     //     
     // }
 
-    Client client(sf::IpAddress::getLocalAddress(), 2000);
+//     Client client(sf::IpAddress::getLocalAddress(), 2000);
 
-    client.RunClient();
+//     client.RunClient();
 
-    return 0;
-}
+//     return 0;
+// }

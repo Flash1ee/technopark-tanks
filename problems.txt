@@ -1,0 +1,1 @@
+1. @dvarin - do not throw const char * - https://stackoverflow.com/questions/59518468/terminate-called-after-throwing-an-instance-of-char-const-in-string-function

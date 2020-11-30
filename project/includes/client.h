@@ -1,5 +1,5 @@
 #include<SFML/Network.hpp>
-#include<SFML/Graphics.hpp>
+
 #include<iostream>
 #include<string>
 #include<vector>
@@ -14,7 +14,8 @@ public:
 
     void RunClient();
     bool SendToServer();
-    bool RecieveFromServer();
+    bool RecieveFromServer(sf::Packet& packet);
+    bool connectToServer(std::string server_ip, int server_port);
 
 private:
     sf::TcpSocket *m_socket;
