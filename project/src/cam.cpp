@@ -13,8 +13,9 @@ void Cam::changeViewCoords(float x, float y) { //функция для счит�
 }
 
 Cam::Cam() {
-    view.reset(sf::FloatRect(200, 200, 400, 400));
-	// view.setSize(200, 200);
+    view.reset(sf::FloatRect(0, 0, 1024, 760));
+	view.setSize(540, 380);
+	// view.setSize(200, 200);ц
 }
  
 // void Cam::moveMap(float time, float speed) { //функция для перемещения камеры по карте. принимает время sfml
@@ -34,7 +35,7 @@ Cam::Cam() {
  
 void Cam::changeView(){
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
-		view.zoom(0.999); //масштабируем, увеличение
+		view.zoom(0.5f); //масштабируем, увеличение
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
 		view.setSize(640, 480);//устанавливает размер камеры (наш исходный)
@@ -43,6 +44,6 @@ void Cam::changeView(){
 		view.setSize(540, 380);//например другой размер
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
-		view.setSize(400, 200);//например другой размер
+		view.setSize(400, 400);//например другой размер
 	}
 }

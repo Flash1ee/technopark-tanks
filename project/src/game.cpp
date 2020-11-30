@@ -6,9 +6,9 @@
 #include <iostream>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(640, 480), "Tanks");
+    sf::RenderWindow window(sf::VideoMode(1024, 760), "Tanks");
     Player player(playerTankImage, 200, 200, 1, 2, 13, 13, 100, 0.1);
-    Bullet bullet(bulletImage, 0, 0, 0, 0, 15, 15, 0.5, 0);
+    // Bullet bullet(bulletImage, 0, 0, 0, 0, 15, 15, 0.5, 0);
     std::vector<Bullet*> vectorBullet;
     Map map(map_one, playerTankImage);
     sf::Clock clock;

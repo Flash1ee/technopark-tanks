@@ -12,6 +12,7 @@ Object::Object(sf::String textureFile, float x, float y, float left, float top,
       dy(0),
       speed(speed) {
     this->image.loadFromFile(textureFile);
+    this->image.createMaskFromColor(sf::Color(0, 0, 1));
     this->image.createMaskFromColor(sf::Color(0, 0, 0));
 
     this->texture.loadFromImage(this->image);

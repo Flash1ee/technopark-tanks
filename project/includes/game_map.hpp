@@ -13,10 +13,10 @@ typedef enum { EMPTY, WALL, COUNT_W } entities;
 
 class Map {
    private:
-    size_t m_cols;
-    size_t m_rows;
-    size_t m_block_size;
-    std::vector<std::vector<std::shared_ptr<Object> > > m_field;
+    size_t mCols;
+    size_t mRows;
+    size_t mBlockSize;
+    std::vector<std::vector<std::shared_ptr<Object> > > mField;
 
     sf::Image image;
     sf::Texture texture;
