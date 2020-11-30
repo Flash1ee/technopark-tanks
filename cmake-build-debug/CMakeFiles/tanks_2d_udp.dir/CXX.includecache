@@ -39,4 +39,18 @@ game_map.hpp
 /home/daniil/Table/tanks_2d_udp/project/src/game_map.hpp
 SFML/Graphics.hpp
 -
+iostream
+-
+
+/home/daniil/Table/tanks_2d_udp/project/src/game_map.cpp
+game_map.hpp
+/home/daniil/Table/tanks_2d_udp/project/src/game_map.hpp
+fstream
+-
+iostream
+-
+
+/home/daniil/Table/tanks_2d_udp/project/src/objects.cpp
+objects.h
+/home/daniil/Table/tanks_2d_udp/project/src/objects.h
 

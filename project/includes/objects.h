@@ -26,8 +26,6 @@ protected:
 public:
     float getX() const;
     float getY() const;
-    void setX(float x);
-    void setY(float y);
     sf::Sprite& getSprite();
     Object(sf::String textureFile, float x, float y, float left, float top,
            float width, float height, float speed);
@@ -41,7 +39,6 @@ public:
            float width, float height,float speed, int dir)
         : Object(textureFile, x, y, left, top, width, height, speed), dir(dir) {};
     void move(float time);
-    void setDir(int dir);
 };
 
 class Tank : virtual public Object { //класс любого танка

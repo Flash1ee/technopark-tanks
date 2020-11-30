@@ -36,3 +36,5 @@
 /build
 .idea
 workspace.code-workspace
+cmake-build-debug/
+

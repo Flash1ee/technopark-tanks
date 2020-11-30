@@ -88,6 +88,9 @@ int Tank::getDir() const {
 }
 
 int Tank::makeAction(float time) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        this->shot = true;
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         this->sprite.setRotation(0);
         this->dir = moveAction::UP;
@@ -112,10 +115,6 @@ int Tank::makeAction(float time) {
         this->move(time);
         return 0;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        this->shot = true;
-        return 0;
-    }
     return moveAction::ERROR;
 }
 
@@ -133,16 +132,4 @@ void Tank::setShot(bool shot) {
 
 bool Tank::getShot() const {
     return this->shot;
-}
-
-void Object::setY(float y) {
-    this->y = y;
-}
-
-void Object::setX(float x) {
-    this->x = x;
-}
-
-void Bullet::setDir(int dir) {
-    this->dir = dir;
 }
