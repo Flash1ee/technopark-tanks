@@ -15,7 +15,7 @@ enum class PlayerMessageType
 struct PlayerActionMessage
 {
     int player_id;
-    sf::Vector2f position {0, 0};
+    sf::Vector2f position;
     PlayerMessageType msg_type;
 };
 

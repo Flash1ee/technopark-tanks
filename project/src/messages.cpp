@@ -1,4 +1,4 @@
-#include "messages.hpp"
+#include <messages.hpp>
 #include <iostream>
 
 sf::Packet& operator << (sf::Packet& packet, const sf::Vector2f& position)
@@ -23,7 +23,7 @@ sf::Packet& operator >> (sf::Packet& packet, PlayerMessageType& msg_type)
 
 sf::Packet& operator << (sf::Packet& packet, const PlayerActionMessage& message)
 {
-    return packet << message.player_id <<  message.position << message.msg_type;
+    return packet << message.player_id << message.position << message.msg_type;
 }
 
 sf::Packet& operator >> (sf::Packet& packet, PlayerActionMessage& message)

@@ -41,9 +41,17 @@ bool Server::addNewClient()
 
         std::cout << "New connection with id = " << curr_client.id << "accepted" << std::endl;
         
-        PlayerActionMessage msg_to_player{curr_client.id, {100 * curr_client.id, 100 * curr_client.id}, PlayerMessageType::NewPlayer};
+        PlayerActionMessage msg_to_player;//= {curr_client.id, sf::Vector2f{100.0 * (curr_client.id + 1), (100.0 * curr_client.id + 1)}, PlayerMessageType::NewPlayer};
+        
+        msg_to_player.player_id = curr_client.id;
+        msg_to_player.position = sf::Vector2f{100.0 * (curr_client.id + 1), (100.0 * curr_client.id + 1)};
+        msg_to_player.msg_type = PlayerMessageType::NewPlayer;
+
         sf::Packet packet;
+        std::cout <<"JOPA" << std::endl;
         packet << msg_to_player;
+        std::cout <<"JOPA" << std::endl;
+
 
         if(curr_client.socket->send(packet) != sf::Socket::Done)
         {
@@ -56,19 +64,15 @@ bool Server::addNewClient()
         }
         
         m_selector.add(*curr_client.socket);
-        m_clients.push_back(std::move(curr_client));
+        m_clients.push_back(curr_client);
 
     }
 
     return true;
 }
 
-template <class T>
-bool Server::sendToAll(T& msg)
+bool Server::sendToAll(sf::Packet& packet)
 {
-    sf::Packet packet;
-    packet << msg;
-
     for(auto& curr_client : m_clients)
     {
         if(curr_client.socket->send(packet) != sf::Socket::Done)
@@ -81,7 +85,7 @@ bool Server::sendToAll(T& msg)
     return true;
 }
 
-bool Server::recieveFromClient(sf::Packet& packet, int& client_id)
+bool Server::recieveFromClient(sf::Packet& packet)
 {
     for(auto& curr_client : m_clients)
     {
@@ -105,8 +109,10 @@ bool Server::runGame()
 {
     GameActionMessage msg;
     msg.msg_type = GameMessageType::GameBegin;
+    sf::Packet packet;
+    packet << msg;
 
-    sendToAll(msg);
+    sendToAll(packet);
 
     // while (true)
     // {

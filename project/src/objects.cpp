@@ -1,9 +1,8 @@
 #include "objects.h"
 
-Object::Object(sf::String textureFile, float x, float y, float left, float top,
+Object::Object(sf::String textureFile, sf::Vector2f pos, float left, float top,
                float width, float height, float speed)
-    : x(x),
-      y(y),
+    : coords(pos),
       left(left),
       top(top),
       width(width),
@@ -20,7 +19,7 @@ Object::Object(sf::String textureFile, float x, float y, float left, float top,
     this->sprite.setOrigin(this->width / 2, this->height / 2);
     this->sprite.setTextureRect(
         sf::IntRect(this->left, this->top, this->width, this->height));
-    this->sprite.setPosition(this->x, this->y);
+    this->sprite.setPosition(coords.x, coords.y);
     // this->sprite.setScale(5,5);
 }
 
@@ -48,9 +47,9 @@ void Tank::move(float time) {
                     //получается, что персонаж идет только вверх
     }
 
-    x += dx * time;
-    y += dy * time;
-    sprite.setPosition(x, y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+    coords.x += dx * time;
+    coords.y += dy * time;
+    sprite.setPosition(coords.x, coords.y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
                 //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
@@ -74,9 +73,9 @@ void Bullet::move(float time) {
             break;
     }
 
-    x += dx * time;
-    y += dy * time;
-    sprite.setPosition(x, y);
+    coords.x += dx * time;
+    coords.y += dy * time;
+    sprite.setPosition(coords.x, coords.y);
 }
 
 sf::Sprite& Object::getSprite() {
@@ -119,11 +118,11 @@ int Tank::makeAction(float time) {
 }
 
 float Object::getX() const {
-    return this->x;
+    return this->coords.x;
 }
 
 float Object::getY() const {
-    return this->y;
+    return this->coords.y;
 }
 
 void Tank::setShot(bool shot) {

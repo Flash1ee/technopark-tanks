@@ -14,7 +14,7 @@ enum moveAction {
 
 class Object {
 protected:
-    float x, y; //координаты
+    sf::Vector2f coords; //координаты
     float dx, dy; //current delta coordinats
     float left, top;
     float width, height;

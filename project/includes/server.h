@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <messages.hpp>
+
 
 enum class ClientStatus
 {
@@ -36,11 +38,10 @@ public:
     ~Server();
 
     bool addNewClient();
-    bool recieveFromClient(sf::Packet& packet, int& client_id);
+    bool recieveFromClient(sf::Packet& packet);
     bool sendToClient();
 
-    template <class T>
-    bool sendToAll(T& msg);
+    bool sendToAll(sf::Packet& packet);
 
     bool waitPlayersConnection();
     bool runGame();
@@ -54,5 +55,5 @@ private:
 };
 
 
-template <> bool Server::sendToAll(PlayerActionMessage& msg);
-template <> bool Server::sendToAll(GameActionMessage& msg);
+// template <PlayerActionMessage> bool Server::sendToAll(PlayerActionMessage& msg);
+// template <GameActionMessage> bool Server::sendToAll(GameActionMessage& msg);

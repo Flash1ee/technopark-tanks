@@ -10,13 +10,7 @@
 
 int main(int argc, char* argv[]) 
 {
-    if(argc != 2)
-    {
-        std::cout << "argc != 2" << std::endl;
-        return -1;
-    }
-
-    std::string window_title = std::string("Tanks") + std::string(argv[1]);
+    std::string window_title = std::string("Tanks");
     std::string player_skin(playerTankImage);
     std::string map_skin(map_one);
     std::string server_ip = sf::IpAddress::getLocalAddress().toString();

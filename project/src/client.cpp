@@ -1,10 +1,10 @@
-#include "client.h"
+#include <client.h>
 #include <exception>
 #include <ctime>
 #include <chrono>
 #include <thread>
-#include "client_server_config.h"
-#include "messages.hpp"
+#include <client_server_config.h>
+#include <messages.hpp>
 #include <SFML/System/Vector2.hpp>
 
 

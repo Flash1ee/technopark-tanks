@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "game_session.hpp"
+#include <messages.hpp>
 #include <string>
 #include <iostream>
 
@@ -54,15 +55,15 @@ void GameSession::WaitForOtherPlayers()
 {
     //encapsulation error
     sf::Packet packet;
-    GameStatus game_status;
+
     while(true)
     {
         if(m_game_client.RecieveFromServer(packet))
         {
-            std::string text;
-            packet >> text;
+            GameActionMessage game_status;
+            packet >> game_status;
 
-            if(text == "GameStart")
+            if(game_status.msg_type == GameMessageType::GameBegin)
             {
                 std::cout << "ALL USERS ARE CONNECTED. GAME WILL START NOW!" << std::endl;
                 break;
@@ -86,7 +87,7 @@ void GameSession::Run()
     //     RunOfflineGame();
     // }
     
-    Player this_player(playerTankImage, 200, 200, 1, 2, 13, 13, 100, 0.1);
+    Player this_player(playerTankImage, sf::Vector2f{200, 200}, 1, 2, 13, 13, 100, 0.1);
     std::vector<Player> players;
     std::vector<Bullet*> bullets;
     sf::Clock clock;
@@ -104,7 +105,8 @@ void GameSession::Run()
 
             if (this_player.getShot()) {
                 this_player.setShot(false);
-                bullets.push_back(new Bullet(bulletImage, this_player.getX(), this_player.getY(), 0, 0, 15, 15, 0.5, this_player.getDir()));
+                sf::Vector2f coords = {this_player.getX(), this_player.getY()};
+                bullets.push_back(new Bullet(bulletImage, coords, 0, 0, 15, 15, 0.5, this_player.getDir()));
             }
         }
 

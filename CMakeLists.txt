@@ -3,9 +3,9 @@ project(tanks_2d_udp)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CLIENT_MODULES game.cpp objects.cpp game_map.cpp cam.cpp game_session.cpp client.cpp)
+set(CLIENT_MODULES game.cpp objects.cpp game_map.cpp cam.cpp game_session.cpp client.cpp messages.cpp)
 
-set(SERVER_MODULES server.cpp)
+set(SERVER_MODULES server.cpp messages.cpp)
 
 set(MODULES_PATH "project/src/")
 
