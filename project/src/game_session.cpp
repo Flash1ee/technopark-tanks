@@ -1,7 +1,7 @@
 #include "game.h"
 #include "cam.h"
 #include "game_map.hpp"
-
+#include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "game_session.hpp"
@@ -20,10 +20,12 @@ GameSession::GameSession(std::string window_title,
                             m_is_multiplayer(is_multiplayer)
 {
 
+    m_player_pos = {200, 200};
+
     if(m_is_multiplayer)
     {
 
-        m_game_client.connectToServer(server_ip, server_port);
+        m_player_pos = m_game_client.connectToServer(server_ip, server_port);
 
 
         // sf::Packet packet;
@@ -48,10 +50,45 @@ GameSession::~GameSession()
 
 }
 
-void GameSession::RunGame()
+void GameSession::WaitForOtherPlayers()
 {
-    Player player(playerTankImage, 200, 200, 1, 2, 13, 13, 100, 0.1);
-    std::vector<Bullet*> vectorBullet;
+    //encapsulation error
+    sf::Packet packet;
+    GameStatus game_status;
+    while(true)
+    {
+        if(m_game_client.RecieveFromServer(packet))
+        {
+            std::string text;
+            packet >> text;
+
+            if(text == "GameStart")
+            {
+                std::cout << "ALL USERS ARE CONNECTED. GAME WILL START NOW!" << std::endl;
+                break;
+            }
+        }
+    }
+
+
+}
+
+void GameSession::Run()
+{
+    if(m_is_multiplayer)
+    {
+
+        WaitForOtherPlayers();
+        //RunOnlineGame()
+    }
+    // else
+    // {
+    //     RunOfflineGame();
+    // }
+    
+    Player this_player(playerTankImage, 200, 200, 1, 2, 13, 13, 100, 0.1);
+    std::vector<Player> players;
+    std::vector<Bullet*> bullets;
     sf::Clock clock;
 
     while (m_window.isOpen()) {
@@ -64,27 +101,31 @@ void GameSession::RunGame()
             if (event.type == sf::Event::Closed) {
                 m_window.close();
             }
-            if (player.getShot()) {
-                player.setShot(false);
-                vectorBullet.push_back(new Bullet(bulletImage, player.getX(), player.getY(), 0, 0, 15, 15, 0.5, player.getDir()));
+
+            if (this_player.getShot()) {
+                this_player.setShot(false);
+                bullets.push_back(new Bullet(bulletImage, this_player.getX(), this_player.getY(), 0, 0, 15, 15, 0.5, this_player.getDir()));
             }
         }
 
-        player.makeAction(time);
-        for (auto i: vectorBullet) {
-            i->move(time);
+        for (auto& curr_bullet : bullets) {
+            curr_bullet->move(time);
         }
-        m_cam.changeViewCoords(player.getX(), player.getY());
+
+
+        this_player.makeAction(time);
+
+        m_cam.changeViewCoords(this_player.getX(), this_player.getY());
         m_cam.changeView();
 
         m_window.setView(m_cam.view);//"оживляем" камеру в окне sfml
         m_window.clear();
 
         m_map.drawMap(m_window);
-        for (auto i: vectorBullet) {
+        for (auto i : bullets) {
             m_window.draw(i->getSprite());
         }
-        m_window.draw(player.getSprite());
+        m_window.draw(this_player.getSprite());
         m_window.display();
     }
 }

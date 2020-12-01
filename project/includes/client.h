@@ -1,8 +1,8 @@
 #include<SFML/Network.hpp>
-
 #include<iostream>
 #include<string>
 #include<vector>
+#include <SFML/System/Vector2.hpp>
 
 class Client
 {
@@ -15,7 +15,7 @@ public:
     void RunClient();
     bool SendToServer();
     bool RecieveFromServer(sf::Packet& packet);
-    bool connectToServer(std::string server_ip, int server_port);
+    sf::Vector2f connectToServer(std::string server_ip, int server_port);
 
 private:
     sf::TcpSocket *m_socket;

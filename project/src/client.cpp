@@ -4,6 +4,8 @@
 #include <chrono>
 #include <thread>
 #include "client_server_config.h"
+#include "messages.hpp"
+#include <SFML/System/Vector2.hpp>
 
 
 Client::Client(sf::IpAddress ip_address, int port) : m_ip_adress(ip_address), m_port(port)
@@ -16,12 +18,14 @@ Client::Client(std::string str_ip, int port)
     Client(sf::IpAddress(str_ip), port);
 }
 
-bool Client::connectToServer(std::string server_ip, int server_port)
+sf::Vector2f Client::connectToServer(std::string server_ip, int server_port)
 {
     m_ip_adress = server_ip;
     m_port = server_port;
-    
-    sf::TcpSocket *m_socket = new sf::TcpSocket;
+
+    m_socket = new sf::TcpSocket;
+    PlayerActionMessage new_player_msg;
+
 
     if(m_socket->connect(m_ip_adress, m_port) == sf::Socket::Done)
     {
@@ -32,7 +36,9 @@ bool Client::connectToServer(std::string server_ip, int server_port)
         while (m_socket->receive(packet) != sf::Socket::Done) {}
         if(packet.getDataSize() > 0)
         {
-            packet >> m_id;
+            packet >> new_player_msg;
+            m_id = new_player_msg.player_id;
+
             std::cout << "My ID is " << m_id << std::endl;
         }
         else
@@ -48,7 +54,7 @@ bool Client::connectToServer(std::string server_ip, int server_port)
         throw std::runtime_error("Can't connect to server\n");
     }
 
-    return true;
+    return new_player_msg.position;
 }
 
 Client::~Client()
@@ -100,11 +106,7 @@ bool Client::SendToServer()
 
 bool Client::RecieveFromServer(sf::Packet& packet)
 {
-    if(m_socket->receive(packet) != sf::Socket::Done)
-    {
-        std::cout << "Can't recieve message!" << std::endl;
-        return false;
-    }
+    while(m_socket->receive(packet) != sf::Socket::Done) {}
         
     return true;
 }

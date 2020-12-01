@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 enum moveAction {
-    UP,
+    UP = 0,
     DOWN,
     RIGHT,
     LEFT,
@@ -27,7 +27,7 @@ public:
     float getX() const;
     float getY() const;
     sf::Sprite& getSprite();
-    Object(sf::String textureFile, float x, float y, float left, float top,
+    Object(sf::String textureFile, sf::Vector2f pos, float left, float top,
            float width, float height, float speed);
 };
 
@@ -35,9 +35,9 @@ class Bullet : public Object {
 private:
     int dir; //направление движения
 public:
-    Bullet(sf::String textureFile, float x, float y, float left, float top,
+    Bullet(sf::String textureFile, sf::Vector2f pos, float left, float top,
            float width, float height,float speed, int dir)
-        : Object(textureFile, x, y, left, top, width, height, speed), dir(dir) {};
+        : Object(textureFile, pos, left, top, width, height, speed), dir(dir) {};
     void move(float time);
 };
 
@@ -49,9 +49,9 @@ protected:
     bool shot;
     // size_t armor;
     // size_t power;
-    Tank(sf::String textureFile, float x, float y, float left, float top, float width,
+    Tank(sf::String textureFile, sf::Vector2f pos, float left, float top, float width,
          float height, int hp, float speed)
-        : Object(textureFile, x, y, left, top, width, height, speed), hp(hp), shot(false) {};
+        : Object(textureFile, pos, left, top, width, height, speed), hp(hp), shot(false) {};
 public:
     void move(float time);
     int makeAction(float time);
@@ -62,9 +62,10 @@ public:
 
 class Player : public Tank { //класс игрока
 public:
-    Player(sf::String textureFile, float x, float y, float left, float top, float width,
+    Player(sf::String textureFile, sf::Vector2f pos, float left, float top, float width,
            float height, int hp, float speed)
-        : Tank(textureFile, x, y, left, top, width, height, hp, speed),
-          Object(textureFile, x, y, left, top, width, height, speed) {};
+        : Tank(textureFile, pos, left, top, width, height, hp, speed),
+          Object(textureFile, pos, left, top, width, height, speed) {};
 };
+
 #endif  // _OBJECTS_H_

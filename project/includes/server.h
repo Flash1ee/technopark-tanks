@@ -1,8 +1,9 @@
 #pragma once
-#include<SFML/Network.hpp>
-#include<iostream>
-#include<string>
-#include<vector>
+#include <SFML/Network.hpp>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 
 enum class ClientStatus
 {
@@ -18,14 +19,11 @@ public:
 
     client_data()
     {
-        socket = new sf::TcpSocket;
+        socket = std::make_shared<sf::TcpSocket>();
     }
-    ~client_data()
-    {
-        delete socket;
-    }
+    ~client_data() {}
 
-    sf::TcpSocket* socket;
+    std::shared_ptr<sf::TcpSocket> socket;
     int id;
     ClientStatus status;
 };
@@ -40,7 +38,10 @@ public:
     bool addNewClient();
     bool recieveFromClient(sf::Packet& packet, int& client_id);
     bool sendToClient();
-    bool sendToAll(sf::Packet& packet, const int exclude_id);
+
+    template <class T>
+    bool sendToAll(T& msg);
+
     bool waitPlayersConnection();
     bool runGame();
 
@@ -51,3 +52,7 @@ private:
     //TODO pack TcpSocket* into shared_ptr
     //TODO change vector to map and add more smart IDs
 };
+
+
+template <> bool Server::sendToAll(PlayerActionMessage& msg);
+template <> bool Server::sendToAll(GameActionMessage& msg);
