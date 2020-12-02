@@ -1,8 +1,7 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#define playerTankImage "../resources/sprites.png"
-#define bulletImage "../resources/bullet.png"
+#define ObjectImage "../resources/sprites.png"
 #define map_one "../maps/1.txt"
 
 

@@ -16,7 +16,7 @@ class Map {
     size_t mCols;
     size_t mRows;
     size_t mBlockSize;
-    std::vector<std::vector<std::shared_ptr<Object> > > mField;
+    std::vector<std::vector<std::shared_ptr<Object>>> mField;
 
     sf::Image image;
     sf::Texture texture;

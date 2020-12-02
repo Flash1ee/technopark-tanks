@@ -58,18 +58,22 @@ void Tank::move(float time) {
 void Bullet::move(float time) {
     switch (dir) {
         case RIGHT:
+            this->sprite.setRotation(90);
             dx = speed;
             dy = 0;
             break;
         case LEFT:
+            this->sprite.setRotation(-90);
             dx = -speed;
             dy = 0;
             break;
         case DOWN:
+            this->sprite.setRotation(180);
             dx = 0;
             dy = speed;
             break;
         case UP:
+            this->sprite.setRotation(0);
             dx = 0;
             dy = -speed;
             break;
