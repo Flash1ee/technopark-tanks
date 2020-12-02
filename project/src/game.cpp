@@ -7,9 +7,9 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1024, 760), "Tanks");
-    Player player(playerTankImage, sf::IntRect(1, 2, 13, 13), 200, 200, 0.1, 100);
+    Player player(ObjectImage, sf::IntRect(1, 2, 13, 13), 200, 200, 0.1, 100);
     std::vector<Bullet*> vectorBullet;
-    Map map(map_one, playerTankImage);
+    Map map(map_one, ObjectImage);
     sf::Clock clock;
     Cam cam;
 

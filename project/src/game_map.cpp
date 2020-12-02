@@ -54,6 +54,7 @@ Map::Map(std::string map, std::string sprite) : mBlockSize(blockSize) {
             setPos(i, j, p);
         }
     }
+
     if (!in.eof()) {
         throw "read error, not found eof";
     }
