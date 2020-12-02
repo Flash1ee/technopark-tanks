@@ -1,13 +1,9 @@
 #include "objects.h"
 
-Object::Object(sf::String textureFile, float x, float y, float left, float top,
-               float width, float height, float speed)
+Object::Object(sf::String textureFile, sf::IntRect::Rect rect, float x, float y, float speed)
     : x(x),
       y(y),
-      left(left),
-      top(top),
-      width(width),
-      height(height),
+      rect(rect),
       dx(0),
       dy(0),
       speed(speed) {
@@ -18,9 +14,8 @@ Object::Object(sf::String textureFile, float x, float y, float left, float top,
     this->texture.loadFromImage(this->image);
 
     this->sprite.setTexture(this->texture);
-    this->sprite.setOrigin(this->width / 2, this->height / 2);
-    this->sprite.setTextureRect(
-        sf::IntRect(this->left, this->top, this->width, this->height));
+    this->sprite.setOrigin(rect.width / 2, rect.height / 2);
+    this->sprite.setTextureRect(rect);
     this->sprite.setPosition(this->x, this->y);
     // this->sprite.setScale(5,5);
 }

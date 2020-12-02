@@ -12,7 +12,7 @@ std::map<entities, std::vector<float>> coords = {
     {EMPTY,
      {272, 32, static_cast<float>(blockSize), static_cast<float>(blockSize)}}};
 
-void Map::set_pos(size_t i, size_t j, std::shared_ptr<Object> p) {
+void Map::setPos(size_t i, size_t j, std::shared_ptr<Object> p) {
     if (i >= mRows || j >= mCols) {
         throw std::invalid_argument("Bad position");
     }
@@ -51,7 +51,7 @@ Map::Map(std::string map, std::string sprite) : mBlockSize(blockSize) {
             std::vector<float> cord = coords[flag];
             auto p = std::make_shared<Object>(sprite, i, j, cord[0], cord[1],
                                               cord[2], cord[3], 0);
-            set_pos(i, j, p);
+            setPos(i, j, p);
         }
     }
     if (!in.eof()) {
