@@ -24,7 +24,7 @@ sf::Vector2f Client::connectToServer(std::string server_ip, int server_port)
     m_port = server_port;
 
     m_socket = new sf::TcpSocket;
-    PlayerActionMessage new_player_msg;
+    PlayerAction new_player_msg;
 
 
     if(m_socket->connect(m_ip_adress, m_port) == sf::Socket::Done)
@@ -79,16 +79,8 @@ void Client::RunClient()
 }
 
 
-bool Client::SendToServer()
+bool Client::SendToServer(const sf::Packet& packet)
 {
-
-    sf::Packet packet;
-
-    std::srand(std::time(nullptr)); // use current time as seed for random generator
-    int random_variable = std::rand();
-
-    packet << m_id << random_variable;
-
     if(m_socket->send(packet) == sf::Socket::Done)
     {
         std::cout << "Sent!" << std::endl;

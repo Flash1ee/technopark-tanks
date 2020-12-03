@@ -6,43 +6,48 @@
 #include <vector>
 #include <variant>
 
-enum class PlayerMessageType
+enum PlayerActionType
 {
     NewPlayer = 0,
-    UpdatePlayer
+    UpdatePlayer,
+    NewBullet,
+    UpdateBullet,
+    DeleteBullet
 };
 
-struct PlayerActionMessage
+struct PlayerAction
 {
     int player_id;
-    sf::Vector2f position;
-    PlayerMessageType msg_type;
+    sf::Vector2f position {0, 0};
+    PlayerActionType msg_type;
 };
 
-sf::Packet& operator << (sf::Packet& packet, const PlayerMessageType& msg_type);
-sf::Packet& operator >> (sf::Packet& packet, PlayerMessageType& msg_type);
-
 sf::Packet& operator << (sf::Packet& packet, const sf::Vector2f& position);
-sf::Packet& operator << (sf::Packet& packet, const sf::Vector2f& position);
+sf::Packet& operator >> (sf::Packet& packet, sf::Vector2f& position);
 
-sf::Packet& operator << (sf::Packet& packet, const PlayerActionMessage& message);
-sf::Packet& operator >> (sf::Packet& packet, PlayerActionMessage& message);
+sf::Packet& operator << (sf::Packet& packet, const PlayerActionType& msg_type);
+sf::Packet& operator >> (sf::Packet& packet, PlayerActionType& msg_type);
+
+sf::Packet& operator << (sf::Packet& packet, const PlayerAction& message);
+sf::Packet& operator >> (sf::Packet& packet, PlayerAction& message);
 
 
-enum class GameMessageType
+enum GameActionType
 {
     WaitingForPlayers = 0,
     GameBegin,
     GameEnd
 };
 
-struct GameActionMessage
+
+sf::Packet& operator << (sf::Packet& packet, const GameActionType& msg_type);
+sf::Packet& operator >> (sf::Packet& packet, GameActionType& msg_type);
+
+struct PlayerActionVector
 {
-    GameMessageType msg_type;
+    int size;
+    std::vector<PlayerAction> actions;
 };
 
-sf::Packet& operator << (sf::Packet& packet, const GameMessageType& msg_type);
-sf::Packet& operator >> (sf::Packet& packet, GameMessageType& msg_type);
-
-sf::Packet& operator << (sf::Packet& packet, const GameActionMessage& message);
-sf::Packet& operator >> (sf::Packet& packet, GameActionMessage& message);
+sf::Packet& operator << (sf::Packet& packet, const PlayerActionVector& msg_vec);
+sf::Packet& operator >> (sf::Packet& packet, PlayerActionVector& msg_vec);

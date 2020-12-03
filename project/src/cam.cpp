@@ -1,13 +1,13 @@
 #include "cam.h"
 
-void Cam::changeViewCoords(float x, float y) { //функция для считывания координат игрока
-	float tempX = x; 
-	float tempY = y;
+void Cam::changeViewCoords(const sf::Vector2f& coords) { //функция для считывания координат игрока
+	float tempX = coords.x; 
+	float tempY = coords.y;
  
-	if (x < 110) tempX = 110;//убираем из вида левую сторону
-	if (x > 350) tempX = 350;//убираем из вида правую сторону
-	if (y < 150) tempY = 150;//верхнюю сторону
-	if (y > 310) tempY = 310;//нижнюю сторону	
+	if (coords.x < 110) tempX = 110;//убираем из вида левую сторону
+	if (coords.x > 350) tempX = 350;//убираем из вида правую сторону
+	if (coords.y < 150) tempY = 150;//верхнюю сторону
+	if (coords.y > 310) tempY = 310;//нижнюю сторону	
  
 	view.setCenter(tempX, tempY); //следим за игроком, передавая его координаты. 
 }

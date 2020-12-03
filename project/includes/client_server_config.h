@@ -1,3 +1,3 @@
 #pragma once
 
-constexpr int PORT = 2006;
+constexpr int PORT = 2003;

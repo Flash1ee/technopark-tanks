@@ -60,10 +60,10 @@ void GameSession::WaitForOtherPlayers()
     {
         if(m_game_client.RecieveFromServer(packet))
         {
-            GameActionMessage game_status;
+            GameActionType game_status;
             packet >> game_status;
 
-            if(game_status.msg_type == GameMessageType::GameBegin)
+            if(game_status == GameActionType::GameBegin)
             {
                 std::cout << "ALL USERS ARE CONNECTED. GAME WILL START NOW!" << std::endl;
                 break;
@@ -87,9 +87,15 @@ void GameSession::Run()
     //     RunOfflineGame();
     // }
     
-    Player this_player(playerTankImage, sf::Vector2f{200, 200}, 1, 2, 13, 13, 100, 0.1);
+    Player this_player(playerTankImage, m_player_pos, 1, 2, 13, 13, 100, 0.1);
+    
+    sf::Vector2f old_pos = this_player.getPos();
+    sf::Vector2f new_pos = old_pos;
+
     std::vector<Player> players;
-    std::vector<Bullet*> bullets;
+
+    std::vector<std::shared_ptr<Bullet>> new_bullets;
+    std::vector<std::shared_ptr<Bullet>> all_bullets;
     sf::Clock clock;
 
     while (m_window.isOpen()) {
@@ -105,29 +111,116 @@ void GameSession::Run()
 
             if (this_player.getShot()) {
                 this_player.setShot(false);
-                sf::Vector2f coords = {this_player.getX(), this_player.getY()};
-                bullets.push_back(new Bullet(bulletImage, coords, 0, 0, 15, 15, 0.5, this_player.getDir()));
+                //sf::Vector2f coords = this_player.getPos();
+                auto new_b = std::make_shared<Bullet>(bulletImage, old_pos, 0, 0, 15, 15, 0.5, this_player.getDir());
+                
+                all_bullets.push_back(new_b); // Copying is too expensive
+                new_bullets.push_back(new_b);
             }
         }
 
-        for (auto& curr_bullet : bullets) {
-            curr_bullet->move(time);
-        }
-
-
+       
         this_player.makeAction(time);
+        sf::Vector2f new_pos = this_player.getPos();
+        
+        {// Gathering info for sending to server
+            PlayerActionVector action_vector;
 
-        m_cam.changeViewCoords(this_player.getX(), this_player.getY());
-        m_cam.changeView();
+            if(new_pos != old_pos)
+            {
+                sf::Packet packet;
+                PlayerAction action = { m_game_client.m_id, new_pos, PlayerActionType::UpdatePlayer};
 
-        m_window.setView(m_cam.view);//"оживляем" камеру в окне sfml
-        m_window.clear();
+                action_vector.actions.push_back(action);
+                old_pos = new_pos;
+            }
 
-        m_map.drawMap(m_window);
-        for (auto i : bullets) {
-            m_window.draw(i->getSprite());
+            if(new_bullets.size() > 0)
+            {
+                PlayerAction action;
+                for(auto& curr_bullet : new_bullets)
+                {
+                    action = { -1, new_pos, PlayerActionType::UpdatePlayer}; // bullets have no id
+                    action_vector.actions.push_back(action);
+                }
+
+                new_bullets.clear();
+            }
+
+            sf::Packet packet;
+            packet << action_vector;
+
+            m_game_client.SendToServer(packet);
         }
-        m_window.draw(this_player.getSprite());
-        m_window.display();
+        
+        { // getting info from server and applying it to current session
+            PlayerActionVector others_actions;
+            sf::Packet packet;
+
+            m_game_client.RecieveFromServer(packet);
+
+            packet >> others_actions;
+
+
+            for(auto& action : others_actions.actions)
+            {
+                switch (action.msg_type)
+                {
+                case PlayerActionType::NewPlayer:
+                    {
+
+                    }
+                    break;
+
+                case PlayerActionType::UpdatePlayer:
+                    {
+                        
+                    }
+                    break;
+
+                case PlayerActionType::NewBullet:
+                    {
+                        
+                    }
+                    break;
+
+                case PlayerActionType::UpdateBullet:
+                    {
+                        
+                    }
+                    break;
+
+                case PlayerActionType::NewPlayer:
+                    {
+                        
+                    }
+                    break;
+                
+                default:
+                    break;
+                }
+            }
+            
+        }
+
+        { // Drawing is here
+
+            for (auto& curr_bullet : all_bullets) {
+                curr_bullet->move(time);
+            }
+
+            m_cam.changeViewCoords(new_pos);
+            m_cam.changeView();
+
+            m_window.setView(m_cam.view);//"оживляем" камеру в окне sfml
+            m_window.clear();
+
+            m_map.drawMap(m_window);
+            for (auto i : all_bullets) {
+                m_window.draw(i->getSprite());
+            }
+            m_window.draw(this_player.getSprite());
+            m_window.display();
+        }
     }
 }

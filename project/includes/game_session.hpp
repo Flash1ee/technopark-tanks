@@ -1,7 +1,7 @@
 #pragma once
 #include "client.h"
 #include "game_map.hpp"
-
+#include "cam.h"
 
 class GameSession
 {

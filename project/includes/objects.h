@@ -24,8 +24,7 @@ protected:
     sf::Sprite sprite;
     Object();
 public:
-    float getX() const;
-    float getY() const;
+    sf::Vector2f getPos() const;
     sf::Sprite& getSprite();
     Object(sf::String textureFile, sf::Vector2f pos, float left, float top,
            float width, float height, float speed);

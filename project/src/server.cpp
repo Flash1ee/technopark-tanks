@@ -41,11 +41,11 @@ bool Server::addNewClient()
 
         std::cout << "New connection with id = " << curr_client.id << "accepted" << std::endl;
         
-        PlayerActionMessage msg_to_player;//= {curr_client.id, sf::Vector2f{100.0 * (curr_client.id + 1), (100.0 * curr_client.id + 1)}, PlayerMessageType::NewPlayer};
+        PlayerAction msg_to_player;//= {curr_client.id, sf::Vector2f{100.0 * (curr_client.id + 1), (100.0 * curr_client.id + 1)}, PlayerActionType::NewPlayer};
         
         msg_to_player.player_id = curr_client.id;
         msg_to_player.position = sf::Vector2f{100.0 * (curr_client.id + 1), (100.0 * curr_client.id + 1)};
-        msg_to_player.msg_type = PlayerMessageType::NewPlayer;
+        msg_to_player.msg_type = PlayerActionType::NewPlayer;
 
         sf::Packet packet;
         std::cout <<"JOPA" << std::endl;
@@ -71,10 +71,13 @@ bool Server::addNewClient()
     return true;
 }
 
-bool Server::sendToAll(sf::Packet& packet)
+bool Server::sendToAll(sf::Packet& packet, int exclude_id)
 {
     for(auto& curr_client : m_clients)
     {
+        if(curr_client.id == exclude_id)
+            continue;
+            
         if(curr_client.socket->send(packet) != sf::Socket::Done)
         {
             std::cout << "Error while sending data to all users" << std::endl;
@@ -107,30 +110,25 @@ bool Server::recieveFromClient(sf::Packet& packet)
 
 bool Server::runGame()
 {
-    GameActionMessage msg;
-    msg.msg_type = GameMessageType::GameBegin;
+    GameActionType msg = GameActionType::GameBegin;
     sf::Packet packet;
     packet << msg;
 
     sendToAll(packet);
 
-    // while (true)
-    // {
-    //     for(auto& curr_client : m_clients)
-    //     {
-    //         if (m_selector.isReady(*curr_client.socket))
-    //         {
-    //             if (curr_client.socket->receive(packet) == sf::Socket::Done)
-    //             {
-    //                 sendToAll(packet, curr_client.id);
-    //             }
-    //             else
-    //             {
-    //                 std::cout << "Cant recieve data from client" << std::endl;
-    //             }
-    //         }
-    //     }
-    // }
+    while (true)
+    {
+        for(auto& curr_client : m_clients)
+        {
+            if (m_selector.isReady(*curr_client.socket))
+            {
+                while (curr_client.socket->receive(packet) == sf::Socket::Done) {}
+                
+                sendToAll(packet, curr_client.id);
+                
+            }
+        }
+    }
 }
 
 bool Server::waitPlayersConnection()

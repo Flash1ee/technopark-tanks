@@ -41,7 +41,7 @@ public:
     bool recieveFromClient(sf::Packet& packet);
     bool sendToClient();
 
-    bool sendToAll(sf::Packet& packet);
+    bool sendToAll(sf::Packet& packet, int exclude_id);
 
     bool waitPlayersConnection();
     bool runGame();
@@ -55,5 +55,5 @@ private:
 };
 
 
-// template <PlayerActionMessage> bool Server::sendToAll(PlayerActionMessage& msg);
+// template <PlayerAction> bool Server::sendToAll(PlayerAction& msg);
 // template <GameActionMessage> bool Server::sendToAll(GameActionMessage& msg);

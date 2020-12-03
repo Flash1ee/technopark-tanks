@@ -117,12 +117,8 @@ int Tank::makeAction(float time) {
     return moveAction::ERROR;
 }
 
-float Object::getX() const {
-    return this->coords.x;
-}
-
-float Object::getY() const {
-    return this->coords.y;
+sf::Vector2f Object::getPos() const {
+    return this->coords;
 }
 
 void Tank::setShot(bool shot) {
