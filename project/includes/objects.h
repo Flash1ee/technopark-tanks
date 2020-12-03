@@ -17,23 +17,23 @@ protected:
     float x, y; //координаты
     float dx, dy; //current delta coordinats
     float speed; //скорость (множитель времени)
-    sf::IntRect::Rect rect; 
+    sf::IntRect rect; 
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
-    Object();
+    // Object();
 public:
     float getX() const;
     float getY() const;
     sf::Sprite& getSprite();
-    Object(sf::String textureFile, sf::IntRect::Rect rect, float x, float y, float speed);
+    Object(sf::String textureFile, sf::IntRect rect, float x, float y, float speed);
 };
 
 class Bullet : public Object {
 private:
     int dir; //направление движения
 public:
-    Bullet(sf::String textureFile, sf::IntRect::Rect rect, float x, float y, float speed, int dir)
+    Bullet(sf::String textureFile, sf::IntRect rect, float x, float y, float speed, int dir)
         : Object(textureFile, rect, x, y, speed), dir(dir) {};
     void move(float time);
 };
@@ -46,7 +46,7 @@ protected:
     bool shot;
     // size_t armor;
     // size_t power;
-    Tank(sf::String textureFile, sf::IntRect::Rect rect, float x, float y, float speed, int hp)
+    Tank(sf::String textureFile, sf::IntRect rect, float x, float y, float speed, int hp)
         : Object(textureFile, rect, x, y, speed), hp(hp), shot(false) {};
 public:
     void move(float time);
@@ -58,7 +58,7 @@ public:
 
 class Player : public Tank { //класс игрока
 public:
-    Player(sf::String textureFile, sf::IntRect::Rect rect, float x, float y, float speed, int hp)
+    Player(sf::String textureFile, sf::IntRect rect, float x, float y, float speed, int hp)
         : Tank(textureFile, rect, x, y, speed, hp),
           Object(textureFile, rect, x, y, speed) {};
 };

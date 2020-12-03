@@ -10,7 +10,7 @@ std::map<entities, std::vector<float>> coords = {
     {WALL,
      {256, 0, static_cast<float>(blockSize), static_cast<float>(blockSize)}},
     {EMPTY,
-     {272, 32, static_cast<float>(blockSize), static_cast<float>(blockSize)}}};
+     {336, 0, static_cast<float>(blockSize), static_cast<float>(blockSize)}}};
 
 void Map::setPos(size_t i, size_t j, std::shared_ptr<Object> p) {
     if (i >= mRows || j >= mCols) {
@@ -49,8 +49,8 @@ Map::Map(std::string map, std::string sprite) : mBlockSize(blockSize) {
             }
             auto flag = mapEntity[cur];
             std::vector<float> cord = coords[flag];
-            auto p = std::make_shared<Object>(sprite, i, j, cord[0], cord[1],
-                                              cord[2], cord[3], 0);
+            auto p = std::make_shared<Object>(sprite, sf::IntRect(cord[0], cord[1],
+                                              cord[2], cord[3]), i, j, 0);
             setPos(i, j, p);
         }
     }

@@ -7,9 +7,9 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1024, 760), "Tanks");
-    Player player(ObjectImage, sf::IntRect(1, 2, 13, 13), 200, 200, 0.1, 100);
+    Player player(objectImage, sf::IntRect(1, 2, 13, 13), 200, 200, 0.1, 100);
     std::vector<Bullet*> vectorBullet;
-    Map map(map_one, ObjectImage);
+    Map map(mapOne, objectImage);
     sf::Clock clock;
     Cam cam;
 
@@ -25,7 +25,7 @@ int main() {
             }
             if (player.getShot()) {
                 player.setShot(false);
-                vectorBullet.push_back(new Bullet(bulletImage, sf::IntRect(0, 0, 15, 15), player.getX(), player.getY(), 0.5, player.getDir()));
+                vectorBullet.push_back(new Bullet(objectImage, sf::IntRect(321, 100, 8, 8), player.getX(), player.getY(), 0.5, player.getDir()));
             }
         }
 

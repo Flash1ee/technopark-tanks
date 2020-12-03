@@ -1,6 +1,6 @@
 #include "objects.h"
 
-Object::Object(sf::String textureFile, sf::IntRect::Rect rect, float x, float y, float speed)
+Object::Object(sf::String textureFile, sf::IntRect rect, float x, float y, float speed)
     : x(x),
       y(y),
       rect(rect),
