@@ -1,7 +1,9 @@
 #ifndef _OBJECTS_H_
 #define _OBJECTS_H_
 
+#include "TmxLevel.h"
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 enum moveAction {
     UP,
@@ -21,6 +23,7 @@ protected:
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
+    std::vector<std::vector<std::shared_ptr<TmxObject>>> m_objects;
     // Object();
 public:
     float getX() const;

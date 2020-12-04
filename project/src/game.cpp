@@ -1,12 +1,18 @@
 #include "game.h"
 #include "cam.h"
 #include "game_map.hpp"
+#include "TmxLevel.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1024, 760), "Tanks");
+    TmxLevel level;
+    level.LoadFromFile("/home/dmitry/prep/tanks_2d_udp/project/src/map1.tmx");
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Tanks");
+    TmxObject obj = level.GetFirstObject("player");
+    std::cout << obj.name << std::endl;
+
     Player player(objectImage, sf::IntRect(1, 2, 13, 13), 200, 200, 0.1, 100);
     std::vector<Bullet*> vectorBullet;
     Map map(mapOne, objectImage);
@@ -39,7 +45,8 @@ int main() {
         window.setView(cam.view);//"оживляем" камеру в окне sfml
         window.clear();
 
-        map.drawMap(window);
+        level.Draw(window);
+        // map.drawMap(window);
         for (auto i: vectorBullet) {
             window.draw(i->getSprite());
         }
