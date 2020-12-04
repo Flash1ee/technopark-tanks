@@ -368,6 +368,10 @@ std::vector<TmxObject> TmxLevel::GetAllObjects(const std::string &name) const
 
     return vec;
 }
+std::vector<TmxObject> TmxLevel::GetAllObjects() const
+{
+    return m_objects;
+}
 
 sf::Vector2i TmxLevel::GetTileSize() const
 {
