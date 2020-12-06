@@ -48,10 +48,7 @@ bool Server::addNewClient()
         msg_to_player.msg_type = PlayerActionType::NewPlayer;
 
         sf::Packet packet;
-        std::cout <<"JOPA" << std::endl;
         packet << msg_to_player;
-        std::cout <<"JOPA" << std::endl;
-
 
         if(curr_client.socket->send(packet) != sf::Socket::Done)
         {
@@ -77,12 +74,12 @@ bool Server::sendToAll(sf::Packet& packet, int exclude_id = -1)
     {
         if(curr_client.first == exclude_id)
             continue;
-            
-        if(curr_client.second.socket->send(packet) != sf::Socket::Done)
-        {
-            std::cout << "Error while sending data to all users" << std::endl;
-            return false;
-        }
+        
+        while(curr_client.second.socket->send(packet) == sf::Socket::Partial) {}
+        // {
+        //     std::cout << "Error while sending data to all users" << std::endl;
+        //     return false;
+        // }
     }
 
     return true;
@@ -90,21 +87,21 @@ bool Server::sendToAll(sf::Packet& packet, int exclude_id = -1)
 
 bool Server::recieveFromClient(sf::Packet& packet)
 {
-    for(auto& curr_client : m_clients)
-    {
-        if (m_selector.isReady(*curr_client.second.socket))
-        {
-            if (curr_client.second.socket->receive(packet) == sf::Socket::Done)
-            {
-                std::string text;
-                packet >> text;
-                std::cout << "Recieved data. Text = " << text << std::endl;
+    // for(auto& curr_client : m_clients)
+    // {
+    //     if (m_selector.isReady(*curr_client.second.socket))
+    //     {
+    //         if (curr_client.second.socket->receive(packet) == sf::Socket::Done)
+    //         {
+    //             std::string text;
+    //             packet >> text;
+    //             std::cout << "Recieved data. Text = " << text << std::endl;
                 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
 
-    return true;
+    // return true;
 }
 
 
@@ -118,11 +115,14 @@ bool Server::runGame()
 
     while (true)
     {
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::cout << "game in progress..." << std::endl;
         for(auto& curr_client : m_clients)
         {
             if (m_selector.isReady(*curr_client.second.socket))
             {
-                while (curr_client.second.socket->receive(packet) == sf::Socket::Done) {}
+                std::cout << "some player made action" << std::endl;
+                while (curr_client.second.socket->receive(packet) != sf::Socket::Done) {}
                 
                 sendToAll(packet, curr_client.first);
                 
@@ -159,11 +159,11 @@ bool Server::waitPlayersConnection()
         if(m_clients.size() == 2)
         {
             std::cout << "Ready to start game" << std::endl;
-            break;
+            return true;
         }
     }
 
-    return true;
+    // return true;
 }
 
 

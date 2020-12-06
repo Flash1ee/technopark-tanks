@@ -81,26 +81,43 @@ void Client::RunClient()
 
 bool Client::SendToServer(sf::Packet& packet)
 {
-    if(m_socket->send(packet) == sf::Socket::Done)
+    // if(m_socket->send(packet) == sf::Socket::Done)
+    // {
+    //     std::cout << "Sent!" << std::endl;
+    // }
+
+    // else
+    // {
+    //     std::cout << "Can't send!" << std::endl;
+    // }
+
+    sf::Socket::Status status;
+    do
     {
-        std::cout << "Sent!" << std::endl;
-    }
+        status = m_socket->send(packet);
 
-    else
-    {
-        std::cout << "Can't send!" << std::endl;
-    }
+    }while (status == sf::Socket::Partial);
 
-    m_socket->setBlocking(false);
+    if(status == sf::Socket::Done)
+        return true;
 
-    return true;
+    else return false;
+
 }
 
 bool Client::RecieveFromServer(sf::Packet& packet)
 {
-    while(m_socket->receive(packet) != sf::Socket::Done) {}
-        
-    return true;
+    sf::Socket::Status status;
+    do
+    {
+        status = m_socket->receive(packet);
+    } while (status == sf::Socket::Partial);
+    
+
+    if(status == sf::Socket::Done)
+        return true;
+
+    else return false;
 }
 
 // int main()

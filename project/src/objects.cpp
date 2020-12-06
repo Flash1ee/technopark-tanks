@@ -45,11 +45,23 @@ void Tank::move(float time) {
                     //получается, что персонаж идет только вверх
     }
 
+// <<<<<<< HEAD
+//     coords.x += dx * time;
+//     coords.y += dy * time;
+//     sprite.setPosition(coords.x, coords.y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+
+//     //sprite.setPosition(coords.x + (rect.width / 2), coords.y + (rect.height / 2));  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+// =======
+    auto x_old = coords.x;
+    auto y_old = coords.y;
     coords.x += dx * time;
     coords.y += dy * time;
-    sprite.setPosition(coords.x, coords.y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+    checkCollisionsMap(x_old, y_old, dx, dy);
 
-    //sprite.setPosition(coords.x + (rect.width / 2), coords.y + (rect.height / 2));  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+
+    // checkCollisionsMap(0, dy);
+    sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+// >>>>>>> Dev
                 //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
@@ -79,7 +91,8 @@ void Bullet::move(float time) {
 
     coords.x += dx * time;
     coords.y += dy * time;
-    sprite.setPosition(coords.x, coords.y);
+    sprite.setPosition(coords.x + rect.width / 2, coords.y - rect.height / 2);
+
 }
 
 sf::Sprite& Object::getSprite() {
@@ -136,4 +149,35 @@ void Tank::setShot(bool shot) {
 
 bool Tank::getShot() const {
     return this->shot;
+}
+void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
+    for (auto &i : m_objects) {
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)))
+        {
+
+            if (dy > 0) {
+                // this->y =i.rect.top - this->rect.height;
+                coords.y = y_old;
+                this->dy = 0;
+            }
+            if (dy < 0) {
+                // this->y = i.rect.top + this->rect.height;
+                coords.y = y_old;
+                this->dy = 0;
+            }
+            if (dx > 0) {
+                // this->x = i.rect.left - this->rect.width;
+                coords.x = x_old;
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                // this->x = i.rect.left + this->rect.width;
+                coords.x = x_old;
+                this->dx = 0;
+            }
+        }
+    }
+}
+sf::IntRect Object::getRect() {
+    return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }
