@@ -9,7 +9,7 @@
 
 int main() {
     TmxLevel level;
-    level.LoadFromFile("/home/dmitry/prep/tanks_2d_udp/project/src/map1.tmx"); //deprecated #TODO
+    level.LoadFromFile("../project/src/map1.tmx"); //deprecated #TODO
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Tanks"); // TODO
 
     TmxObject Player_obj = level.GetFirstObject("player"); //TODO: make const name
