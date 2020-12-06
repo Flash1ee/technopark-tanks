@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <variant>
+#include "objects.h"
 
 enum PlayerActionType
 {
@@ -19,7 +20,7 @@ struct PlayerAction
 {
     int player_id;
     sf::Vector2f position {0, 0};
-    moveAction direction;
+    Direction direction;
     PlayerActionType msg_type;
 };
 

@@ -15,8 +15,8 @@ class Map {
    private:
     size_t m_cols;
     size_t m_rows;
-    size_t m_block_size;
-    std::vector<std::vector<std::shared_ptr<Object> > > m_field;
+    size_t m_blockSize;
+    std::vector<std::vector<std::shared_ptr<Object>>> mField;
 
     sf::Image image;
     sf::Texture texture;
@@ -25,7 +25,7 @@ class Map {
    public:
     explicit Map(std::string map, std::string sprite);
     // ~Map();
-    void set_pos(size_t i, size_t j, std::shared_ptr<Object> p);
+    void setPos(size_t i, size_t j, std::shared_ptr<Object> p);
     sf::Sprite getSprite() const;
     void drawMap(sf::RenderWindow &window);
 };

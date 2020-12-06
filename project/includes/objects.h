@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-enum class moveAction {
+enum class Direction {
     UP = 0,
     DOWN,
     RIGHT,
@@ -13,58 +13,56 @@ enum class moveAction {
 };
 
 class Object {
+
+public:
+    Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float speed, Direction dir);
+
+    sf::Vector2f getPos() const;
+    void setPos(const sf::Vector2f& new_pos);
+    sf::Sprite& getSprite();
+
 protected:
     sf::Vector2f coords; //координаты
     float dx, dy; //current delta coordinats
-    float left, top;
-    float width, height;
     float speed; //скорость (множитель времени)
+    Direction dir;
+    sf::IntRect rect; 
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
-    Object();
-public:
-    sf::Vector2f getPos() const;
-    sf::Sprite& getSprite();
-    Object(sf::String textureFile, sf::Vector2f pos, float left, float top,
-           float width, float height, float speed);
+    // Object();
 };
 
 class Bullet : public Object {
-private:
-    int dir; //направление движения
+
 public:
-    Bullet(sf::String textureFile, sf::Vector2f pos, float left, float top,
-           float width, float height,float speed, int dir)
-        : Object(textureFile, pos, left, top, width, height, speed), dir(dir) {};
+    Bullet(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float speed, Direction dir)
+        : Object(textureFile, rect, pos, speed, dir) {};
     void move(float time);
 };
 
-class Tank : virtual public Object { //класс любого танка
+class Tank : public Object { //класс любого танка
 protected:
     // sf::String name;
     int hp;
-    int dir;
+    //Direction dir;
     bool shot;
     // size_t armor;
     // size_t power;
-    Tank(sf::String textureFile, sf::Vector2f pos, float left, float top, float width,
-         float height, int hp, float speed)
-        : Object(textureFile, pos, left, top, width, height, speed), hp(hp), shot(false) {};
+    Tank(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float speed, int hp, Direction dir)
+        : Object(textureFile, rect, pos, speed, dir), hp(hp), shot(false) {};
 public:
     void move(float time);
     int makeAction(float time);
-    int getDir() const;
+    Direction getDir() const;
     bool getShot() const;
     void setShot(bool shot);
 };
 
 class Player : public Tank { //класс игрока
 public:
-    Player(sf::String textureFile, sf::Vector2f pos, float left, float top, float width,
-           float height, int hp, float speed)
-        : Tank(textureFile, pos, left, top, width, height, hp, speed),
-          Object(textureFile, pos, left, top, width, height, speed) {};
+    Player(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float speed, int hp, Direction dir)
+        : Tank(textureFile, rect, pos, speed, hp, dir) {}
 };
 
 #endif  // _OBJECTS_H_

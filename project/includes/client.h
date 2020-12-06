@@ -13,7 +13,7 @@ public:
     ~Client();
 
     void RunClient();
-    bool SendToServer(const sf::Packet& packet);
+    bool SendToServer(sf::Packet& packet);
     bool RecieveFromServer(sf::Packet& packet);
     sf::Vector2f connectToServer(std::string server_ip, int server_port);
 

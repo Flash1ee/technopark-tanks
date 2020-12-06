@@ -1,46 +1,44 @@
 #include "objects.h"
 
-Object::Object(sf::String textureFile, sf::Vector2f pos, float left, float top,
-               float width, float height, float speed)
+Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float speed, Direction dir = Direction::UP)
     : coords(pos),
-      left(left),
-      top(top),
-      width(width),
-      height(height),
+      rect(rect),
       dx(0),
       dy(0),
-      speed(speed) {
+      speed(speed),
+      dir(dir) {
     this->image.loadFromFile(textureFile);
+    this->image.createMaskFromColor(sf::Color(0, 0, 1));
     this->image.createMaskFromColor(sf::Color(0, 0, 0));
 
     this->texture.loadFromImage(this->image);
 
     this->sprite.setTexture(this->texture);
-    this->sprite.setOrigin(this->width / 2, this->height / 2);
-    this->sprite.setTextureRect(
-        sf::IntRect(this->left, this->top, this->width, this->height));
+
+    this->sprite.setOrigin(rect.width / 2, rect.height / 2);
+    this->sprite.setTextureRect(rect);
     this->sprite.setPosition(coords.x, coords.y);
     // this->sprite.setScale(5,5);
 }
 
 void Tank::move(float time) {
     switch (dir) {
-        case RIGHT:
+        case Direction::RIGHT:
             dx = speed;
             dy = 0;
             break;  //по иксу задаем положительную скорость, по игреку зануляем.
                     //получаем, что персонаж идет только вправо
-        case LEFT:
+        case Direction::LEFT:
             dx = -speed;
             dy = 0;
             break;  //по иксу задаем отрицательную скорость, по игреку зануляем.
                     //получается, что персонаж идет только влево
-        case DOWN:
+        case Direction::DOWN:
             dx = 0;
             dy = speed;
             break;  //по иксу задаем нулевое значение, по игреку положительное.
                     //получается, что персонаж идет только вниз
-        case UP:
+        case Direction::UP:
             dx = 0;
             dy = -speed;
             break;  //по иксу задаем нулевое значение, по игреку отрицательное.
@@ -50,24 +48,30 @@ void Tank::move(float time) {
     coords.x += dx * time;
     coords.y += dy * time;
     sprite.setPosition(coords.x, coords.y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+
+    //sprite.setPosition(coords.x + (rect.width / 2), coords.y + (rect.height / 2));  //выводим спрайт в позицию x y , посередине. бесконечно выводим
                 //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
 void Bullet::move(float time) {
     switch (dir) {
-        case RIGHT:
+        case Direction::RIGHT:
+            this->sprite.setRotation(90);
             dx = speed;
             dy = 0;
             break;
-        case LEFT:
+        case Direction::LEFT:
+            this->sprite.setRotation(-90);
             dx = -speed;
             dy = 0;
             break;
-        case DOWN:
+        case Direction::DOWN:
+            this->sprite.setRotation(180);
             dx = 0;
             dy = speed;
             break;
-        case UP:
+        case Direction::UP:
+            this->sprite.setRotation(0);
             dx = 0;
             dy = -speed;
             break;
@@ -82,7 +86,7 @@ sf::Sprite& Object::getSprite() {
     return this->sprite;
 }
 
-int Tank::getDir() const {
+Direction Tank::getDir() const {
     return this->dir;
 }
 
@@ -92,33 +96,38 @@ int Tank::makeAction(float time) {
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         this->sprite.setRotation(0);
-        this->dir = moveAction::UP;
+        this->dir = Direction::UP;
         this->move(time);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         this->sprite.setRotation(-90);
-        this->dir = moveAction::LEFT;
+        this->dir = Direction::LEFT;
         this->move(time);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         this->sprite.setRotation(90);
-        this->dir = moveAction::RIGHT;
+        this->dir = Direction::RIGHT;
         this->move(time);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         this->sprite.setRotation(180);
-        this->dir = moveAction::DOWN;
+        this->dir = Direction::DOWN;
         this->move(time);
         return 0;
     }
-    return moveAction::ERROR;
+    return -1;
 }
 
 sf::Vector2f Object::getPos() const {
     return this->coords;
+}
+
+void Object::setPos(const sf::Vector2f& new_pos)
+{
+
 }
 
 void Tank::setShot(bool shot) {

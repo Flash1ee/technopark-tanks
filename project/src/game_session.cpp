@@ -17,7 +17,7 @@ GameSession::GameSession(std::string window_title,
                          std::string server_ip, 
                          int server_port) : 
                             
-                            m_window(sf::VideoMode(640, 480), window_title),
+                            m_window(sf::VideoMode(1024, 760), window_title),
                             m_map(map_path, player_skin),
                             m_is_multiplayer(is_multiplayer)
 {
@@ -88,32 +88,34 @@ void GameSession::Run()
     //     RunOfflineGame();
     // }
     
-    Player this_player(playerTankImage, m_player_pos, 1, 2, 13, 13, 100, 0.1);
-    
-    sf::Vector2f old_pos = this_player.getPos();
+    std::shared_ptr<Player> this_player = std::make_shared<Player>(OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 100, 0.1, Direction::UP);
+        
+    sf::Vector2f old_pos = this_player->getPos();
     sf::Vector2f new_pos = old_pos;
 
-    std::map<int, Player> players;
+    std::map<int, std::shared_ptr<Player>> players;
 
     std::vector<std::shared_ptr<Bullet>> new_bullets;
     std::vector<std::shared_ptr<Bullet>> all_bullets;
     sf::Clock clock;
 
     while (m_window.isOpen()) {
+
         float time = clock.getElapsedTime().asMicroseconds();  //дать прошедшее время в микросекундах
         clock.restart();    //перезагружает время
-        time = time / 800;  //скорость игры
+        time /= 800;  //скорость игры
 
         sf::Event event;
         while (m_window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 m_window.close();
+                exit(0);
             }
 
-            if (this_player.getShot()) {
-                this_player.setShot(false);
+            if (this_player->getShot()) {
+                this_player->setShot(false);
                 //sf::Vector2f coords = this_player.getPos();
-                auto new_b = std::make_shared<Bullet>(bulletImage, old_pos, 0, 0, 15, 15, 0.5, this_player.getDir());
+                auto new_b = std::make_shared<Bullet>(OBJECT_IMAGE, sf::IntRect(321, 100, 8, 8), old_pos, 0.5, this_player->getDir());
                 
                 all_bullets.push_back(new_b); // Copying is too expensive
                 new_bullets.push_back(new_b);
@@ -121,97 +123,101 @@ void GameSession::Run()
         }
 
        
-        this_player.makeAction(time);
-        sf::Vector2f new_pos = this_player.getPos();
+        this_player->makeAction(time);
+        sf::Vector2f new_pos = this_player->getPos();
         
-        {// Gathering info for sending to server
-            PlayerActionVector action_vector;
+        if(m_is_multiplayer)
+        {
 
-            moveAction dir = static_cast<moveAction>(this_player.getDir());
+            {// Gathering info for sending to server
+                PlayerActionVector action_vector;
 
-            if(new_pos != old_pos)
-            {
-                sf::Packet packet;
-                PlayerAction action = { m_game_client.m_id, new_pos, dir, PlayerActionType::UpdatePlayer};
+                Direction dir = this_player->getDir();
 
-                action_vector.actions.push_back(action);
-                old_pos = new_pos;
-            }
-
-            if(new_bullets.size() > 0)
-            {
-                PlayerAction action;
-                for(auto& curr_bullet : new_bullets)
+                if(new_pos != old_pos)
                 {
-                    action = { -1, new_pos, dir, PlayerActionType::UpdatePlayer }; // bullets have no id
+                    sf::Packet packet;
+                    PlayerAction action = { m_game_client.m_id, new_pos, dir, PlayerActionType::UpdatePlayer};
+
                     action_vector.actions.push_back(action);
+                    old_pos = new_pos;
                 }
 
-                new_bullets.clear();
-            }
-
-            sf::Packet packet;
-            packet << action_vector;
-
-            m_game_client.SendToServer(packet);
-        }
-        
-        { // getting info from server and applying it to current session
-            PlayerActionVector others_actions;
-            sf::Packet packet;
-
-            m_game_client.RecieveFromServer(packet);
-
-            packet >> others_actions;
-
-
-            for(auto& action : others_actions.actions)
-            {
-                switch (action.msg_type)
+                if(new_bullets.size() > 0)
                 {
-                case PlayerActionType::NewPlayer:
+                    PlayerAction action;
+                    for(auto& curr_bullet : new_bullets)
                     {
-                        int id = action.player_id;
-                        moveAction dir = action.direction;
-                        sf::Vector2f pos = action.position;
-                        players.insert(std::make_pair(id, Player(playerTankImage, pos, 1, 2, 13, 13, 100, 0.1, dir)));
+                        action = { -1, new_pos, dir, PlayerActionType::UpdatePlayer }; // bullets have no id
+                        action_vector.actions.push_back(action);
                     }
-                    break;
 
-                case PlayerActionType::UpdatePlayer:
-                    {
-                        int id = action.player_id;
-                        sf::Vector2f new_pos = action.position;
-                        players[id].SetPos(new_pos);
-                    }
-                    break;
-
-                case PlayerActionType::NewBullet:
-                    {
-                        sf::Vector2f pos = action.position;
-                        moveAction dir = action.direction;
-                        std::shared_ptr<Bullet> new_b(new Bullet(bulletImage, pos, 0, 0, 15, 15, 0.5, dir));
-                        all_bullets.push_back(new_b);
-                    }
-                    break;
-
-                case PlayerActionType::UpdateBullet:
-                    {
-                        
-                    }
-                    break;
-
-                case PlayerActionType::DeleteBullet:
-                    {
-                        
-                    }
-                    break;
-                
-                default:
-                    break;
+                    new_bullets.clear();
                 }
+
+                sf::Packet packet;
+                packet << action_vector;
+
+                m_game_client.SendToServer(packet);
             }
-            
+
+            { // getting info from server and applying it to current session
+                PlayerActionVector others_actions;
+                sf::Packet packet;
+
+                m_game_client.RecieveFromServer(packet);
+
+                packet >> others_actions;
+
+
+                for(auto& action : others_actions.actions)
+                {
+                    switch (action.msg_type)
+                    {
+                    case PlayerActionType::NewPlayer:
+                        {
+                            int id = action.player_id;
+                            Direction dir = action.direction;
+                            sf::Vector2f pos = action.position;
+                            players.insert(std::make_pair(id, std::make_shared<Player>(OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), pos, 0.1, 100, dir)));
+                        }
+                        break;
+
+                    case PlayerActionType::UpdatePlayer:
+                        {
+                            int id = action.player_id;
+                            sf::Vector2f new_pos = action.position;
+                            players[id]->setPos(new_pos);
+                        }
+                        break;
+
+                    case PlayerActionType::NewBullet:
+                        {
+                            sf::Vector2f pos = action.position;
+                            Direction dir = action.direction;
+                            std::shared_ptr<Bullet> new_b(new Bullet(OBJECT_IMAGE, sf::IntRect(321, 100, 8, 8), pos, 0.5, dir));
+                            all_bullets.push_back(new_b);
+                        }
+                        break;
+
+                    case PlayerActionType::UpdateBullet:
+                        {
+
+                        }
+                        break;
+
+                    case PlayerActionType::DeleteBullet:
+                        {
+
+                        }
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+
+            }
         }
 
         { // Drawing is here
@@ -230,7 +236,7 @@ void GameSession::Run()
             for (auto i : all_bullets) {
                 m_window.draw(i->getSprite());
             }
-            m_window.draw(this_player.getSprite());
+            m_window.draw(this_player->getSprite());
             m_window.display();
         }
     }

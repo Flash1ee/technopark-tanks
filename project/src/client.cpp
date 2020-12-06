@@ -79,7 +79,7 @@ void Client::RunClient()
 }
 
 
-bool Client::SendToServer(const sf::Packet& packet)
+bool Client::SendToServer(sf::Packet& packet)
 {
     if(m_socket->send(packet) == sf::Socket::Done)
     {
