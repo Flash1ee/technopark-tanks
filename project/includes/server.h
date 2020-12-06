@@ -26,7 +26,6 @@ public:
     ~client_data() {}
 
     std::shared_ptr<sf::TcpSocket> socket;
-    int id;
     ClientStatus status;
 };
 
@@ -49,7 +48,7 @@ public:
 private:
     sf::TcpListener m_listener;
     sf::SocketSelector m_selector;
-    std::vector<client_data> m_clients;
+    std::map<int, client_data> m_clients;
     //TODO pack TcpSocket* into shared_ptr
     //TODO change vector to map and add more smart IDs
 };

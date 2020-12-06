@@ -19,6 +19,7 @@ struct PlayerAction
 {
     int player_id;
     sf::Vector2f position {0, 0};
+    moveAction direction;
     PlayerActionType msg_type;
 };
 

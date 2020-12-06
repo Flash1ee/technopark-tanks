@@ -8,6 +8,7 @@
 #include <messages.hpp>
 #include <string>
 #include <iostream>
+#include <map>
 
 GameSession::GameSession(std::string window_title, 
                          std::string& map_path,
@@ -92,7 +93,7 @@ void GameSession::Run()
     sf::Vector2f old_pos = this_player.getPos();
     sf::Vector2f new_pos = old_pos;
 
-    std::vector<Player> players;
+    std::map<int, Player> players;
 
     std::vector<std::shared_ptr<Bullet>> new_bullets;
     std::vector<std::shared_ptr<Bullet>> all_bullets;
@@ -126,10 +127,12 @@ void GameSession::Run()
         {// Gathering info for sending to server
             PlayerActionVector action_vector;
 
+            moveAction dir = static_cast<moveAction>(this_player.getDir());
+
             if(new_pos != old_pos)
             {
                 sf::Packet packet;
-                PlayerAction action = { m_game_client.m_id, new_pos, PlayerActionType::UpdatePlayer};
+                PlayerAction action = { m_game_client.m_id, new_pos, dir, PlayerActionType::UpdatePlayer};
 
                 action_vector.actions.push_back(action);
                 old_pos = new_pos;
@@ -140,7 +143,7 @@ void GameSession::Run()
                 PlayerAction action;
                 for(auto& curr_bullet : new_bullets)
                 {
-                    action = { -1, new_pos, PlayerActionType::UpdatePlayer}; // bullets have no id
+                    action = { -1, new_pos, dir, PlayerActionType::UpdatePlayer }; // bullets have no id
                     action_vector.actions.push_back(action);
                 }
 
@@ -168,19 +171,27 @@ void GameSession::Run()
                 {
                 case PlayerActionType::NewPlayer:
                     {
-
+                        int id = action.player_id;
+                        moveAction dir = action.direction;
+                        sf::Vector2f pos = action.position;
+                        players.insert(std::make_pair(id, Player(playerTankImage, pos, 1, 2, 13, 13, 100, 0.1, dir)));
                     }
                     break;
 
                 case PlayerActionType::UpdatePlayer:
                     {
-                        
+                        int id = action.player_id;
+                        sf::Vector2f new_pos = action.position;
+                        players[id].SetPos(new_pos);
                     }
                     break;
 
                 case PlayerActionType::NewBullet:
                     {
-                        
+                        sf::Vector2f pos = action.position;
+                        moveAction dir = action.direction;
+                        std::shared_ptr<Bullet> new_b(new Bullet(bulletImage, pos, 0, 0, 15, 15, 0.5, dir));
+                        all_bullets.push_back(new_b);
                     }
                     break;
 
@@ -190,7 +201,7 @@ void GameSession::Run()
                     }
                     break;
 
-                case PlayerActionType::NewPlayer:
+                case PlayerActionType::DeleteBullet:
                     {
                         
                     }

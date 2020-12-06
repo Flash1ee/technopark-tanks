@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-enum moveAction {
+enum class moveAction {
     UP = 0,
     DOWN,
     RIGHT,

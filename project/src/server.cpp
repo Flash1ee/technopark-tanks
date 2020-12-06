@@ -36,15 +36,15 @@ bool Server::addNewClient()
     if(m_listener.accept(*curr_client.socket) == sf::Socket::Done)
     {
         std::cout << "Accepted\n";
-        curr_client.id = m_clients.size();
+        int id = m_clients.size();
         curr_client.status = ClientStatus::Connected;
 
-        std::cout << "New connection with id = " << curr_client.id << "accepted" << std::endl;
+        std::cout << "New connection with id = " << id << "accepted" << std::endl;
         
         PlayerAction msg_to_player;//= {curr_client.id, sf::Vector2f{100.0 * (curr_client.id + 1), (100.0 * curr_client.id + 1)}, PlayerActionType::NewPlayer};
         
-        msg_to_player.player_id = curr_client.id;
-        msg_to_player.position = sf::Vector2f{100.0 * (curr_client.id + 1), (100.0 * curr_client.id + 1)};
+        msg_to_player.player_id = id;
+        msg_to_player.position = sf::Vector2f{100.0 * (id + 1), (100.0 * (id + 1))};
         msg_to_player.msg_type = PlayerActionType::NewPlayer;
 
         sf::Packet packet;
@@ -64,21 +64,21 @@ bool Server::addNewClient()
         }
         
         m_selector.add(*curr_client.socket);
-        m_clients.push_back(curr_client);
+        m_clients.insert(std::make_pair(id, curr_client));
 
     }
 
     return true;
 }
 
-bool Server::sendToAll(sf::Packet& packet, int exclude_id)
+bool Server::sendToAll(sf::Packet& packet, int exclude_id = -1)
 {
     for(auto& curr_client : m_clients)
     {
-        if(curr_client.id == exclude_id)
+        if(curr_client.first == exclude_id)
             continue;
             
-        if(curr_client.socket->send(packet) != sf::Socket::Done)
+        if(curr_client.second.socket->send(packet) != sf::Socket::Done)
         {
             std::cout << "Error while sending data to all users" << std::endl;
             return false;
@@ -92,9 +92,9 @@ bool Server::recieveFromClient(sf::Packet& packet)
 {
     for(auto& curr_client : m_clients)
     {
-        if (m_selector.isReady(*curr_client.socket))
+        if (m_selector.isReady(*curr_client.second.socket))
         {
-            if (curr_client.socket->receive(packet) == sf::Socket::Done)
+            if (curr_client.second.socket->receive(packet) == sf::Socket::Done)
             {
                 std::string text;
                 packet >> text;
@@ -120,11 +120,11 @@ bool Server::runGame()
     {
         for(auto& curr_client : m_clients)
         {
-            if (m_selector.isReady(*curr_client.socket))
+            if (m_selector.isReady(*curr_client.second.socket))
             {
-                while (curr_client.socket->receive(packet) == sf::Socket::Done) {}
+                while (curr_client.second.socket->receive(packet) == sf::Socket::Done) {}
                 
-                sendToAll(packet, curr_client.id);
+                sendToAll(packet, curr_client.first);
                 
             }
         }
