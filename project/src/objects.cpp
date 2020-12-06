@@ -44,9 +44,15 @@ void Tank::move(float time) {
                     //получается, что персонаж идет только вверх
     }
 
+    auto x_old = x;
+    auto y_old = y;
     x += dx * time;
     y += dy * time;
-    sprite.setPosition(x, y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+    checkCollisionsMap(x_old, y_old, dx, dy);
+
+
+    // checkCollisionsMap(0, dy);
+    sprite.setPosition(x + rect.width / 2, y + rect.height / 2);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
                 //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
@@ -76,7 +82,8 @@ void Bullet::move(float time) {
 
     x += dx * time;
     y += dy * time;
-    sprite.setPosition(x, y);
+    sprite.setPosition(x + rect.width / 2, y - rect.height / 2);
+
 }
 
 sf::Sprite& Object::getSprite() {
@@ -132,4 +139,35 @@ void Tank::setShot(bool shot) {
 
 bool Tank::getShot() const {
     return this->shot;
+}
+void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
+    for (auto &i : m_objects) {
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)))
+        {
+
+            if (dy > 0) {
+                // this->y =i.rect.top - this->rect.height;
+                this->y = y_old;
+                this->dy = 0;
+            }
+            if (dy < 0) {
+                // this->y = i.rect.top + this->rect.height;
+                this->y = y_old;
+                this->dy = 0;
+            }
+            if (dx > 0) {
+                // this->x = i.rect.left - this->rect.width;
+                this->x = x_old;
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                // this->x = i.rect.left + this->rect.width;
+                this->x = x_old;
+                this->dx = 0;
+            }
+        }
+    }
+}
+sf::IntRect Object::getRect() {
+    return sf::IntRect(x, y, rect.width, rect.height);
 }
