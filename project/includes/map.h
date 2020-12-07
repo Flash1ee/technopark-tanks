@@ -10,7 +10,7 @@
 //  и текстурные координаты.
 // Текстурные координаты позволяют связать с объектом спрайт,
 //  использующий основную текстуру карты как источник данных.
-struct TmxObject
+struct MapObject
 {
     int GetPropertyInt(const std::string &propertyName);
     float GetPropertyFloat(const std::string &propertyName);
@@ -31,21 +31,21 @@ struct TmxObject
 //  из которых складывается ландшафт карты.
 // Слоёв может быть несколько, что позволяет нарисовать,
 //  например, слой травы поверх слоя земли.
-struct TmxLayer
+struct MapLayer
 {
     sf::Uint8 opacity = 0;
     std::vector<sf::Sprite> tiles;
 };
 
-class TmxLevel
+class Level
 {
   public:
     // Загружает данные из TMX в память объекта.
     bool LoadFromFile(const std::string &filepath);
 
-    TmxObject GetFirstObject(const std::string &name) const;
-    std::vector<TmxObject> GetAllObjects(const std::string &name) const;
-    std::vector<TmxObject> GetAllObjects() const;
+    MapObject GetFirstObject(const std::string &name) const;
+    std::vector<MapObject> GetAllObjects(const std::string &name) const;
+    std::vector<MapObject> GetAllObjects() const;
     sf::Vector2i GetTileSize() const;
     float GetTilemapWidth() const;
     float GetTilemapHeight() const;
@@ -63,6 +63,6 @@ class TmxLevel
     int m_tileHeight = 0;
     int m_firstTileID = 0;
     sf::Texture m_tilesetImage;
-    std::vector<TmxObject> m_objects;
-    std::vector<TmxLayer> m_layers;
+    std::vector<MapObject> m_objects;
+    std::vector<MapLayer> m_layers;
 };

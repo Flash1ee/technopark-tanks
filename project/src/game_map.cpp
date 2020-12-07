@@ -1,7 +1,7 @@
-#include "game_map.hpp"
-
 #include <fstream>
 #include <iostream>
+
+#include "game_map.hpp"
 
 constexpr int block_size = 16;
 std::map<char, entities> map_entity = {{'.', EMPTY}, {'#', WALL}};
@@ -52,8 +52,9 @@ Map::Map(std::string map, std::string sprite) : m_blockSize(block_size) {
             auto flag = map_entity[cur];
             std::vector<float> cord = coords[flag];
 
-            auto p = std::make_shared<Object>(sprite, sf::IntRect(cord[0], cord[1],
-                                              cord[2], cord[3]), sf::Vector2f(i, j), 0, Direction::UP);
+            auto p = std::make_shared<Object>(
+                sprite, sf::IntRect(cord[0], cord[1], cord[2], cord[3]),
+                sf::Vector2f(i, j), 0, Direction::UP);
             setPos(i, j, p);
         }
     }
