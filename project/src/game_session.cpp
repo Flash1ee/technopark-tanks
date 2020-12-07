@@ -17,7 +17,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
 
       m_window(sf::VideoMode(1024, 760), window_title),
       m_is_multiplayer(is_multiplayer) {
-    m_level.LoadFromFile("../project/src/map1.tmx");
+    m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player");
     sf::FloatRect p_pos = player.rect;
     m_player_pos = {p_pos.left + p_pos.width / 2, p_pos.top - p_pos.width / 2};
