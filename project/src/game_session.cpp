@@ -121,10 +121,6 @@ void GameSession::Run()
                 auto bullet_pos = this_player->getPos();
                 auto bullet_dir = this_player->getDir();
                 auto new_b = std::make_shared<Bullet>(OBJECT_IMAGE, sf::IntRect(321, 100, 8, 8), bullet_pos, 0.5, bullet_dir);
-                
-                // sf::Packet packet;
-                // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir, PlayerActionType::NewBullet};
-                // action_vector.actions.push_back(new_bullet_action);
 
                 all_bullets.push_back(new_b); // Copying is too expensive
                 new_bullets.push_back(new_b);
@@ -143,13 +139,10 @@ void GameSession::Run()
 
             if(is_new_user)
             {
-                sf::Packet new_player_packet;
                 PlayerAction create_new_player = { m_game_client.m_id, new_pos, this_player->getDir(), PlayerActionType::NewPlayer};
-                new_player_packet << create_new_player;
-                m_game_client.SendToServer(new_player_packet);
+                action_vector.push(create_new_player);
                 is_new_user = false;
                 std::cout << "I notified server about me" << std::endl;
-
             }
 
 
@@ -159,10 +152,9 @@ void GameSession::Run()
 
                 if(new_pos != old_pos)
                 {
-                    sf::Packet packet;
                     PlayerAction action = { m_game_client.m_id, new_pos, dir, PlayerActionType::UpdatePlayer};
 
-                    action_vector.actions.push_back(action);
+                    action_vector.push(action);
                     old_pos = new_pos;
                 }
 
@@ -172,7 +164,7 @@ void GameSession::Run()
                     for(auto& curr_bullet : new_bullets)
                     {
                         action = { -1, new_pos, dir, PlayerActionType::NewBullet }; // bullets have no id
-                        action_vector.actions.push_back(action);
+                        action_vector.push(action);
                     }
 
                     new_bullets.clear();
@@ -180,31 +172,34 @@ void GameSession::Run()
                 
             }
 
-            if(action_vector.actions.size() > 0)
+            if(action_vector.get_size() > 0)
             {
-                sf::Packet packet;
-                packet << action_vector;
-                m_game_client.SendToServer(packet);
-                std::cout << "I send all my action to server" << std::endl;
+                sf::Packet packet_to_server;
+                packet_to_server << action_vector;
+                m_game_client.SendToServer(packet_to_server);
+                std::cout << "I send all actions. Amount is " << action_vector.get_size() << std::endl;
+
             }
-            else 
-                std::cout << "Nothing to send right now" << std::endl;
+            // else 
+            //     std::cout << "Nothing to send right now" << std::endl;
 
 
             { // getting info from server and applying it to current session
                 PlayerActionVector others_actions;
 
-                sf::Packet packet;
+                sf::Packet packet_from_server;
 
-                m_game_client.RecieveFromServer(packet);
+                m_game_client.RecieveFromServer(packet_from_server);
 
-                if(packet.getDataSize() > 0)
+                packet_from_server >> others_actions;
+                
+                if(others_actions.get_size() > 0)
                 {
-                    packet >> others_actions;
-
-
-                    for(auto& action : others_actions.actions)
+                    std::cout << "I recieved " << others_actions.get_size() << " actions" << std::endl;
+                    while(others_actions.get_size() > 0)
                     {
+                        PlayerAction action = others_actions.pop();
+                        
                         switch (action.msg_type)
                         {
                         case PlayerActionType::NewPlayer:
@@ -213,7 +208,8 @@ void GameSession::Run()
                                 int id = action.player_id;
                                 Direction dir = action.direction;
                                 sf::Vector2f pos = action.position;
-                                players.insert(std::make_pair(id, std::make_shared<Player>(m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), pos, 0.1, 100, dir)));
+                                auto new_palyer = std::make_shared<Player>(m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), pos, 0.1, 100, dir);
+                                players.insert(std::make_pair(id, std::move(new_palyer)));
                             }
                             break;
 
@@ -256,7 +252,7 @@ void GameSession::Run()
                 }
                 else
                 {
-                    std::cout << "Nothing to apply right now" << std::endl;
+                    //std::cout << "Nothing to apply right now" << std::endl;
                 }
                 
 

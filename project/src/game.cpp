@@ -21,8 +21,8 @@ int main(int argc, char* argv[])
     std::string map_skin(MAP_ONE);
     std::string server_ip = sf::IpAddress::getLocalAddress().toString();
 
-    //GameSession game_session(window_title, map_skin, player_skin, true, server_ip, PORT);
-    GameSession game_session(window_title, map_skin, player_skin, false);
+    GameSession game_session(window_title, map_skin, player_skin, true, server_ip, PORT);
+    //GameSession game_session(window_title, map_skin, player_skin, false);
 
     game_session.Run();
 

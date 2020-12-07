@@ -40,7 +40,7 @@ public:
     bool recieveFromClient(sf::Packet& packet);
     bool sendToClient();
 
-    bool sendToAll(sf::Packet& packet, int exclude_id);
+    bool sendToAll(const sf::Packet& packet, int exclude_id);
 
     bool waitPlayersConnection();
     bool runGame();

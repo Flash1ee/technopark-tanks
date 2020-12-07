@@ -45,11 +45,39 @@ enum GameActionType
 sf::Packet& operator << (sf::Packet& packet, const GameActionType& msg_type);
 sf::Packet& operator >> (sf::Packet& packet, GameActionType& msg_type);
 
-struct PlayerActionVector
+class PlayerActionVector
 {
-    int size;
+public:
+
+    PlayerActionVector()
+    {
+    }
+    ~PlayerActionVector()
+    {
+        actions.clear();
+    }
+
+    void push(const PlayerAction& action)
+    {
+        actions.push_back(action);
+    }
+
+    PlayerAction pop()
+    {
+        auto action = actions.back();
+        actions.pop_back();
+        return action;
+    }
+
+    int get_size() const
+    {
+        return actions.size();
+    }
+
+    friend sf::Packet& operator << (sf::Packet& packet, const PlayerActionVector& msg_vec);
+    friend sf::Packet& operator >> (sf::Packet& packet, PlayerActionVector& msg_vec);
+
+private:
     std::vector<PlayerAction> actions;
 };
 
-sf::Packet& operator << (sf::Packet& packet, const PlayerActionVector& msg_vec);
-sf::Packet& operator >> (sf::Packet& packet, PlayerActionVector& msg_vec);

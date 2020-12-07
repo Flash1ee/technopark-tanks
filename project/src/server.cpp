@@ -60,6 +60,7 @@ bool Server::addNewClient()
             std::cout << "ID sent to user" << std::endl; 
         }
         
+        curr_client.socket->setBlocking(false);
         m_selector.add(*curr_client.socket);
         m_clients.insert(std::make_pair(id, curr_client));
 
@@ -68,14 +69,17 @@ bool Server::addNewClient()
     return true;
 }
 
-bool Server::sendToAll(sf::Packet& packet, int exclude_id = -1)
+bool Server::sendToAll(const sf::Packet& packet, int exclude_id = -1)
 {
     for(auto& curr_client : m_clients)
     {
         if(curr_client.first == exclude_id)
+        {
+            std::cout << "Dont send message to its owner" << std::endl;
             continue;
-        
-        while(curr_client.second.socket->send(packet) == sf::Socket::Partial) {}
+        }
+        sf::Packet tmp_packet = packet;
+        while(curr_client.second.socket->send(tmp_packet) == sf::Socket::Partial) {}
         // {
         //     std::cout << "Error while sending data to all users" << std::endl;
         //     return false;
@@ -115,19 +119,23 @@ bool Server::runGame()
 
     while (true)
     {
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-        std::cout << "game in progress..." << std::endl;
-        for(auto& curr_client : m_clients)
+        //std::this_thread::sleep_for(std::chrono::seconds(2));
+        //std::cout << "..." << std::endl;
+        if(m_selector.wait())
         {
-            if (m_selector.isReady(*curr_client.second.socket))
+            for(auto& curr_client : m_clients)
             {
-                std::cout << "some player made action" << std::endl;
-                while (curr_client.second.socket->receive(packet) != sf::Socket::Done) {}
-                
-                sendToAll(packet, curr_client.first);
-                
+                if (m_selector.isReady(*curr_client.second.socket))
+                {
+                    while (curr_client.second.socket->receive(packet) != sf::Socket::Done) {}
+
+                    sendToAll(packet, curr_client.first);
+                    std::cout << "SEND ACTION TO ALL PLAYERS" << std::endl;
+
+                }
             }
         }
+        
     }
 }
 

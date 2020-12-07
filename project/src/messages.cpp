@@ -54,7 +54,8 @@ sf::Packet& operator >> (sf::Packet& packet, GameActionType& msg_type)
 
 sf::Packet& operator << (sf::Packet& packet, const PlayerActionVector& msg_vec)
 {
-    packet << msg_vec.size;
+    int size = msg_vec.actions.size();
+    packet << size;
     
     for(auto& msg : msg_vec.actions)
     {
@@ -70,7 +71,7 @@ sf::Packet& operator >> (sf::Packet& packet, PlayerActionVector& msg_vec)
     packet >> size;
 
     msg_vec.actions.resize(size);
-    for(int i = 0; i < size; ++i)
+    for(int i = 0; i <size; ++i)
     {
         packet >> msg_vec.actions[i];
     }
