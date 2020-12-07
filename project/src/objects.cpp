@@ -91,7 +91,7 @@ void Bullet::move(float time) {
 
     coords.x += dx * time;
     coords.y += dy * time;
-    sprite.setPosition(coords.x + rect.width / 2, coords.y - rect.height / 2);
+    sprite.setPosition(coords.x + 7, coords.y + 7);
 
 }
 
@@ -181,3 +181,70 @@ void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
 sf::IntRect Object::getRect() {
     return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }
+
+void Bots::checkCollisionsMap(float x_old, float y_old, float dx, float dy) {
+    srand(time(0));
+    for (auto &i : m_objects) {
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)))
+        {
+            if (dy > 0) {
+                // this->y =i.rect.top - this->rect.height;
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
+            }
+            if (dy < 0) {
+                // this->y = i.rect.top + this->rect.height;
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
+            }
+            if (dx > 0) {
+                // this->x = i.rect.left - this->rect.width;
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
+            }
+            if (dx < 0) {
+                // this->x = i.rect.left + this->rect.width;
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
+            }
+        }
+    }
+}
+
+void Bots::move(float time) {
+    switch (dir) {
+        case Direction::RIGHT:
+            this->sprite.setRotation(90);
+            dx = speed;
+            dy = 0;
+            break;
+        case Direction::LEFT:
+            this->sprite.setRotation(-90);
+            dx = -speed;
+            dy = 0;
+            break;
+        case Direction::DOWN:
+            this->sprite.setRotation(180);
+            dx = 0;
+            dy = speed;
+            break;
+        case Direction::UP:
+            this->sprite.setRotation(0);
+            dx = 0;
+            dy = -speed;
+            break;
+    }
+
+    auto x_old = coords.x;
+    auto y_old = coords.y;
+    coords.x += dx * time;
+    coords.y += dy * time;
+    this->checkCollisionsMap(x_old, y_old, dx, dy);
+
+    sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);
+}
+

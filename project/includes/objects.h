@@ -55,8 +55,8 @@ class Tank : public Object {  //класс любого танка
     }
 
    public:
-    void checkCollisionsMap(float x_old, float y_old, float x, float y);
-    void move(float time);
+    virtual void checkCollisionsMap(float x_old, float y_old, float x, float y);
+    virtual void move(float time);
     int makeAction(float time);
     Direction getDir() const;
     bool getShot() const;
@@ -68,4 +68,13 @@ class Player : public Tank {  //класс игрока
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
+};
+
+class Bots : public Tank {  //класс игрока
+public:
+    Bots(Level& mapObj, sf::String textureFile, sf::IntRect rect,
+           sf::Vector2f pos, float speed, int hp, Direction dir)
+            : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
+    void checkCollisionsMap(float x_old, float y_old, float x, float y) override;
+    void move(float time);
 };

@@ -14,7 +14,6 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
                          std::string server_ip, int server_port)
     :
-
       m_window(sf::VideoMode(1024, 760), window_title),
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile("../maps/map1.tmx");
@@ -78,6 +77,8 @@ void GameSession::Run() {
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.07,
         100, Direction::UP);
+    Bots bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_player_pos, 0.07,
+              100, Direction::UP);
 
     sf::Vector2f old_pos = this_player->getPos();
     sf::Vector2f new_pos = old_pos;
@@ -122,6 +123,7 @@ void GameSession::Run() {
             }
         }
 
+        bots.move(time);
         this_player->makeAction(time);
         old_pos = new_pos;
         new_pos = this_player->getPos();
@@ -252,6 +254,7 @@ void GameSession::Run() {
                 m_window.draw(i->getSprite());
             }
             m_window.draw(this_player->getSprite());
+            m_window.draw(bots.getSprite());
             m_window.display();
         }
     }
