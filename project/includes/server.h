@@ -1,10 +1,12 @@
 #pragma once
+
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
-#include <messages.hpp>
+
+#include "messages.hpp"
 
 
 enum class ClientStatus

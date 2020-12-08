@@ -1,8 +1,5 @@
-#ifndef _GAME_H_
-#define _GAME_H_
+#pragma once
 
 #define OBJECT_IMAGE "../resources/sprites.png"
+#define BULLET_SOUND "../sounds/fire.ogg"
 #define MAP_ONE "../maps/1.txt"
-
-
-#endif  // _GAME_H_
