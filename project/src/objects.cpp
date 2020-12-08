@@ -94,8 +94,11 @@ void Bullet::move(float time) {
             break;
     }
 
-    coords.x += dx * time;
-    coords.y += dy * time;
+    this->checkCollisionsMap();
+    if (m_life == 1) {
+        coords.x += dx * time;
+        coords.y += dy * time;
+    }
     setPos();
     // sprite.setPosition(coords.x + 7, coords.y + 7);
 }
@@ -172,6 +175,19 @@ void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
         }
     }
 }
+
+void Bullet::checkCollisionsMap() {
+    for (auto &i : m_objects) {
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
+            m_life = 0;
+        }
+    }
+}
+
+int Bullet::getLife() const {
+    return this->m_life;
+}
+
 void Player::checkCollisionsBots(Bots &b) {
     for (auto &i : m_objects) {
         if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(b.getRect())) {
@@ -239,21 +255,25 @@ void Bots::checkCollisionsMap(float x_old, float y_old, float dx, float dy,
                 // this->y =i.rect.top - this->rect.height;
                 coords.y = p.getPos().y - rect.height;
                 this->dy = 0;
+                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
             }
             if (dy < 0) {
                 // this->y = i.rect.top + this->rect.height;
                 coords.y = p.getPos().y + rect.height;
                 this->dy = 0;
+                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
             }
             if (dx > 0) {
                 // this->x = i.rect.left - this->rect.width;
                 coords.x = p.getPos().x - rect.width;
                 this->dx = 0;
+                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
             }
             if (dx < 0) {
                 // this->x = i.rect.left + this->rect.width;
                 coords.x = p.getPos().x + rect.width;
                 this->dx = 0;
+                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
             }
         }
     }
