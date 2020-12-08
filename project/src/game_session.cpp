@@ -77,9 +77,8 @@ void GameSession::Run() {
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.07,
         100, Direction::UP);
-    sf::Vector2f m_bot_pos = {m_player_pos.x + 13, m_player_pos.y + 10};
-    Bots bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
-              100, Direction::UP);
+    // sf::Vector2f m_bot_pos = {m_player_pos.x + 13, m_player_pos.y + 10};
+    // Bots bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,100, Direction::UP);
 
     sf::Vector2f old_pos = this_player->getPos();
     sf::Vector2f new_pos = old_pos;
@@ -126,9 +125,9 @@ void GameSession::Run() {
             }
         }
 
-        bots.move(time, *this_player);
+        // bots.move(time, *this_player);
         this_player->makeAction(time);
-        this_player->checkCollisionsBots(bots);
+        // this_player->checkCollisionsBots(bots);
         old_pos = new_pos;
         new_pos = this_player->getPos();
 
@@ -202,8 +201,9 @@ void GameSession::Run() {
                                 int id = action.player_id;
                                 Direction dir = action.direction;
                                 sf::Vector2f pos = action.position;
-                                auto new_palyer = std::make_shared<Player>(m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), pos, 0.1, 100, dir);
-                                players.insert(std::make_pair(id, std::move(new_palyer)));
+                                auto new_palyer = std::make_shared<Player>(m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), pos, 0.07, 100, dir);
+                                std::cout << "Other player added. Position is " << pos.x << " " << pos.y << std::endl;
+                                players.insert(std::make_pair(id, new_palyer));
                             }
                             break;
 
@@ -262,7 +262,11 @@ void GameSession::Run() {
                 m_window.draw(i->getSprite());
             }
             m_window.draw(this_player->getSprite());
-            m_window.draw(bots.getSprite());
+            //m_window.draw(bots.getSprite());
+            for(auto& other_player : players)
+            {
+                m_window.draw(other_player.second->getSprite());
+            }
             m_window.display();
         }
     }
