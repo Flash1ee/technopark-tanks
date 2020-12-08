@@ -71,6 +71,7 @@ class Tank : public Object {  //класс любого танка
     virtual void move(float time);
     int makeAction(float time);
     Direction getDir() const;
+    void setDir(Direction dir);
     bool getShot() const;
     void setShot(bool shot);
 };

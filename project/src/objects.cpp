@@ -103,6 +103,11 @@ sf::Sprite &Object::getSprite() { return this->sprite; }
 
 Direction Tank::getDir() const { return this->dir; }
 
+void Tank::setDir(Direction dir)
+{
+    this->dir = dir;
+}
+
 int Tank::makeAction(float time) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         this->shot = true;

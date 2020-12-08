@@ -213,6 +213,8 @@ void GameSession::Run() {
                                 std::cout << "Other player should be updated" << std::endl;
                                 int id = action.player_id;
                                 sf::Vector2f new_pos = action.position;
+                                auto new_dir = action.direction;
+                                players[id]->setDir(new_dir);
                                 players[id]->setPos(new_pos);
                             } break;
 
