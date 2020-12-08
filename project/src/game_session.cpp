@@ -77,7 +77,8 @@ void GameSession::Run() {
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.07,
         100, Direction::UP);
-    Bots bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_player_pos, 0.07,
+    sf::Vector2f m_bot_pos = {m_player_pos.x + 13, m_player_pos.y + 10};
+    Bots bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
               100, Direction::UP);
 
     sf::Vector2f old_pos = this_player->getPos();
@@ -121,12 +122,13 @@ void GameSession::Run() {
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
                 new_b->sound();
-                
+
             }
         }
 
-        bots.move(time);
+        bots.move(time, *this_player);
         this_player->makeAction(time);
+        this_player->checkCollisionsBots(bots);
         old_pos = new_pos;
         new_pos = this_player->getPos();
 

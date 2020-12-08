@@ -7,7 +7,7 @@
 #include "map.h"
 
 enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };
-
+class Bots;
 class Object {
    public:
     Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
@@ -80,6 +80,9 @@ class Player : public Tank {  //класс игрока
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
+    void checkCollisionsBots(Bots &p);
+    
+    
 };
 
 class Bots : public Tank {  //класс игрока
@@ -87,8 +90,8 @@ public:
     Bots(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
             : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {
-                // m_objects.push_back(mapObj.GetFirstObject("player"));
+                m_objects = mapObj.GetAllObjects();
             }
-    void checkCollisionsMap(float x_old, float y_old, float x, float y) override;
-    void move(float time);
+    void checkCollisionsMap(float x_old, float y_old, float x, float y, Player &p);
+    void move(float time, Player &p);
 };

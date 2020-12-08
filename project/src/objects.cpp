@@ -1,12 +1,10 @@
 #include "objects.h"
 
-Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float speed, Direction dir = Direction::UP)
-    : coords(pos),
-      rect(rect),
-      dx(0),
-      dy(0),
-      speed(speed),
-      dir(dir) {
+#include <iostream>
+
+Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
+               float speed, Direction dir = Direction::UP)
+    : coords(pos), rect(rect), dx(0), dy(0), speed(speed), dir(dir) {
     this->image.loadFromFile(textureFile);
     this->image.createMaskFromColor(sf::Color(0, 0, 1));
     this->image.createMaskFromColor(sf::Color(0, 0, 0));
@@ -18,7 +16,6 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float
     this->sprite.setTextureRect(rect);
     setPos();
 
-    
     // this->sprite.setPosition(coords.x, coords.y);
     // this->sprite.setScale(5,5);
 }
@@ -47,26 +44,29 @@ void Tank::move(float time) {
                     //получается, что персонаж идет только вверх
     }
 
-// <<<<<<< HEAD
-//     coords.x += dx * time;
-//     coords.y += dy * time;
-//     sprite.setPosition(coords.x, coords.y);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+    // <<<<<<< HEAD
+    //     coords.x += dx * time;
+    //     coords.y += dy * time;
+    //     sprite.setPosition(coords.x, coords.y);  //выводим спрайт в позицию x
+    //     y , посередине. бесконечно выводим
 
-//     //sprite.setPosition(coords.x + (rect.width / 2), coords.y + (rect.height / 2));  //выводим спрайт в позицию x y , посередине. бесконечно выводим
-// =======
+    //     //sprite.setPosition(coords.x + (rect.width / 2), coords.y +
+    //     (rect.height / 2));  //выводим спрайт в позицию x y , посередине.
+    //     бесконечно выводим
+    // =======
     auto x_old = coords.x;
     auto y_old = coords.y;
     coords.x += dx * time;
     coords.y += dy * time;
     checkCollisionsMap(x_old, y_old, dx, dy);
 
-
     // checkCollisionsMap(0, dy);
     setPos();
-    
-    // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
-// >>>>>>> Dev
-                //в этой функции, иначе бы наш спрайт стоял на месте.
+
+    // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height /
+    // 2);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+    // >>>>>>> Dev
+    //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
 void Bullet::move(float time) {
@@ -97,18 +97,11 @@ void Bullet::move(float time) {
     coords.y += dy * time;
     setPos();
     // sprite.setPosition(coords.x + 7, coords.y + 7);
+}
+void Bullet::sound() { this->m_sound.play(); }
+sf::Sprite &Object::getSprite() { return this->sprite; }
 
-}
-void Bullet::sound() {
-    this->m_sound.play();
-}
-sf::Sprite& Object::getSprite() {
-    return this->sprite;
-}
-
-Direction Tank::getDir() const {
-    return this->dir;
-}
+Direction Tank::getDir() const { return this->dir; }
 
 int Tank::makeAction(float time) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
@@ -141,30 +134,20 @@ int Tank::makeAction(float time) {
     return -1;
 }
 
-sf::Vector2f Object::getPos() const {
-    return this->coords;
-}
+sf::Vector2f Object::getPos() const { return this->coords; }
 
-void Object::setPos(const sf::Vector2f& new_pos)
-{
+void Object::setPos(const sf::Vector2f &new_pos) {
     this->coords = new_pos;
-    this->sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);
+    this->sprite.setPosition(coords.x + rect.width / 2,
+                             coords.y + rect.height / 2);
 }
-void Object::setPos() {
-    setPos(this->coords);
-}
-void Tank::setShot(bool shot) {
-    this->shot = shot;
-}
+void Object::setPos() { setPos(this->coords); }
+void Tank::setShot(bool shot) { this->shot = shot; }
 
-bool Tank::getShot() const {
-    return this->shot;
-}
+bool Tank::getShot() const { return this->shot; }
 void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
     for (auto &i : m_objects) {
-        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)))
-        {
-
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
             if (dy > 0) {
                 // this->y =i.rect.top - this->rect.height;
                 coords.y = y_old;
@@ -188,15 +171,44 @@ void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
         }
     }
 }
+void Player::checkCollisionsBots(Bots &b) {
+    for (auto &i : m_objects) {
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(b.getRect())) {
+            if (dy > 0) {
+                // this->y =i.rect.top - this->rect.height;
+                coords.y = b.getPos().y - rect.height;
+                this->dy = 0;
+            }
+            if (dy < 0) {
+                // this->y = i.rect.top + this->rect.height;
+                coords.y = b.getPos().y + rect.height;
+                this->dy = 0;
+            }
+            if (dx > 0) {
+                // this->x = i.rect.left - this->rect.width;
+                coords.x = b.getPos().x - rect.width;
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                // this->x = i.rect.left + this->rect.width;
+                coords.x = b.getPos().x + rect.width;
+                this->dx = 0;
+            }
+        }
+    }
+}
+
 sf::IntRect Object::getRect() {
     return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }
 
-void Bots::checkCollisionsMap(float x_old, float y_old, float dx, float dy) {
+
+void Bots::checkCollisionsMap(float x_old, float y_old, float dx, float dy,
+                              Player &p) {
     srand(time(0));
     for (auto &i : m_objects) {
-        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)))
-        {
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) &&
+            i.name == "solid") {
             if (dy > 0) {
                 // this->y =i.rect.top - this->rect.height;
                 coords.y = y_old;
@@ -221,11 +233,32 @@ void Bots::checkCollisionsMap(float x_old, float y_old, float dx, float dy) {
                 this->dx = 0;
                 dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
             }
+        } else if (getRect().intersects(static_cast<sf::IntRect>(p.getRect()))) {
+            if (dy > 0) {
+                // this->y =i.rect.top - this->rect.height;
+                coords.y = p.getPos().y - rect.height;
+                this->dy = 0;
+            }
+            if (dy < 0) {
+                // this->y = i.rect.top + this->rect.height;
+                coords.y = p.getPos().y + rect.height;
+                this->dy = 0;
+            }
+            if (dx > 0) {
+                // this->x = i.rect.left - this->rect.width;
+                coords.x = p.getPos().x - rect.width;
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                // this->x = i.rect.left + this->rect.width;
+                coords.x = p.getPos().x + rect.width;
+                this->dx = 0;
+            }
         }
     }
 }
 
-void Bots::move(float time) {
+void Bots::move(float time, Player &p) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -253,9 +286,9 @@ void Bots::move(float time) {
     auto y_old = coords.y;
     coords.x += dx * time;
     coords.y += dy * time;
-    this->checkCollisionsMap(x_old, y_old, dx, dy);
+    this->checkCollisionsMap(x_old, y_old, dx, dy, p);
     setPos();
 
-    // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);
+    // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height /
+    // 2);
 }
-
