@@ -49,7 +49,6 @@ class Bullet : public Object {
         };
     void move(float time);
     void sound();
-
 };
 
 class Tank : public Object {  //класс любого танка

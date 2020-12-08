@@ -104,14 +104,16 @@ void GameSession::Run() {
                 m_window.close();
                 exit(0);
             }
-
+            
             if (this_player->getShot()) {
                 this_player->setShot(false);
                 // sf::Vector2f coords = this_player.getPos();
-                auto bullet_pos = this_player->getPos();
+                sf::Vector2f bullet_pos;
+                bullet_pos.x = this_player->getPos().x + 4.5;
+                bullet_pos.y = this_player->getPos().y + 4.5;
                 auto bullet_dir = this_player->getDir();
                 auto new_b = std::make_shared<Bullet>(
-                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(321, 100, 8, 8), bullet_pos, 0.5,
+                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(323, 102, 4, 4), bullet_pos, 0.5,
                     bullet_dir);
 
                 // sf::Packet packet;
