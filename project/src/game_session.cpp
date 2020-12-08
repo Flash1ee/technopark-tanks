@@ -110,7 +110,7 @@ void GameSession::Run() {
                 auto bullet_pos = this_player->getPos();
                 auto bullet_dir = this_player->getDir();
                 auto new_b = std::make_shared<Bullet>(
-                    OBJECT_IMAGE, sf::IntRect(321, 100, 8, 8), bullet_pos, 0.5,
+                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(321, 100, 8, 8), bullet_pos, 0.5,
                     bullet_dir);
 
                 // sf::Packet packet;
@@ -120,6 +120,8 @@ void GameSession::Run() {
 
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
+                new_b->sound();
+                
             }
         }
 
@@ -215,7 +217,7 @@ void GameSession::Run() {
                                 sf::Vector2f pos = action.position;
                                 Direction dir = action.direction;
                                 std::shared_ptr<Bullet> new_b(new Bullet(
-                                    OBJECT_IMAGE, sf::IntRect(321, 100, 8, 8),
+                                    OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(321, 100, 8, 8),
                                     pos, 0.5, dir));
                                 all_bullets.push_back(new_b);
                             } break;

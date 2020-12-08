@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <memory>
 
 #include "map.h"
@@ -31,15 +32,24 @@ class Object {
     sf::Texture texture;
     sf::Sprite sprite;
     std::vector<MapObject> m_objects;
+    sf::Sound m_sound;
+    sf::SoundBuffer m_buffer;
     // Object();
 };
 
 class Bullet : public Object {
    public:
-    Bullet(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
+    Bullet(sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
            float speed, Direction dir)
-        : Object(textureFile, rect, pos, speed, dir){};
+        : Object(textureFile, rect, pos, speed, dir){
+            if (!m_buffer.loadFromFile(soundFile)) {
+                throw std::exception();
+            }
+            m_sound.setBuffer(m_buffer);
+        };
     void move(float time);
+    void sound();
+
 };
 
 class Tank : public Object {  //класс любого танка
@@ -76,7 +86,9 @@ class Bots : public Tank {  //класс игрока
 public:
     Bots(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-            : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
+            : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {
+                // m_objects.push_back(mapObj.GetFirstObject("player"));
+            }
     void checkCollisionsMap(float x_old, float y_old, float x, float y) override;
     void move(float time);
 };

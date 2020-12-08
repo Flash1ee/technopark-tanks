@@ -12,12 +12,13 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float
     this->image.createMaskFromColor(sf::Color(0, 0, 0));
 
     this->texture.loadFromImage(this->image);
-
     this->sprite.setTexture(this->texture);
 
     this->sprite.setOrigin(rect.width / 2, rect.height / 2);
     this->sprite.setTextureRect(rect);
     setPos();
+
+    
     // this->sprite.setPosition(coords.x, coords.y);
     // this->sprite.setScale(5,5);
 }
@@ -98,7 +99,9 @@ void Bullet::move(float time) {
     // sprite.setPosition(coords.x + 7, coords.y + 7);
 
 }
-
+void Bullet::sound() {
+    this->m_sound.play();
+}
 sf::Sprite& Object::getSprite() {
     return this->sprite;
 }
