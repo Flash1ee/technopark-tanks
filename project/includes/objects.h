@@ -14,6 +14,8 @@ class Object {
 
     sf::Vector2f getPos() const;
     void setPos(const sf::Vector2f& new_pos);
+    void setPos();
+    // void setPos(const sf::Vector2f& new_pos);
     sf::Sprite& getSprite();
     float getX() const;
     float getY() const;

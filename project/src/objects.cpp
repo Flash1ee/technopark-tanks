@@ -17,7 +17,8 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos, float
 
     this->sprite.setOrigin(rect.width / 2, rect.height / 2);
     this->sprite.setTextureRect(rect);
-    this->sprite.setPosition(coords.x, coords.y);
+    setPos();
+    // this->sprite.setPosition(coords.x, coords.y);
     // this->sprite.setScale(5,5);
 }
 
@@ -60,7 +61,9 @@ void Tank::move(float time) {
 
 
     // checkCollisionsMap(0, dy);
-    sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
+    setPos();
+    
+    // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);  //выводим спрайт в позицию x y , посередине. бесконечно выводим
 // >>>>>>> Dev
                 //в этой функции, иначе бы наш спрайт стоял на месте.
 }
@@ -91,7 +94,8 @@ void Bullet::move(float time) {
 
     coords.x += dx * time;
     coords.y += dy * time;
-    sprite.setPosition(coords.x + 7, coords.y + 7);
+    setPos();
+    // sprite.setPosition(coords.x + 7, coords.y + 7);
 
 }
 
@@ -140,9 +144,12 @@ sf::Vector2f Object::getPos() const {
 
 void Object::setPos(const sf::Vector2f& new_pos)
 {
-
+    this->coords = new_pos;
+    this->sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);
 }
-
+void Object::setPos() {
+    setPos(this->coords);
+}
 void Tank::setShot(bool shot) {
     this->shot = shot;
 }
@@ -244,7 +251,8 @@ void Bots::move(float time) {
     coords.x += dx * time;
     coords.y += dy * time;
     this->checkCollisionsMap(x_old, y_old, dx, dy);
+    setPos();
 
-    sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);
+    // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height / 2);
 }
 
