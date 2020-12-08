@@ -38,24 +38,29 @@ class Object {
 };
 
 class Bullet : public Object {
-   public:
-    Bullet(sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
-           float speed, Direction dir)
-        : Object(textureFile, rect, pos, speed, dir){
+public:
+    Bullet(Level& mapObj, sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
+           float speed, Direction dir, int life)
+        : Object(textureFile, rect, pos, speed, dir), m_life(life) {
+        m_objects = mapObj.GetAllObjects("solid");
             if (!m_buffer.loadFromFile(soundFile)) {
                 throw std::exception();
             }
             m_sound.setBuffer(m_buffer);
         };
     void move(float time);
+    void checkCollisionsMap();
     void sound();
-
+    int getLife() const;
+private:
+    int m_life;
 };
 
 class Tank : public Object {  //класс любого танка
    protected:
     // sf::String name;
     int hp;
+    std::vector<std::shared_ptr<Bullet>> m_bullets;
     // Direction dir;
     bool shot;
     // size_t armor;

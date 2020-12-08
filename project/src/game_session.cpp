@@ -110,9 +110,9 @@ void GameSession::Run() {
                 // sf::Vector2f coords = this_player.getPos();
                 auto bullet_pos = this_player->getPos();
                 auto bullet_dir = this_player->getDir();
-                auto new_b = std::make_shared<Bullet>(
+                auto new_b = std::make_shared<Bullet>(m_level,
                     OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(321, 100, 8, 8), bullet_pos, 0.5,
-                    bullet_dir);
+                    bullet_dir, 1);
 
                 // sf::Packet packet;
                 // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -218,9 +218,9 @@ void GameSession::Run() {
                                           << std::endl;
                                 sf::Vector2f pos = action.position;
                                 Direction dir = action.direction;
-                                std::shared_ptr<Bullet> new_b(new Bullet(
+                                std::shared_ptr<Bullet> new_b(new Bullet(m_level,
                                     OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(321, 100, 8, 8),
-                                    pos, 0.5, dir));
+                                    pos, 0.5, dir, 1));
                                 all_bullets.push_back(new_b);
                             } break;
 
@@ -255,7 +255,12 @@ void GameSession::Run() {
 
             m_level.Draw(m_window);
             for (auto i : all_bullets) {
-                m_window.draw(i->getSprite());
+                if (i->getLife() == 1) {
+                    m_window.draw(i->getSprite());
+                } else {
+                    //TODO Removing and перенос!
+                    all_bullets.pop_back(); //Потом переделаю правильное удаление!!
+                }
             }
             m_window.draw(this_player->getSprite());
             m_window.draw(bots.getSprite());
