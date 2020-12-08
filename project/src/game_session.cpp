@@ -15,7 +15,8 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string server_ip, int server_port)
     :
       m_window(sf::VideoMode(1024, 760), window_title),
-      m_is_multiplayer(is_multiplayer) {
+      m_is_multiplayer(is_multiplayer) 
+{
     m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player");
     sf::FloatRect p_pos = player.rect;
@@ -216,8 +217,7 @@ void GameSession::Run() {
                             } break;
 
                             case PlayerActionType::NewBullet: {
-                                std::cout << "Other player shooted"
-                                          << std::endl;
+                                std::cout << "Other player shooted" << std::endl;
                                 sf::Vector2f pos = action.position;
                                 Direction dir = action.direction;
                                 std::shared_ptr<Bullet> new_b(new Bullet(
