@@ -13,7 +13,8 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
     this->texture.loadFromImage(this->image);
     this->sprite.setTexture(this->texture);
 
-    this->sprite.setOrigin(rect.width / 2, rect.height / 2);
+    this->sprite.setOrigin(static_cast<double>(rect.width) / 2, 
+                           static_cast<double>(rect.height) / 2);
     this->sprite.setTextureRect(rect);
     setPos();
 
