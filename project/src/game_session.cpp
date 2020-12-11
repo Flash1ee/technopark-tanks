@@ -264,13 +264,15 @@ void GameSession::Run() {
             m_window.clear();
 
             m_level.Draw(m_window);
-            for (auto i : all_bullets) {
-                if (i->getLife() == 1) {
-                    m_window.draw(i->getSprite());
+
+            for (int i = 0; i < all_bullets.size(); i++) {
+                if (all_bullets[i]->getLife()) {
+                    m_window.draw(all_bullets[i]->getSprite());
                 } else {
-                    all_bullets.pop_back();
+                    all_bullets.erase(all_bullets.begin() + i);
                 }
             }
+
             m_window.draw(this_player->getSprite());
             for (auto &i : all_bots) {
                 m_window.draw(i->getSprite());
