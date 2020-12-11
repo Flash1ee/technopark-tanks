@@ -221,7 +221,6 @@ sf::IntRect Object::getRect() {
     return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }
 
-
 void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
                               Player &p, std::vector<Bots*> b) {
     std::random_device rd;
