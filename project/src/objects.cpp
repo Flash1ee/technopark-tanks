@@ -103,7 +103,7 @@ void Bullet::move(float time) {
     setPos();
     // sprite.setPosition(coords.x + 7, coords.y + 7);
 }
-void Bullet::sound() { this->m_sound.play(); }
+// void Bullet::sound() { this->m_sound.play(); }
 sf::Sprite &Object::getSprite() { return this->sprite; }
 
 Direction Tank::getDir() const { return this->dir; }
@@ -318,4 +318,15 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b) {
 
     // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height /
     // 2);
+}
+
+void Sound::play() {
+    this->sound.play();
+}
+
+Sound::Sound(std::string path) {
+    if (!this->buffer.loadFromFile(path)) {
+        throw std::exception();
+    }
+    this->sound.setBuffer(this->buffer);
 }

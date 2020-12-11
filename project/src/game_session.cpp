@@ -95,6 +95,10 @@ void GameSession::Run() {
     sf::Clock clock;
     bool is_new_user = true;
 
+    Sound sounds [static_cast<int>(SoundType::COUNT)] {
+        Sound(BULLET_SOUND)
+    };
+
     while (m_window.isOpen()) {
         float time =
             clock.getElapsedTime()
@@ -125,8 +129,7 @@ void GameSession::Run() {
 
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
-                new_b->sound();
-
+                sounds[static_cast<int>(SoundType::BULLET)].play();
             }
         }
 
