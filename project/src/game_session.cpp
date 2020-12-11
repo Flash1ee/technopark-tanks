@@ -77,9 +77,13 @@ void GameSession::Run() {
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.07,
         100, Direction::UP);
-    sf::Vector2f m_bot_pos = {m_player_pos.x + 13, m_player_pos.y + 10};
-    Bots bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
-              100, Direction::UP);
+
+    std::vector<Bots*> all_bots;
+    for (int i = 0; i < 4; i++) {
+        sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
+        all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
+                                    100, Direction::UP));
+    }
 
     sf::Vector2f old_pos = this_player->getPos();
     sf::Vector2f new_pos = old_pos;
@@ -126,9 +130,12 @@ void GameSession::Run() {
             }
         }
 
-        bots.move(time, *this_player);
+        for (auto &i : all_bots) {
+            i->move(time, *this_player, all_bots);
+        }
+
         this_player->makeAction(time);
-        this_player->checkCollisionsBots(bots);
+        this_player->checkCollisionsBots(all_bots);
         old_pos = new_pos;
         new_pos = this_player->getPos();
 
@@ -258,12 +265,13 @@ void GameSession::Run() {
                 if (i->getLife() == 1) {
                     m_window.draw(i->getSprite());
                 } else {
-                    //TODO Removing and перенос!
-                    all_bullets.pop_back(); //Потом переделаю правильное удаление!!
+                    all_bullets.pop_back();
                 }
             }
             m_window.draw(this_player->getSprite());
-            m_window.draw(bots.getSprite());
+            for (auto &i : all_bots) {
+                m_window.draw(i->getSprite());
+            }
             m_window.display();
         }
     }
