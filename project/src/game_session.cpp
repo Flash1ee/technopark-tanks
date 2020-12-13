@@ -78,8 +78,13 @@ void GameSession::Run() {
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.07,
         100, Direction::UP);
-    // sf::Vector2f m_bot_pos = {m_player_pos.x + 13, m_player_pos.y + 10};
-    // Bots bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,100, Direction::UP);
+
+    std::vector<Bots*> all_bots;
+    for (int i = 0; i < 4; i++) {
+        sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
+        all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
+                                    100, Direction::UP));
+    }
 
     sf::Vector2f old_pos = this_player->getPos();
     sf::Vector2f new_pos = old_pos;
@@ -90,6 +95,10 @@ void GameSession::Run() {
     std::vector<std::shared_ptr<Bullet>> all_bullets;
     sf::Clock clock;
     bool is_new_user = true;
+
+    Sound sounds [static_cast<int>(SoundType::COUNT)] {
+        Sound(BULLET_SOUND)
+    };
 
     while (m_window.isOpen()) {
         float time =
@@ -110,9 +119,9 @@ void GameSession::Run() {
                 // sf::Vector2f coords = this_player.getPos();
                 auto bullet_pos = this_player->getPos();
                 auto bullet_dir = this_player->getDir();
-                auto new_b = std::make_shared<Bullet>(
+                auto new_b = std::make_shared<Bullet>(m_level,
                     OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(321, 100, 8, 8), bullet_pos, 0.5,
-                    bullet_dir);
+                    bullet_dir, 1);
 
                 // sf::Packet packet;
                 // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -121,14 +130,16 @@ void GameSession::Run() {
 
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
-                new_b->sound();
-
+                sounds[static_cast<int>(SoundType::BULLET)].play();
             }
         }
 
-        // bots.move(time, *this_player);
+        for (auto &i : all_bots) {
+            i->move(time, *this_player, all_bots);
+        }
+
         this_player->makeAction(time);
-        // this_player->checkCollisionsBots(bots);
+        this_player->checkCollisionsBots(all_bots);
         old_pos = new_pos;
         new_pos = this_player->getPos();
 
@@ -222,9 +233,9 @@ void GameSession::Run() {
                                 std::cout << "Other player shooted" << std::endl;
                                 sf::Vector2f pos = action.position;
                                 Direction dir = action.direction;
-                                std::shared_ptr<Bullet> new_b(new Bullet(
+                                std::shared_ptr<Bullet> new_b(new Bullet(m_level,
                                     OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(321, 100, 8, 8),
-                                    pos, 0.5, dir));
+                                    pos, 0.5, dir, 1));
                                 all_bullets.push_back(new_b);
                             } break;
 
@@ -260,15 +271,26 @@ void GameSession::Run() {
             m_window.clear();
 
             m_level.Draw(m_window);
-            for (auto i : all_bullets) {
-                m_window.draw(i->getSprite());
+
+            for (int i = 0; i < all_bullets.size(); i++) {
+                if (all_bullets[i]->getLife()) {
+                    m_window.draw(all_bullets[i]->getSprite());
+                } else {
+                    all_bullets.erase(all_bullets.begin() + i);
+                }
             }
+
             m_window.draw(this_player->getSprite());
-            //m_window.draw(bots.getSprite());
+
             for(auto& other_player : players)
             {
                 m_window.draw(other_player.second->getSprite());
             }
+
+            for (auto &i : all_bots) {
+                m_window.draw(i->getSprite());
+            }
+            
             m_window.display();
         }
     }

@@ -6,6 +6,21 @@
 
 #include "map.h"
 
+enum class SoundType {
+    BULLET,
+    COUNT,
+    ERROR
+};
+
+class Sound {
+    private:
+      sf::Sound sound;
+      sf::SoundBuffer buffer;
+    public:
+      void play();
+      Sound(std::string path);
+};
+
 enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };
 class Bots;
 class Object {
@@ -32,24 +47,24 @@ class Object {
     sf::Texture texture;
     sf::Sprite sprite;
     std::vector<MapObject> m_objects;
-    sf::Sound m_sound;
-    sf::SoundBuffer m_buffer;
+    // sf::Sound m_sound;
+    // sf::SoundBuffer m_buffer;
     // Object();
 };
 
 class Bullet : public Object {
-   public:
-    Bullet(sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
-           float speed, Direction dir)
-        : Object(textureFile, rect, pos, speed, dir){
-            if (!m_buffer.loadFromFile(soundFile)) {
-                throw std::exception();
-            }
-            m_sound.setBuffer(m_buffer);
+public:
+    Bullet(Level& mapObj, sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
+           float speed, Direction dir, int life)
+        : Object(textureFile, rect, pos, speed, dir), m_life(life) {
+        m_objects = mapObj.GetAllObjects("solid");
         };
     void move(float time);
-    void sound();
-
+    void checkCollisionsMap();
+    // void sound();
+    int getLife() const;
+private:
+    int m_life;
 };
 
 class Tank : public Object {  //класс любого танка
@@ -81,7 +96,7 @@ class Player : public Tank {  //класс игрока
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
-    void checkCollisionsBots(Bots &p);
+    void checkCollisionsBots(std::vector<Bots*> b);
     
     
 };
@@ -93,6 +108,7 @@ public:
             : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {
                 m_objects = mapObj.GetAllObjects();
             }
-    void checkCollisionsMap(float x_old, float y_old, float x, float y, Player &p);
-    void move(float time, Player &p);
+    void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
+                                std::vector<Bots*> b);
+    void move(float time, Player &p, std::vector<Bots*> b);
 };

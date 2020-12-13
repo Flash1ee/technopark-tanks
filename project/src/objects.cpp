@@ -1,5 +1,6 @@
 #include "objects.h"
 
+#include <random>
 #include <iostream>
 
 Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
@@ -93,12 +94,15 @@ void Bullet::move(float time) {
             break;
     }
 
-    coords.x += dx * time;
-    coords.y += dy * time;
+    this->checkCollisionsMap();
+    if (m_life == 1) {
+        coords.x += dx * time;
+        coords.y += dy * time;
+    }
     setPos();
     // sprite.setPosition(coords.x + 7, coords.y + 7);
 }
-void Bullet::sound() { this->m_sound.play(); }
+// void Bullet::sound() { this->m_sound.play(); }
 sf::Sprite &Object::getSprite() { return this->sprite; }
 
 Direction Tank::getDir() const { return this->dir; }
@@ -176,28 +180,43 @@ void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
         }
     }
 }
-void Player::checkCollisionsBots(Bots &b) {
+
+void Bullet::checkCollisionsMap() {
     for (auto &i : m_objects) {
-        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(b.getRect())) {
-            if (dy > 0) {
-                // this->y =i.rect.top - this->rect.height;
-                coords.y = b.getPos().y - rect.height;
-                this->dy = 0;
-            }
-            if (dy < 0) {
-                // this->y = i.rect.top + this->rect.height;
-                coords.y = b.getPos().y + rect.height;
-                this->dy = 0;
-            }
-            if (dx > 0) {
-                // this->x = i.rect.left - this->rect.width;
-                coords.x = b.getPos().x - rect.width;
-                this->dx = 0;
-            }
-            if (dx < 0) {
-                // this->x = i.rect.left + this->rect.width;
-                coords.x = b.getPos().x + rect.width;
-                this->dx = 0;
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
+            m_life = 0;
+        }
+    }
+}
+
+int Bullet::getLife() const {
+    return this->m_life;
+}
+
+void Player::checkCollisionsBots(std::vector<Bots*> b) {
+    for (auto &i : m_objects) {
+        for (auto &it : b) {
+            if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(it->getRect())) {
+                if (dy > 0) {
+                    // this->y =i.rect.top - this->rect.height;
+                    coords.y = it->getPos().y - rect.height;
+                    this->dy = 0;
+                }
+                if (dy < 0) {
+                    // this->y = i.rect.top + this->rect.height;
+                    coords.y = it->getPos().y + rect.height;
+                    this->dy = 0;
+                }
+                if (dx > 0) {
+                    // this->x = i.rect.left - this->rect.width;
+                    coords.x = it->getPos().x - rect.width;
+                    this->dx = 0;
+                }
+                if (dx < 0) {
+                    // this->x = i.rect.left + this->rect.width;
+                    coords.x = it->getPos().x + rect.width;
+                    this->dx = 0;
+                }
             }
         }
     }
@@ -208,62 +227,69 @@ sf::IntRect Object::getRect() {
 }
 
 
-void Bots::checkCollisionsMap(float x_old, float y_old, float dx, float dy,
-                              Player &p) {
-    srand(time(0));
+void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
+                              Player &p, std::vector<Bots*> b) {
+    std::random_device rd;
+    std::uniform_int_distribution<int> uid(0, 3);
     for (auto &i : m_objects) {
-        if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) &&
-            i.name == "solid") {
-            if (dy > 0) {
-                // this->y =i.rect.top - this->rect.height;
-                coords.y = y_old;
-                this->dy = 0;
-                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
-            }
-            if (dy < 0) {
-                // this->y = i.rect.top + this->rect.height;
-                coords.y = y_old;
-                this->dy = 0;
-                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
-            }
-            if (dx > 0) {
-                // this->x = i.rect.left - this->rect.width;
-                coords.x = x_old;
-                this->dx = 0;
-                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
-            }
-            if (dx < 0) {
-                // this->x = i.rect.left + this->rect.width;
-                coords.x = x_old;
-                this->dx = 0;
-                dir = static_cast<Direction>(rand() % (3 - 0 + 1) + 0);
-            }
-        } else if (getRect().intersects(static_cast<sf::IntRect>(p.getRect()))) {
-            if (dy > 0) {
-                // this->y =i.rect.top - this->rect.height;
-                coords.y = p.getPos().y - rect.height;
-                this->dy = 0;
-            }
-            if (dy < 0) {
-                // this->y = i.rect.top + this->rect.height;
-                coords.y = p.getPos().y + rect.height;
-                this->dy = 0;
-            }
-            if (dx > 0) {
-                // this->x = i.rect.left - this->rect.width;
-                coords.x = p.getPos().x - rect.width;
-                this->dx = 0;
-            }
-            if (dx < 0) {
-                // this->x = i.rect.left + this->rect.width;
-                coords.x = p.getPos().x + rect.width;
-                this->dx = 0;
+        for (auto &it : b) {
+            if ((getRect().intersects(static_cast<sf::IntRect>(i.rect)) &&
+                i.name == "solid") || (getRect().intersects(it->getRect())) && (getRect()) != it->getRect()) {
+                if (dy > 0) {
+                    // this->y =i.rect.top - this->rect.height;
+                    coords.y = y_old;
+                    this->dy = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dy < 0) {
+                    // this->y = i.rect.top + this->rect.height;
+                    coords.y = y_old;
+                    this->dy = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dx > 0) {
+                    // this->x = i.rect.left - this->rect.width;
+                    coords.x = x_old;
+                    this->dx = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dx < 0) {
+                    // this->x = i.rect.left + this->rect.width;
+                    coords.x = x_old;
+                    this->dx = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+            } else if (getRect().intersects(static_cast<sf::IntRect>(p.getRect()))) {
+                if (dy > 0) {
+                    // this->y =i.rect.top - this->rect.height;
+                    coords.y = p.getPos().y - rect.height;
+                    this->dy = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dy < 0) {
+                    // this->y = i.rect.top + this->rect.height;
+                    coords.y = p.getPos().y + rect.height;
+                    this->dy = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dx > 0) {
+                    // this->x = i.rect.left - this->rect.width;
+                    coords.x = p.getPos().x - rect.width;
+                    this->dx = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dx < 0) {
+                    // this->x = i.rect.left + this->rect.width;
+                    coords.x = p.getPos().x + rect.width;
+                    this->dx = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
             }
         }
     }
 }
 
-void Bots::move(float time, Player &p) {
+void Bots::move(float time, Player &p, std::vector<Bots*> b) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -291,9 +317,20 @@ void Bots::move(float time, Player &p) {
     auto y_old = coords.y;
     coords.x += dx * time;
     coords.y += dy * time;
-    this->checkCollisionsMap(x_old, y_old, dx, dy, p);
+    this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b);
     setPos();
 
     // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height /
     // 2);
+}
+
+void Sound::play() {
+    this->sound.play();
+}
+
+Sound::Sound(std::string path) {
+    if (!this->buffer.loadFromFile(path)) {
+        throw std::exception();
+    }
+    this->sound.setBuffer(this->buffer);
 }
