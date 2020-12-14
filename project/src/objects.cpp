@@ -105,7 +105,7 @@ void Bullet::move(float time) {
 // void Bullet::sound() { this->m_sound.play(); }
 sf::Sprite &Object::getSprite() { return this->sprite; }
 
-Direction Tank::getDir() const { return this->dir; }
+Direction Object::getDir() const { return this->dir; }
 
 void Tank::setDir(Direction dir)
 {
@@ -193,7 +193,7 @@ int Bullet::getLife() const {
     return this->m_life;
 }
 
-void Player::checkCollisionsBots(std::vector<Bots*> b) {
+void Player::checkCollisionsBot(std::vector<std::shared_ptr<Bot>> b) {
     for (auto &i : m_objects) {
         for (auto &it : b) {
             if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(it->getRect())) {
@@ -227,8 +227,8 @@ sf::IntRect Object::getRect() {
 }
 
 
-void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
-                              Player &p, std::vector<Bots*> b) {
+void Bot::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
+                              Player &p, std::vector<std::shared_ptr<Bot>> b) {
     std::random_device rd;
     std::uniform_int_distribution<int> uid(0, 3);
     for (auto &i : m_objects) {
@@ -289,7 +289,7 @@ void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
     }
 }
 
-void Bots::move(float time, Player &p, std::vector<Bots*> b) {
+void Bot::move(float time, Player &p, std::vector<std::shared_ptr<Bot>> b) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);

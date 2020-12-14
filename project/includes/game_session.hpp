@@ -5,7 +5,8 @@
 #include "client.h"
 
 class GameSession {
-   public:
+
+public:
     GameSession() = delete;
     explicit GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
@@ -21,8 +22,11 @@ class GameSession {
     Level m_level;
     Client m_game_client;
     Cam m_cam;
-    sf::Vector2f m_player_pos;
+    int m_user_id;
 
     bool m_is_multiplayer;
     sf::RenderWindow m_window;
+
+private:
+    static int constexpr m_bot_count = 4;
 };

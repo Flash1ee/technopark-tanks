@@ -5,9 +5,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 
 class Client {
-   public:
+    friend class GameSession;
+
+public:
     Client() {}
     Client(sf::IpAddress ip, int port);
     Client(std::string str_ip, int port);
@@ -16,12 +19,11 @@ class Client {
     void RunClient();
     bool SendToServer(sf::Packet& packet);
     bool RecieveFromServer(sf::Packet& packet);
-    sf::Vector2f connectToServer(std::string server_ip, int server_port);
+    bool connectToServer();
 
-    int m_id;
 
-   private:
-    sf::TcpSocket* m_socket;
+private:
+    std::shared_ptr<sf::TcpSocket> m_socket;
     sf::IpAddress m_ip_adress;
     int m_port;
 };
