@@ -93,6 +93,8 @@ void GameSession::Run() {
                                                                    this_player_pos, 0.07, 100,
                                                                    Direction::UP);
 
+    auto old_player_pos = this_player->getPos();
+    
     std::vector<std::shared_ptr<Bot>> all_bots;
 
     for (int i = 0; i < m_bot_count; ++i) {
@@ -171,8 +173,14 @@ void GameSession::Run() {
 
             {  // Gathering info for sending to server
 
-                PlayerAction action = { m_user_id, player_pos, player_dir, PlayerActionType::UpdatePlayer};
-                action_vector.push(action);
+                if(old_player_pos != this_player->getPos())
+                {
+                    PlayerAction action = { m_user_id, player_pos, player_dir, PlayerActionType::UpdatePlayer};
+                    action_vector.push(action);
+
+                    old_player_pos = this_player->getPos();
+                }
+                
 
                 if (new_bullets.size() > 0) {
                     PlayerAction bullet_action;
@@ -242,8 +250,18 @@ void GameSession::Run() {
                                 auto new_dir = action.direction;
                                 auto new_pos = action.position;
 
-                                other_players[id]->setDir(new_dir);
-                                other_players[id]->setPos(new_pos);
+                                auto player_iter = other_players.find(id);
+
+                                if(player_iter == other_players.end())
+                                {
+                                    std::cout << "No player with id " << id << std::endl;
+                                    exit(-1);
+                                }
+                                else
+                                {
+                                    other_players[id]->setDir(new_dir);
+                                    other_players[id]->setPos(new_pos);
+                                }
                             } break;
 
                             case PlayerActionType::NewBullet: {
