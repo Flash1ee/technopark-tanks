@@ -120,7 +120,6 @@ void GameSession::Run() {
         if (stop == 2) {
             timer_bots.restart();
         }
-        std::cout << times.asSeconds() << std::endl;
 
         if ((times.asSeconds() > 3) && (stop == 0)) {
             for (int i = 0; i < 2; i++) {
