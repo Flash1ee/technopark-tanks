@@ -7,6 +7,9 @@ Menu::Menu(MenuSelector selector, sf::RenderWindow& window) {
     if (!bg.loadFromFile(BACKGROUND_PATH)) {
         throw std::exception();
     };
+    if (!music.openFromFile(MUSIC_PATH)) {
+        throw std::exception();
+    };
     this->background.setTexture(bg);
     background.setPosition(0, 0);
     selectedIndex = 0;
@@ -34,6 +37,7 @@ Menu::Menu(MenuSelector selector, sf::RenderWindow& window) {
 }
 
 int Menu::show(sf::RenderWindow& window) {
+    this->music.play();
     while (window.isOpen()) {
         this->draw(window);
         window.display();
