@@ -4,12 +4,11 @@ Menu::Menu(MenuSelector selector, sf::RenderWindow& window) {
     if (!this->font.loadFromFile(FONT_PATH)) {
         throw std::exception();
     };
-    // sf::Texture bg;
-    // if (!bg.loadFromFile(BACKGROUND_PATH)) {
-    //     throw std::exception();
-    // };
-    // this->background.setTexture(bg);
-    // background.setPosition(0, 0);
+    if (!bg.loadFromFile(BACKGROUND_PATH)) {
+        throw std::exception();
+    };
+    this->background.setTexture(bg);
+    background.setPosition(0, 0);
     selectedIndex = 0;
     switch (selector) {
         case MenuSelector::MAIN: {
@@ -82,7 +81,7 @@ int Menu::show(sf::RenderWindow& window) {
 }
 
 void Menu::draw(sf::RenderWindow& window) {
-    // window.draw(background);
+    window.draw(background);
     for (int i = 0; i < buttons.size(); i++) {
         window.draw(buttons[i]);
     }
