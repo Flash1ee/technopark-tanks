@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
     // GameSession game_session(window_title, map_skin, player_skin, true,
     // server_ip, PORT);
-    sf::RenderWindow menuWindow(sf::VideoMode(1024, 760), window_title, sf::Style::None);
+    sf::RenderWindow menuWindow(sf::VideoMode(1024, 768), window_title, sf::Style::None);
     Menu mainMenu(MenuSelector::MAIN, menuWindow);
     int result = mainMenu.show(menuWindow);
     std::cout << result << '\n';

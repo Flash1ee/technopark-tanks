@@ -149,8 +149,15 @@ void GameSession::Run() {
             if (this_player->getShot()) {
                 this_player->setShot(false);
                 // sf::Vector2f coords = this_player.getPos();
-                auto bullet_pos = this_player->getPos();
                 auto bullet_dir = this_player->getDir();
+                sf::Vector2f bullet_pos;
+                if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
+                    bullet_pos.x = this_player->getPos().x + 4.5;
+                    bullet_pos.y = this_player->getPos().y + 4.5;
+                } else {
+                    bullet_pos.x = this_player->getPos().x + 3.5;
+                    bullet_pos.y = this_player->getPos().y + 3.5;
+                }
                 auto new_b = std::make_shared<Bullet>(m_level,
                     OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(323, 102, 4, 4), bullet_pos, 0.1,
                     bullet_dir, 1);

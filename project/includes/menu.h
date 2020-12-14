@@ -47,6 +47,7 @@ class Menu {
         sf::Font font;
         std::vector <sf::Text> buttons;
         sf::Sprite background;
+        sf::Texture bg;
     public:
         Menu(MenuSelector selector, sf::RenderWindow& window);
         void moveUp();
