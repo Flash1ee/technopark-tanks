@@ -106,6 +106,10 @@ void Bullet::move(float time) {
 // void Bullet::sound() { this->m_sound.play(); }
 sf::Sprite &Object::getSprite() { return this->sprite; }
 
+void Object::setDir(Direction dir) {
+    this->dir = dir;
+}
+
 Direction Tank::getDir() const { return this->dir; }
 
 int Tank::makeAction(float time) {

@@ -2,10 +2,11 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <map>
-#include <messages.hpp>
 #include <string>
 
+#include "messages.hpp"
 #include "cam.h"
+#include "menu.h"
 #include "game.h"
 #include "game_map.hpp"
 #include "game_session.hpp"
@@ -20,7 +21,6 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     MapObject player = m_level.GetFirstObject("player");
     sf::FloatRect p_pos = player.rect;
     m_player_pos = {p_pos.left + p_pos.width / 2, p_pos.top - p_pos.width / 2};
-
     if (m_is_multiplayer) {
         m_player_pos = m_game_client.connectToServer(server_ip, server_port);
 
@@ -112,14 +112,14 @@ void GameSession::Run() {
                 m_window.close();
                 exit(0);
             }
-
+            
             if (this_player->getShot()) {
                 this_player->setShot(false);
                 // sf::Vector2f coords = this_player.getPos();
                 auto bullet_pos = this_player->getPos();
                 auto bullet_dir = this_player->getDir();
                 auto new_b = std::make_shared<Bullet>(m_level,
-                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(321, 100, 8, 8), bullet_pos, 0.5,
+                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(323, 102, 4, 4), bullet_pos, 0.1,
                     bullet_dir, 1);
 
                 // sf::Packet packet;

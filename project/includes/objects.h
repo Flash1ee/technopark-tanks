@@ -31,11 +31,14 @@ class Object {
     sf::Vector2f getPos() const;
     void setPos(const sf::Vector2f& new_pos);
     void setPos();
+    void setDir(Direction dir);
+
     // void setPos(const sf::Vector2f& new_pos);
     sf::Sprite& getSprite();
     float getX() const;
     float getY() const;
     sf::IntRect getRect();
+
 
    protected:
     sf::Vector2f coords;  //координаты
@@ -65,6 +68,7 @@ public:
     int getLife() const;
 private:
     int m_life;
+    // int m_damage;
 };
 
 class Tank : public Object {  //класс любого танка

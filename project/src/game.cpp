@@ -3,6 +3,7 @@
 #include <string>
 
 #include "cam.h"
+#include "menu.h"
 #include "client_server_config.h"
 #include "game_session.hpp"
 #include "game.h"
@@ -18,9 +19,34 @@ int main(int argc, char* argv[]) {
 
     // GameSession game_session(window_title, map_skin, player_skin, true,
     // server_ip, PORT);
-    GameSession game_session(window_title, map_skin, player_skin, false);
+    sf::RenderWindow menuWindow(sf::VideoMode(1024, 760), window_title, sf::Style::None);
+    Menu mainMenu(MenuSelector::MAIN, menuWindow);
+    int result = mainMenu.show(menuWindow);
+    std::cout << result << '\n';
+    switch (result)
+    {
+        case SINGLE: {
+            GameSession game_session(window_title, map_skin, player_skin, false);
+            game_session.Run();
+            break;
+        }
 
-    game_session.Run();
+        case MULTI: {
+            GameSession game_session(window_title, map_skin, player_skin, true,
+               server_ip, PORT);
+            game_session.Run();
+            break;
+        }
+    
+        default: {
+            throw std::exception();
+            break;
+        }
+    }
+    
+    // GameSession game_session(window_title, map_skin, player_skin, false);
+
+    // game_session.Run();
 
     return 0;
 }
