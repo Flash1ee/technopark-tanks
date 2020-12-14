@@ -5,6 +5,7 @@
 #include <string>
 #include <exception>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "game_session.hpp"
 
 #define SINGLE 0
@@ -14,6 +15,7 @@
 #define GAME_COUNT 3
 #define FONT_PATH "../resources/20085.ttf"
 #define BACKGROUND_PATH "../resources/background.jpg"
+#define MUSIC_PATH "../resources/menu_music.ogg"
 
 enum class MenuSelector {
     MAIN,
@@ -48,6 +50,7 @@ class Menu {
         std::vector <sf::Text> buttons;
         sf::Sprite background;
         sf::Texture bg;
+        sf::Music music;
     public:
         Menu(MenuSelector selector, sf::RenderWindow& window);
         void moveUp();
