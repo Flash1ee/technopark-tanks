@@ -103,19 +103,41 @@ void GameSession::Run() {
 
     std::vector<std::shared_ptr<Bullet>> new_bullets;
     std::vector<std::shared_ptr<Bullet>> all_bullets;
-    sf::Clock clock;
+    sf::Clock clock, timer_bots;
     bool is_new_user = true;
 
     Sound sounds [static_cast<int>(SoundType::COUNT)] {
         Sound(BULLET_SOUND)
     };
 
+    int stop = 0;
     while (m_window.isOpen()) {
-        float time =
-            clock.getElapsedTime()
-                .asMicroseconds();  //дать прошедшее время в микросекундах
+        sf::Time times = timer_bots.getElapsedTime();
+
+        float time =clock.getElapsedTime().asMicroseconds();  //дать прошедшее время в микросекундах
         clock.restart();  //перезагружает время
         time /= 800;      //скорость игры
+        if (stop == 2) {
+            timer_bots.restart();
+        }
+        std::cout << times.asSeconds() << std::endl;
+
+        if ((times.asSeconds() > 3) && (stop == 0)) {
+            for (int i = 0; i < 2; i++) {
+                size_t ind = 0;
+                if (i % 2) {
+                    ind = 1;
+                }
+                sf::Vector2f m_bot_pos = {spawn[ind].rect.left + spawn[ind].rect.width / 2,
+                                          spawn[ind].rect.top - spawn[ind].rect.width / 2};
+
+                // sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
+                all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
+                                            100, Direction::UP));
+                stop += 1;
+            }
+
+        }
 
         sf::Event event;
         while (m_window.pollEvent(event)) {
@@ -289,6 +311,7 @@ void GameSession::Run() {
                 m_window.draw(i->getSprite());
             }
             m_window.display();
+
         }
     }
 }
