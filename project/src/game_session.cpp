@@ -158,7 +158,7 @@ void GameSession::Run() {
                     bullet_pos.y = this_player->getPos().y + 3.5;
                 }
                 auto new_b = std::make_shared<Bullet>(m_level,
-                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(323, 102, 4, 4), bullet_pos, 0.1,
+                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(323, 102, 4, 4), bullet_pos, 0.3,
                     bullet_dir, 1);
 
                 // sf::Packet packet;
@@ -293,7 +293,7 @@ void GameSession::Run() {
         {  // Drawing is here
 
             for (auto& curr_bullet : all_bullets) {
-                curr_bullet->move(time);
+                curr_bullet->move(time, all_bots);
             }
 
             m_cam.changeViewCoords(new_pos);
@@ -314,7 +314,9 @@ void GameSession::Run() {
 
             m_window.draw(this_player->getSprite());
             for (auto &i : all_bots) {
-                m_window.draw(i->getSprite());
+                if (i->getHp() != 0) {
+                    m_window.draw(i->getSprite());
+                }
             }
             m_window.display();
 

@@ -71,7 +71,7 @@ void Tank::move(float time) {
     //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
-void Bullet::move(float time) {
+void Bullet::move(float time, std::vector<Bots*> b) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -95,7 +95,7 @@ void Bullet::move(float time) {
             break;
     }
 
-    this->checkCollisionsMap();
+    this->checkCollisionsObject(b);
     if (m_life == 1) {
         coords.x += dx * time;
         coords.y += dy * time;
@@ -181,12 +181,23 @@ void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
     }
 }
 
-void Bullet::checkCollisionsMap() {
+void Bullet::checkCollisionsObject(std::vector<Bots*> b) {
     for (auto &i : m_objects) {
-        if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
-            m_life = 0;
+        for (auto &it : b) {
+            if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(it->getRect())) {
+                it->setHp(it->getHp() - 50);
+                m_life = 0;
+            }
         }
     }
+}
+
+int Tank::getHp() const {
+    return this->m_hp;
+}
+
+void Tank::setHp(int hp) {
+    this->m_hp = hp;
 }
 
 int Bullet::getLife() const {

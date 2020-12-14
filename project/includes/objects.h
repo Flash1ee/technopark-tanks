@@ -62,8 +62,8 @@ public:
         : Object(textureFile, rect, pos, speed, dir), m_life(life) {
         m_objects = mapObj.GetAllObjects("solid");
         };
-    void move(float time);
-    void checkCollisionsMap();
+    void move(float time, std::vector<Bots*> b);
+    void checkCollisionsObject(std::vector<Bots*> b);
     // void sound();
     int getLife() const;
 private:
@@ -74,14 +74,14 @@ private:
 class Tank : public Object {  //класс любого танка
    protected:
     // sf::String name;
-    int hp;
+    int m_hp;
     // Direction dir;
     bool shot;
     // size_t armor;
     // size_t power;
     Tank(Level& mapObj, sf::String textureFile, sf::IntRect rect,
          sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Object(textureFile, rect, pos, speed, dir), hp(hp), shot(false) {
+        : Object(textureFile, rect, pos, speed, dir), m_hp(hp), shot(false) {
         m_objects = mapObj.GetAllObjects("solid");
     }
 
@@ -91,6 +91,8 @@ class Tank : public Object {  //класс любого танка
     int makeAction(float time);
     Direction getDir() const;
     bool getShot() const;
+    int getHp() const;
+    void setHp(int hp);
     void setShot(bool shot);
 };
 
