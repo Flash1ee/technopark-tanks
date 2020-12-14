@@ -6,6 +6,21 @@
 
 #include "map.h"
 
+enum class SoundType {
+    BULLET,
+    COUNT,
+    ERROR
+};
+
+class Sound {
+    private:
+      sf::Sound sound;
+      sf::SoundBuffer buffer;
+    public:
+      void play();
+      Sound(std::string path);
+};
+
 enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };
 class Bots;
 class Object {
@@ -16,11 +31,14 @@ class Object {
     sf::Vector2f getPos() const;
     void setPos(const sf::Vector2f& new_pos);
     void setPos();
+    void setDir(Direction dir);
+
     // void setPos(const sf::Vector2f& new_pos);
     sf::Sprite& getSprite();
     float getX() const;
     float getY() const;
     sf::IntRect getRect();
+
 
    protected:
     sf::Vector2f coords;  //координаты
@@ -32,8 +50,8 @@ class Object {
     sf::Texture texture;
     sf::Sprite sprite;
     std::vector<MapObject> m_objects;
-    sf::Sound m_sound;
-    sf::SoundBuffer m_buffer;
+    // sf::Sound m_sound;
+    // sf::SoundBuffer m_buffer;
     // Object();
 };
 
@@ -43,17 +61,14 @@ public:
            float speed, Direction dir, int life)
         : Object(textureFile, rect, pos, speed, dir), m_life(life) {
         m_objects = mapObj.GetAllObjects("solid");
-            if (!m_buffer.loadFromFile(soundFile)) {
-                throw std::exception();
-            }
-            m_sound.setBuffer(m_buffer);
         };
     void move(float time);
     void checkCollisionsMap();
-    void sound();
+    // void sound();
     int getLife() const;
 private:
     int m_life;
+    // int m_damage;
 };
 
 class Tank : public Object {  //класс любого танка

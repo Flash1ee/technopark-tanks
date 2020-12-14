@@ -2,10 +2,11 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <map>
-#include <messages.hpp>
 #include <string>
 
+#include "messages.hpp"
 #include "cam.h"
+#include "menu.h"
 #include "game.h"
 #include "game_map.hpp"
 #include "game_session.hpp"
@@ -17,10 +18,9 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
       m_window(sf::VideoMode(1024, 760), window_title),
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile("../maps/map1.tmx");
-    MapObject player = m_level.GetFirstObject("player");
+    MapObject player = m_level.GetFirstObject("player1");
     sf::FloatRect p_pos = player.rect;
     m_player_pos = {p_pos.left + p_pos.width / 2, p_pos.top - p_pos.width / 2};
-
     if (m_is_multiplayer) {
         m_player_pos = m_game_client.connectToServer(server_ip, server_port);
 
@@ -79,8 +79,19 @@ void GameSession::Run() {
         100, Direction::UP);
 
     std::vector<Bots*> all_bots;
-    for (int i = 0; i < 4; i++) {
-        sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
+    std::vector<MapObject> spawn;
+    spawn.push_back(m_level.GetFirstObject("spawn1"));
+    spawn.push_back(m_level.GetFirstObject("spawn2"));
+
+    for (int i = 0; i < 2; i++) {
+        size_t ind = 0;
+        if (i % 2) {
+            ind = 1;
+        }
+        sf::Vector2f m_bot_pos = {spawn[ind].rect.left + spawn[ind].rect.width / 2,
+        spawn[ind].rect.top - spawn[ind].rect.width / 2 };
+
+        // sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
         all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
                                     100, Direction::UP));
     }
@@ -95,6 +106,10 @@ void GameSession::Run() {
     sf::Clock clock;
     bool is_new_user = true;
 
+    Sound sounds [static_cast<int>(SoundType::COUNT)] {
+        Sound(BULLET_SOUND)
+    };
+
     while (m_window.isOpen()) {
         float time =
             clock.getElapsedTime()
@@ -108,14 +123,14 @@ void GameSession::Run() {
                 m_window.close();
                 exit(0);
             }
-
+            
             if (this_player->getShot()) {
                 this_player->setShot(false);
                 // sf::Vector2f coords = this_player.getPos();
                 auto bullet_pos = this_player->getPos();
                 auto bullet_dir = this_player->getDir();
                 auto new_b = std::make_shared<Bullet>(m_level,
-                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(321, 100, 8, 8), bullet_pos, 0.5,
+                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(323, 102, 4, 4), bullet_pos, 0.1,
                     bullet_dir, 1);
 
                 // sf::Packet packet;
@@ -125,8 +140,7 @@ void GameSession::Run() {
 
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
-                new_b->sound();
-
+                sounds[static_cast<int>(SoundType::BULLET)].play();
             }
         }
 
@@ -261,13 +275,15 @@ void GameSession::Run() {
             m_window.clear();
 
             m_level.Draw(m_window);
-            for (auto i : all_bullets) {
-                if (i->getLife() == 1) {
-                    m_window.draw(i->getSprite());
+
+            for (int i = 0; i < all_bullets.size(); i++) {
+                if (all_bullets[i]->getLife()) {
+                    m_window.draw(all_bullets[i]->getSprite());
                 } else {
-                    all_bullets.pop_back();
+                    all_bullets.erase(all_bullets.begin() + i);
                 }
             }
+
             m_window.draw(this_player->getSprite());
             for (auto &i : all_bots) {
                 m_window.draw(i->getSprite());
