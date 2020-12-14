@@ -183,11 +183,14 @@ void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
 
 void Bullet::checkCollisionsObject(std::vector<Bots*> b) {
     for (auto &i : m_objects) {
-        for (auto &it : b) {
-            if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(it->getRect())) {
-                it->setHp(it->getHp() - 50);
+            if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
                 m_life = 0;
             }
+        }
+    for (auto &it : b) {
+        if (getRect().intersects(it->getRect())) {
+            it->setHp(it->getHp() - 25);
+            m_life = 0;
         }
     }
 }

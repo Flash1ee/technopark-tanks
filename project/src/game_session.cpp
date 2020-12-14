@@ -313,9 +313,12 @@ void GameSession::Run() {
             }
 
             m_window.draw(this_player->getSprite());
-            for (auto &i : all_bots) {
-                if (i->getHp() != 0) {
-                    m_window.draw(i->getSprite());
+            for (int i = 0; i < all_bots.size(); i++) {
+                if (all_bots[i]->getHp() > 0) {
+                    m_window.draw(all_bots[i]->getSprite());
+                }
+                if (all_bots[i]->getHp() == 0) {
+                    all_bots.erase(all_bots.begin() + i);
                 }
             }
             m_window.display();
