@@ -12,17 +12,20 @@
 
 GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
-                         std::string server_ip, int server_port)
+                         sf::IpAddress server_ip, int server_port)
     :
       m_window(sf::VideoMode(1024, 760), window_title),
-      m_is_multiplayer(is_multiplayer)
+      m_is_multiplayer(is_multiplayer),
+      m_game_client(server_ip, server_port)
 {
-    if(m_is_multiplayer)
-    {
-        m_game_client = Client(server_ip, server_port);
-    }
+
+    // if(m_is_multiplayer)
+    // {
+    //     m_game_client = Client(server_ip, server_port);
+    // }
 
     m_level.LoadFromFile("../maps/map1.tmx");
+
 }
 
 GameSession::~GameSession() {}
@@ -56,7 +59,10 @@ void GameSession::Run() {
             sf::Packet packet;
             PlayerAction new_player_msg;
             
+            //while (m_game_client.m_socket->receive(packet) != sf::Socket::Done) { }
+
             if(m_game_client.RecieveFromServer(packet))
+            //if(packet.getDataSize() > 0)
             {
                 packet >> new_player_msg;
                 m_user_id = new_player_msg.player_id;

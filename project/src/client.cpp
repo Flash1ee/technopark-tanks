@@ -84,16 +84,19 @@ bool Client::SendToServer(sf::Packet& packet)
 
 bool Client::RecieveFromServer(sf::Packet& packet)
 {
-    sf::Socket::Status status = sf::Socket::Done;
-    do
-    {
-        if(status == sf::Socket::Partial)
-        {
-            std::cout << "RecieveFromServer: Partial" << std::endl;
-        }
+    sf::Socket::Status status;// = sf::Socket::Done;
 
-        status = m_socket->receive(packet);
-    } while (status == sf::Socket::Partial);
+    while ((status = m_socket->receive(packet)) && (status != sf::Socket::Done)) { }
+
+    // do
+    // {
+    //     if(status == sf::Socket::Partial)
+    //     {
+    //         std::cout << "RecieveFromServer: Partial" << std::endl;
+    //     }
+
+    //     status = m_socket->receive(packet);
+    // } while (status == sf::Socket::Partial);
 
     if (status == sf::Socket::Done)
         return true;

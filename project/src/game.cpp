@@ -14,10 +14,10 @@ int main(int argc, char* argv[]) {
 
     std::string player_skin(OBJECT_IMAGE);
     std::string map_skin(MAP_ONE);
-    std::string server_ip = "25.59.142.74";//sf::IpAddress::getLocalAddress().toString();
+    sf::IpAddress server_ip = "25.59.142.74";//sf::IpAddress::getLocalAddress().toString();
 
-    //GameSession game_session(window_title, map_skin, player_skin, true, server_ip, PORT);
-    GameSession game_session(window_title, map_skin, player_skin, false);
+    GameSession game_session(window_title, map_skin, player_skin, true, server_ip, PORT);
+    //GameSession game_session(window_title, map_skin, player_skin, false);
 
     game_session.Run();
 
