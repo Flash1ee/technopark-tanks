@@ -101,6 +101,7 @@ void Object::make_rotation(sf::Sprite& sprite, Direction& dir)
 }
 
 void Bullet::move(float time) {
+    make_rotation(this->sprite, this->dir);
     switch (dir) {
         case Direction::RIGHT:
             dx = speed;
@@ -119,7 +120,6 @@ void Bullet::move(float time) {
             dy = -speed;
             break;
     }
-    make_rotation(this->sprite, this->dir);
 
     this->checkCollisionsMap();
     if (m_life == 1) {
@@ -141,6 +141,7 @@ void Tank::setDir(Direction dir)
 }
 
 int Tank::makeAction(float time) {
+    make_rotation(this->sprite, this->dir);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         this->shot = true;
     }
@@ -164,7 +165,7 @@ int Tank::makeAction(float time) {
         this->move(time);
         return 0;
     }
-    make_rotation(this->sprite, this->dir);
+    
     return -1;
 }
 
