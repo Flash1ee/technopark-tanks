@@ -374,6 +374,7 @@ void Sound::play(sound_action action) {
         case BACKGROUND:
             this->background_sound.play();
             this->background_sound.setPitch(0.8f);
+            this->background_sound.getStatus();
             break;
         case BRICK:
             this->brick_sound.play();
