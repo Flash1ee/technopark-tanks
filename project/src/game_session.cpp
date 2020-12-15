@@ -15,7 +15,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
                          std::string server_ip, int server_port)
     :
-      m_window(sf::VideoMode(1024, 760), window_title),
+      m_window(sf::VideoMode(1024, 768), window_title),
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player1");
@@ -41,7 +41,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     }
 }
 
-GameSession::~GameSession() {}
+GameSession::~GameSession() {};
 
 void GameSession::WaitForOtherPlayers() {
     // encapsulation error
@@ -61,7 +61,7 @@ void GameSession::WaitForOtherPlayers() {
     }
 }
 
-void GameSession::Run() {
+int GameSession::Run() {
     if (m_is_multiplayer) {
         WaitForOtherPlayers();
         // RunOnlineGame()
@@ -147,7 +147,16 @@ void GameSession::Run() {
                 m_window.close();
                 exit(0);
             }
-            
+            if (event.type == sf::Event::KeyReleased) {
+                if (event.key.code == sf::Keyboard::Escape) {
+                    sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
+                                                sf::Style::None);
+                    Menu gameMenu(1, menu_window);
+                    if (gameMenu.show(menu_window) == STOP_RUN) {
+                        return STOP_RUN;
+                    }
+                }
+            }
             if (this_player->getShot()) {
                 this_player->setShot(false);
                 // sf::Vector2f coords = this_player.getPos();
@@ -338,4 +347,5 @@ void GameSession::Run() {
 
         }
     }
+    return 0;
 }
