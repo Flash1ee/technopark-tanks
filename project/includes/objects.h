@@ -63,6 +63,7 @@ class Sound {
     // void play();
     //   Sound(std::string path);
     Sound();
+    bool MainSoundStopped();
 };
 
 enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };

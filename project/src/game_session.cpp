@@ -84,18 +84,18 @@ int GameSession::Run() {
     spawn.push_back(m_level.GetFirstObject("spawn1"));
     spawn.push_back(m_level.GetFirstObject("spawn2"));
 
-    for (int i = 0; i < 2; i++) {
-        size_t ind = 0;
-        if (i % 2) {
-            ind = 1;
-        }
-        sf::Vector2f m_bot_pos = {spawn[ind].rect.left + spawn[ind].rect.width / 2,
-        spawn[ind].rect.top - spawn[ind].rect.width / 2 };
+    // for (int i = 0; i < 2; i++) {
+    //     size_t ind = 0;
+    //     if (i % 2) {
+    //         ind = 1;
+    //     }
+    //     sf::Vector2f m_bot_pos = {spawn[ind].rect.left + spawn[ind].rect.width / 2,
+    //     spawn[ind].rect.top - spawn[ind].rect.width / 2 };
 
-        // sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
-        all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
-                                    100, Direction::UP));
-    }
+    //     // sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
+    //     all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
+    //                                 100, Direction::UP));
+    // }
 
     sf::Vector2f old_pos = this_player->getPos();
     sf::Vector2f new_pos = old_pos;
@@ -110,20 +110,20 @@ int GameSession::Run() {
     // Sound sounds [static_cast<int>(SoundType::COUNT)] {
     //     Sound(BULLET_SOUND)
     // };
+    size_t count_bots = 0;
 
     int stop = 0;
+    int time_before = clock.getElapsedTime().asSeconds();
+    timer_bots.restart();
+
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
 
         float time =clock.getElapsedTime().asMicroseconds();  //дать прошедшее время в микросекундах
         clock.restart();  //перезагружает время
         time /= 800;      //скорость игры
-        if (stop == 2) {
-            timer_bots.restart();
-        }
-
-
-        if ((times.asSeconds() > 10) && (stop == 0)) {
+        
+        if (times.asSeconds() > 10 && sounds.MainSoundStopped() && count_bots != 6) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
@@ -137,6 +137,7 @@ int GameSession::Run() {
                                             100, Direction::UP));
                 stop += 1;
             }
+            timer_bots.restart();
 
         }
 
@@ -326,6 +327,11 @@ int GameSession::Run() {
                     sounds.play(BRICK);
                 }
             }
+            if (all_bots.size() != count_bots) {
+                sounds.play(SPAWN);
+                count_bots = all_bots.size();
+            }
+
             m_window.draw(this_player->getSprite());
             for (int i = 0; i < all_bots.size(); i++) {
                 if (all_bots[i]->getHp() > 0) {
@@ -334,6 +340,7 @@ int GameSession::Run() {
                 if (all_bots[i]->getHp() == 0) {
                     all_bots.erase(all_bots.begin() + i);
                     sounds.play(KILL);
+                    count_bots--;
                 }
             }
             m_window.display();
