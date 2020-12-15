@@ -68,6 +68,7 @@ int Menu::show(sf::RenderWindow& window) {
                         }
                         if (currbutton == "Single play") {
                             window.close();
+                            this->music.stop();
                             return SINGLE;
                         }
                         if (currbutton == "Multiplayer") {
@@ -106,3 +107,4 @@ void Menu::moveDown() {
         this->buttons[selectedIndex].setColor(sf::Color::Red);
     }
 }
+

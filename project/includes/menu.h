@@ -17,6 +17,9 @@
 #define BACKGROUND_PATH "../resources/background.jpg"
 #define MUSIC_PATH "../resources/menu_music.ogg"
 
+
+
+
 enum class MenuSelector {
     MAIN,
     GAME,

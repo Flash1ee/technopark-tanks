@@ -337,13 +337,64 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b) {
     // 2);
 }
 
-void Sound::play() {
-    this->sound.play();
-}
+// void Sound::play() {
+//     this->sound.play();
+// }
 
-Sound::Sound(std::string path) {
-    if (!this->buffer.loadFromFile(path)) {
-        throw std::exception();
+// Sound::Sound(std::string path) {
+//     if (!this->buffer.loadFromFile(path)) {
+//         throw std::exception();
+//     }
+//     this->sound.setBuffer(this->buffer);
+// }
+Sound::Sound() {
+    background.loadFromFile(BACKGROUND_SOUND);
+    background_sound.setBuffer(background);
+
+    brick.loadFromFile(BRICK_SOUND);
+    brick_sound.setBuffer(brick);
+
+    explosion.loadFromFile(KILL_SOUND);
+    explosion_sound.setBuffer(explosion);
+
+    fire.loadFromFile(FIRE_SOUND);
+    fire_sound.setBuffer(fire);
+
+    gameover.loadFromFile(GAME_OVER_SOUND);
+    gameover_sound.setBuffer(gameover);
+
+    gamestart.loadFromFile(GAME_START_SOUND);
+    gamestart_sound.setBuffer(gamestart);
+
+    steel.loadFromFile(SPAWN_SOUND);
+    steel_sound.setBuffer(steel);
+}
+void Sound::play(sound_action action) {
+    switch(action) {
+        case BACKGROUND:
+            this->background_sound.play();
+            this->background_sound.setPitch(0.8f);
+            break;
+        case BRICK:
+            this->brick_sound.play();
+            this->fire_sound.setVolume(100);
+            break;
+        case KILL:
+            this->explosion_sound.play();
+            break;
+        case FIRE:
+            this->fire_sound.play();
+            this->fire_sound.setVolume(15);
+            break;
+        case GAME_OVER:
+            this->gameover_sound.play();
+            break;
+        case GAME_START:
+            this->gamestart_sound.play();
+            break;
+        case SPAWN:
+            this->steel_sound.play();
+            break;
     }
-    this->sound.setBuffer(this->buffer);
+
 }

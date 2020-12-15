@@ -5,20 +5,64 @@
 #include <memory>
 
 #include "map.h"
+#include "menu.h"
+
+
+
+#define GAME_START_SOUND "../sounds/gamestart.ogg"
+#define GAME_OVER_SOUND "../sounds/gameover.ogg"
+#define BACKGROUND_SOUND "../sounds/background.ogg"
+#define FIRE_SOUND "../sounds/fire.ogg"
+#define SPAWN_SOUND "../sounds/bonus.ogg"
+#define BRICK_SOUND "../sounds/brick.ogg"
+#define KILL_SOUND "../sounds/explosion.ogg"
+
 
 enum class SoundType {
     BULLET,
     COUNT,
     ERROR
 };
-
+typedef enum {
+    BACKGROUND,
+    BRICK,
+    KILL,
+    FIRE,
+    GAME_OVER,
+    GAME_START,
+    SPAWN,
+    COUNT
+} sound_action;
 class Sound {
     private:
-      sf::Sound sound;
-      sf::SoundBuffer buffer;
+    sf::Sound sound;
+    sf::SoundBuffer buffer;
+
+    sf::SoundBuffer background;
+    sf::Sound background_sound;
+
+    sf::SoundBuffer brick;
+    sf::Sound brick_sound;
+
+    sf::SoundBuffer explosion;
+    sf::Sound explosion_sound;
+
+    sf::SoundBuffer fire;
+    sf::Sound fire_sound;
+
+    sf::SoundBuffer gameover;
+    sf::Sound gameover_sound;
+
+    sf::SoundBuffer gamestart;
+    sf::Sound gamestart_sound;
+
+    sf::SoundBuffer steel;
+    sf::Sound steel_sound;
     public:
-      void play();
-      Sound(std::string path);
+    void play(sound_action action);
+    // void play();
+    //   Sound(std::string path);
+    Sound();
 };
 
 enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };
@@ -32,6 +76,7 @@ class Object {
     void setPos(const sf::Vector2f& new_pos);
     void setPos();
     void setDir(Direction dir);
+
 
     // void setPos(const sf::Vector2f& new_pos);
     sf::Sprite& getSprite();
@@ -102,7 +147,6 @@ class Player : public Tank {  //класс игрока
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
     void checkCollisionsBots(std::vector<Bots*> b);
-    
     
 };
 

@@ -73,7 +73,8 @@ void GameSession::Run() {
 
     // TmxObject Player_obj = m_level.GetFirstObject("player"); //TODO: make
     // const name
-
+    Sound sounds;
+    sounds.play(GAME_START);
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.07,
         100, Direction::UP);
@@ -106,9 +107,9 @@ void GameSession::Run() {
     sf::Clock clock, timer_bots;
     bool is_new_user = true;
 
-    Sound sounds [static_cast<int>(SoundType::COUNT)] {
-        Sound(BULLET_SOUND)
-    };
+    // Sound sounds [static_cast<int>(SoundType::COUNT)] {
+    //     Sound(BULLET_SOUND)
+    // };
 
     int stop = 0;
     while (m_window.isOpen()) {
@@ -121,7 +122,8 @@ void GameSession::Run() {
             timer_bots.restart();
         }
 
-        if ((times.asSeconds() > 3) && (stop == 0)) {
+
+        if ((times.asSeconds() > 10) && (stop == 0)) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
@@ -168,7 +170,8 @@ void GameSession::Run() {
 
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
-                sounds[static_cast<int>(SoundType::BULLET)].play();
+                sounds.play(FIRE);
+                // sounds[static_cast<int>(SoundType::BULLET)].play();
             }
         }
 
@@ -176,7 +179,9 @@ void GameSession::Run() {
             i->move(time, *this_player, all_bots);
         }
 
-        this_player->makeAction(time);
+        if (!this_player->makeAction(time)) {
+            sounds.play(BACKGROUND);
+        }
         this_player->checkCollisionsBots(all_bots);
         old_pos = new_pos;
         new_pos = this_player->getPos();
@@ -309,9 +314,9 @@ void GameSession::Run() {
                     m_window.draw(all_bullets[i]->getSprite());
                 } else {
                     all_bullets.erase(all_bullets.begin() + i);
+                    sounds.play(BRICK);
                 }
             }
-
             m_window.draw(this_player->getSprite());
             for (int i = 0; i < all_bots.size(); i++) {
                 if (all_bots[i]->getHp() > 0) {
@@ -319,6 +324,7 @@ void GameSession::Run() {
                 }
                 if (all_bots[i]->getHp() == 0) {
                     all_bots.erase(all_bots.begin() + i);
+                    sounds.play(KILL);
                 }
             }
             m_window.display();
