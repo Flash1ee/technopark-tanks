@@ -123,7 +123,7 @@ void GameSession::Run() {
         clock.restart();  //перезагружает время
         time /= 800;      //скорость игры
         
-        if (times.asSeconds() > 10 && sounds.MainSoundStopped() && count_bots != 6) {
+        if (times.asSeconds() > 10 && sounds.MainSoundStopped() && count_bots < 6) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
