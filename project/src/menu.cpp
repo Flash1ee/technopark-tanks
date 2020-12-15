@@ -98,7 +98,7 @@ int Menu::show(sf::RenderWindow& window) {
                         break;
                     }
 
-                    case sf::Keyboard::Enter: {
+                    case sf::Keyboard::Return: {
                         std::string currbutton = this->buttons[this->selectedIndex].getString();
                         if (currbutton == "Exit") {
                             window.close();
