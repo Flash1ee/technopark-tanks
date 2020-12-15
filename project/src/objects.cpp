@@ -71,6 +71,39 @@ void Tank::move(float time) {
     //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
+void Bullet::move(float time, Player& p) {
+    switch (dir) {
+        case Direction::RIGHT:
+            this->sprite.setRotation(90);
+            dx = speed;
+            dy = 0;
+            break;
+        case Direction::LEFT:
+            this->sprite.setRotation(-90);
+            dx = -speed;
+            dy = 0;
+            break;
+        case Direction::DOWN:
+            this->sprite.setRotation(180);
+            dx = 0;
+            dy = speed;
+            break;
+        case Direction::UP:
+            this->sprite.setRotation(0);
+            dx = 0;
+            dy = -speed;
+            break;
+    }
+
+    this->checkCollisionsObject(p);
+    if (m_life == 1) {
+        coords.x += dx * time;
+        coords.y += dy * time;
+    }
+    setPos();
+    // sprite.setPosition(coords.x + 7, coords.y + 7);
+}
+
 void Bullet::move(float time, std::vector<Bots*> b) {
     switch (dir) {
         case Direction::RIGHT:
@@ -192,6 +225,18 @@ void Bullet::checkCollisionsObject(std::vector<Bots*> b) {
             it->setHp(it->getHp() - 25);
             m_life = 0;
         }
+    }
+}
+
+void Bullet::checkCollisionsObject(Player& p) {
+    for (auto &i : m_objects) {
+        if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
+            m_life = 0;
+        }
+    }
+    if (getRect().intersects(p.getRect())) {
+        p.setHp(p.getHp() - 25);
+        m_life = 0;
     }
 }
 

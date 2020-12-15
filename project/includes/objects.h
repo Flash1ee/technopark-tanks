@@ -109,7 +109,9 @@ public:
         m_objects = mapObj.GetAllObjects("solid");
         };
     void move(float time, std::vector<Bots*> b);
+    void move(float time, Player& p);
     void checkCollisionsObject(std::vector<Bots*> b);
+    void checkCollisionsObject(Player& p);
     // void sound();
     int getLife() const;
 private:
