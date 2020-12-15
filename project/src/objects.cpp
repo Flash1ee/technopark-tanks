@@ -372,19 +372,26 @@ Sound::Sound() {
 void Sound::play(sound_action action) {
     switch(action) {
         case BACKGROUND:
+            if (this->background_sound.getStatus() != sf::Sound::Playing) {
             this->background_sound.play();
+            this->background_sound.setVolume(60);
             this->background_sound.setPitch(0.8f);
+            }
             break;
         case BRICK:
+            if (this->brick_sound.getStatus() != sf::Sound::Playing) {
             this->brick_sound.play();
             this->fire_sound.setVolume(100);
+            }
             break;
         case KILL:
             this->explosion_sound.play();
             break;
         case FIRE:
+            if (this->fire_sound.getStatus() != sf::Sound::Playing) {
             this->fire_sound.play();
             this->fire_sound.setVolume(15);
+            }
             break;
         case GAME_OVER:
             this->gameover_sound.play();
@@ -393,8 +400,15 @@ void Sound::play(sound_action action) {
             this->gamestart_sound.play();
             break;
         case SPAWN:
-            this->steel_sound.play();
+            if (this->steel_sound.getStatus() != sf::Sound::Playing) {
+                this->steel_sound.play();
+            }
             break;
     }
-
+}
+bool Sound::MainSoundStopped() {
+    if (this->gamestart_sound.getStatus() != sf::Sound::Playing) {
+        return true;
+    }
+    return false;
 }
