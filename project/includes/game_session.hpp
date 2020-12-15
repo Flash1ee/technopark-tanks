@@ -14,7 +14,7 @@ class GameSession {
     ~GameSession();
 
     void WaitForOtherPlayers();
-    void Run();
+    int Run();
     // void RunGame();
 
    private:
