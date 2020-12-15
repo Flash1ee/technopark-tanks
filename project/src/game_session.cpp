@@ -157,6 +157,7 @@ int GameSession::Run() {
                     if (gameMenu.show(menu_window) == STOP_RUN) {
                         return STOP_RUN;
                     }
+                    clock.restart();
                 }
             }
 

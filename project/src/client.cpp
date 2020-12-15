@@ -48,7 +48,7 @@ sf::Vector2f Client::connectToServer(std::string server_ip, int server_port) {
 }
 
 Client::~Client() {
-    m_socket->disconnect();
+   m_socket->disconnect();
     if (m_socket != nullptr) {
         delete m_socket;
     }
