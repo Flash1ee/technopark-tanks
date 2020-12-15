@@ -240,6 +240,21 @@ sf::IntRect Object::getRect() {
     return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }
 
+bool Object::comparisonPos(Player &p, std::vector<Bots*> b) {
+    for (auto &it : b) {
+        for (int i = 0; i < 100; i++) {
+            if ((p.coords.x == (it->coords.x + i)) || (p.coords.x == (it->coords.x - i))) {
+                return true;
+            }
+            if ((p.coords.y == (it->coords.y + i)) || (p.coords.y == (it->coords.y - i))) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+}
+
 void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
                               Player &p, std::vector<Bots*> b) {
     std::random_device rd;
@@ -331,6 +346,9 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b) {
     coords.x += dx * time;
     coords.y += dy * time;
     this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b);
+    if (true) {
+        this->setShot(true);
+    }
     setPos();
 
     // sprite.setPosition(coords.x + rect.width / 2, coords.y + rect.height /
@@ -390,7 +408,7 @@ void Sound::play(sound_action action) {
         case FIRE:
             if (this->fire_sound.getStatus() != sf::Sound::Playing) {
             this->fire_sound.play();
-            this->fire_sound.setVolume(15);
+            this->fire_sound.setVolume(60);
             }
             break;
         case GAME_OVER:
@@ -398,6 +416,7 @@ void Sound::play(sound_action action) {
             break;
         case GAME_START:
             this->gamestart_sound.play();
+            this->gamestart_sound.setVolume(20);
             break;
         case SPAWN:
             if (this->steel_sound.getStatus() != sf::Sound::Playing) {
