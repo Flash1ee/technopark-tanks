@@ -177,35 +177,35 @@ void GameSession::Run() {
                 // sounds[static_cast<int>(SoundType::BULLET)].play();
             }
 
-            for (auto &i : all_bots) {
-                if (i->getShot()) {
-                    i->setShot(false);
-                    // sf::Vector2f coords = this_player.getPos();
-                    auto bullet_dir = i->getDir();
-                    sf::Vector2f bullet_pos;
-                    if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
-                        bullet_pos.x = i->getPos().x + 4.5;
-                        bullet_pos.y = i->getPos().y + 4.5;
-                    } else {
-                        bullet_pos.x = i->getPos().x + 3.5;
-                        bullet_pos.y = i->getPos().y + 3.5;
-                    }
-                    auto new_b = std::make_shared<Bullet>(m_level,
-                                                          OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
-                                                          bullet_pos, 0.3,
-                                                          bullet_dir, 1);
-
-                    // sf::Packet packet;
-                    // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
-                    // PlayerActionType::NewBullet};
-                    // action_vector.actions.push_back(new_bullet_action);
-
-                    all_bullets.push_back(new_b);  // Copying is too expensive
-                    bots_bullets.push_back(new_b);
-                    sounds.play(FIRE);
-                    // sounds[static_cast<int>(SoundType::BULLET)].play();
-                }
-            }
+//            for (auto &i : all_bots) {
+//                if (i->getShot()) {
+//                    i->setShot(false);
+//                    // sf::Vector2f coords = this_player.getPos();
+//                    auto bullet_dir = i->getDir();
+//                    sf::Vector2f bullet_pos;
+//                    if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
+//                        bullet_pos.x = i->getPos().x + 4.5;
+//                        bullet_pos.y = i->getPos().y + 4.5;
+//                    } else {
+//                        bullet_pos.x = i->getPos().x + 3.5;
+//                        bullet_pos.y = i->getPos().y + 3.5;
+//                    }
+//                    auto new_b = std::make_shared<Bullet>(m_level,
+//                                                          OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
+//                                                          bullet_pos, 0.3,
+//                                                          bullet_dir, 1);
+//
+//                    // sf::Packet packet;
+//                    // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
+//                    // PlayerActionType::NewBullet};
+//                    // action_vector.actions.push_back(new_bullet_action);
+//
+//                    all_bullets.push_back(new_b);  // Copying is too expensive
+//                    bots_bullets.push_back(new_b);
+//                    sounds.play(FIRE);
+//                    // sounds[static_cast<int>(SoundType::BULLET)].play();
+//                }
+            //}
         }
 
         for (auto &i : all_bots) {
