@@ -145,16 +145,18 @@ void GameSession::Run() {
             }
         }
 
-        for (auto &i : all_bots) {
-            i->move(time, *this_player, all_bots); // move all bots
-        }
+        {// Move
+            for (auto &i : all_bots) {
+                i->move(time, *this_player, all_bots); // move all bots
+            }
 
-        for (auto& curr_bullet : all_bullets) {
-            curr_bullet->move(time); // move all bullets
-        }
+            for (auto& curr_bullet : all_bullets) {
+                curr_bullet->move(time); // move all bullets
+            }
 
-        this_player->makeAction(time); // move this player
-        this_player->checkCollisionsBot(all_bots);
+            this_player->makeAction(time); // move this player
+            this_player->checkCollisionsBot(all_bots);
+        }
 
         if (m_is_multiplayer) {
 
@@ -233,7 +235,7 @@ void GameSession::Run() {
 
                                 auto new_palyer = std::make_shared<Player>(m_level,
                                                                            OBJECT_IMAGE,
-                                                                           sf::IntRect(1, 2, 13, 13),
+                                                                           sf::IntRect(1, 129, 13, 13),
                                                                            pos, 0.07, 100, dir);
 
                                 std::cout << "Other player added. Position is " << pos.x << " " << pos.y << std::endl;
@@ -246,10 +248,7 @@ void GameSession::Run() {
                             {
                                 std::cout << "Other player should be updated" << std::endl;
                                 int id = action.player_id;
-                                if(id == m_user_id)
-                                {
-                                    std::cout << "PNX" << std::endl;
-                                }
+
                                 auto new_dir = action.direction;
                                 auto new_pos = action.position;
 
@@ -302,12 +301,12 @@ void GameSession::Run() {
         }
 
         {  // Drawing is here
+            m_window.clear();
 
             m_cam.changeViewCoords(this_player->getPos());
             m_cam.changeView();
 
             m_window.setView(m_cam.view);  //"оживляем" камеру в окне sfml
-            m_window.clear();
 
             m_level.Draw(m_window);
 

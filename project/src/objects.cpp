@@ -70,29 +70,56 @@ void Tank::move(float time) {
     //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
+void Object::make_rotation(sf::Sprite& sprite, Direction& dir)
+{
+    switch (dir)
+    {
+    case Direction::UP:
+        {
+            sprite.setRotation(0);
+        }
+        break;
+    case Direction::DOWN:
+        {
+            sprite.setRotation(180);
+        }
+        break;
+    case Direction::RIGHT:
+        {
+            sprite.setRotation(90);
+        }
+        break;
+    case Direction::LEFT:
+        {
+            sprite.setRotation(-90);
+        }
+        break;
+    
+    default:
+        break;
+    }
+}
+
 void Bullet::move(float time) {
     switch (dir) {
         case Direction::RIGHT:
-            this->sprite.setRotation(90);
             dx = speed;
             dy = 0;
             break;
         case Direction::LEFT:
-            this->sprite.setRotation(-90);
             dx = -speed;
             dy = 0;
             break;
         case Direction::DOWN:
-            this->sprite.setRotation(180);
             dx = 0;
             dy = speed;
             break;
         case Direction::UP:
-            this->sprite.setRotation(0);
             dx = 0;
             dy = -speed;
             break;
     }
+    make_rotation(this->sprite, this->dir);
 
     this->checkCollisionsMap();
     if (m_life == 1) {
@@ -110,38 +137,7 @@ Direction Object::getDir() const { return this->dir; }
 void Tank::setDir(Direction dir)
 {
     this->dir = dir;
-}
-
-void make_rotation(sf::Sprite& sprite, Direction& dir)
-{
-    switch (dir)
-    {
-    case Direction::UP:
-        {
-            sprite.setRotation(0);
-        }
-        break;
-    case Direction::DOWN:
-        {
-            sprite.setRotation(180);
-            
-        }
-        break;
-    case Direction::RIGHT:
-        {
-            sprite.setRotation(90);
-            
-        }
-        break;
-    case Direction::LEFT:
-        {
-            sprite.setRotation(-90);
-        }
-        break;
-    
-    default:
-        break;
-    }
+    make_rotation(this->sprite, this->dir);
 }
 
 int Tank::makeAction(float time) {
@@ -174,10 +170,10 @@ int Tank::makeAction(float time) {
 
 sf::Vector2f Object::getPos() const { return this->coords; }
 
-void Object::setPos(const sf::Vector2f &new_pos) {
+void Object::setPos(const sf::Vector2f &new_pos) 
+{
     this->coords = new_pos;
-    this->sprite.setPosition(coords.x + rect.width / 2,
-                             coords.y + rect.height / 2);
+    this->sprite.setPosition(coords.x + (rect.width / 2), coords.y + (rect.height / 2));
 }
 void Object::setPos() { setPos(this->coords); }
 void Tank::setShot(bool shot) { this->shot = shot; }

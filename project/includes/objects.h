@@ -43,6 +43,7 @@ class Object {
     float getY() const;
     Direction getDir() const;
     sf::IntRect getRect();
+    void make_rotation(sf::Sprite& sprite, Direction& dir);
 
    protected:
     sf::Vector2f coords;  //координаты
