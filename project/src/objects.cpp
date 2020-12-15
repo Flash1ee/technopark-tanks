@@ -112,34 +112,63 @@ void Tank::setDir(Direction dir)
     this->dir = dir;
 }
 
+void make_rotation(sf::Sprite& sprite, Direction& dir)
+{
+    switch (dir)
+    {
+    case Direction::UP:
+        {
+            sprite.setRotation(0);
+        }
+        break;
+    case Direction::DOWN:
+        {
+            sprite.setRotation(180);
+            
+        }
+        break;
+    case Direction::RIGHT:
+        {
+            sprite.setRotation(90);
+            
+        }
+        break;
+    case Direction::LEFT:
+        {
+            sprite.setRotation(-90);
+        }
+        break;
+    
+    default:
+        break;
+    }
+}
+
 int Tank::makeAction(float time) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         this->shot = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        this->sprite.setRotation(0);
         this->dir = Direction::UP;
         this->move(time);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        this->sprite.setRotation(-90);
         this->dir = Direction::LEFT;
         this->move(time);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        this->sprite.setRotation(90);
         this->dir = Direction::RIGHT;
         this->move(time);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        this->sprite.setRotation(180);
         this->dir = Direction::DOWN;
         this->move(time);
         return 0;
     }
+    make_rotation(this->sprite, this->dir);
     return -1;
 }
 

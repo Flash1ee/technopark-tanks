@@ -29,8 +29,9 @@ bool Client::connectToServer()
         // while (m_socket->receive(packet) != sf::Socket::Done) { }
         // if (packet.getDataSize() > 0)
         // {
+        //     PlayerAction new_player_msg;
         //     packet >> new_player_msg;
-        //     m_id = new_player_msg.player_id;
+        //     m_user_id = new_player_msg.player_id;
 
         //     std::cout << "My ID is " << m_id << std::endl;
         // }
@@ -86,17 +87,27 @@ bool Client::RecieveFromServer(sf::Packet& packet)
 {
     sf::Socket::Status status;// = sf::Socket::Done;
 
-    while ((status = m_socket->receive(packet)) && (status != sf::Socket::Done)) { }
-
-    // do
+    // while (m_socket->receive(packet) != sf::Socket::Done) 
     // {
-    //     if(status == sf::Socket::Partial)
-    //     {
-    //         std::cout << "RecieveFromServer: Partial" << std::endl;
-    //     }
+    //     std::cout << "HER\n";
+    // }
 
-    //     status = m_socket->receive(packet);
-    // } while (status == sf::Socket::Partial);
+    //while ((status = m_socket->receive(packet)) && (status != sf::Socket::Done)) { }
+
+    do
+    {
+        if(status == sf::Socket::Partial)
+        {
+            std::cout << "RecieveFromServer: Partial" << std::endl;
+        }
+        // std::cout << "HER\n";
+        status = m_socket->receive(packet);
+    } while (status == sf::Socket::Partial /*|| status == sf::Socket::NotReady*/);
+
+    // if(status == sf::Socket::NotReady)
+    // {
+    //     std::cout << "ERROR" << std::endl;
+    // }
 
     if (status == sf::Socket::Done)
         return true;

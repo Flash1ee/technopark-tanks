@@ -21,7 +21,12 @@ class Sound {
       Sound(std::string path);
 };
 
-enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };
+enum class Direction{ 
+    UP = 0,
+    DOWN,
+    RIGHT,
+    LEFT,
+    ERROR };
 
 class Bot;
 class Object {

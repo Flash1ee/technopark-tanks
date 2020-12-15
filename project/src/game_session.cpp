@@ -59,10 +59,10 @@ void GameSession::Run() {
             sf::Packet packet;
             PlayerAction new_player_msg;
             
-            //while (m_game_client.m_socket->receive(packet) != sf::Socket::Done) { }
+            while (m_game_client.m_socket->receive(packet) != sf::Socket::Done) { }
 
-            if(m_game_client.RecieveFromServer(packet))
-            //if(packet.getDataSize() > 0)
+            //if(m_game_client.RecieveFromServer(packet))
+            if(packet.getDataSize() > 0)
             {
                 packet >> new_player_msg;
                 m_user_id = new_player_msg.player_id;
@@ -145,7 +145,6 @@ void GameSession::Run() {
             }
         }
 
-
         for (auto &i : all_bots) {
             i->move(time, *this_player, all_bots); // move all bots
         }
@@ -175,6 +174,7 @@ void GameSession::Run() {
 
                 if(old_player_pos != this_player->getPos())
                 {
+                    std::cout << "DIR   I will send player postion is" << static_cast<int>(player_dir) << std::endl;
                     PlayerAction action = { m_user_id, player_pos, player_dir, PlayerActionType::UpdatePlayer};
                     action_vector.push(action);
 
@@ -246,10 +246,15 @@ void GameSession::Run() {
                             {
                                 std::cout << "Other player should be updated" << std::endl;
                                 int id = action.player_id;
-
+                                if(id == m_user_id)
+                                {
+                                    std::cout << "PNX" << std::endl;
+                                }
                                 auto new_dir = action.direction;
                                 auto new_pos = action.position;
 
+                                std::cout << "DIR   I recieve player postion is" << static_cast<int>(player_dir) << std::endl;
+                                
                                 auto player_iter = other_players.find(id);
 
                                 if(player_iter == other_players.end())
