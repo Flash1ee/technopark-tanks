@@ -19,6 +19,8 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player1");
+    
+
     sf::FloatRect p_pos = player.rect;
     m_player_pos = {p_pos.left + p_pos.width / 2, p_pos.top - p_pos.width / 2};
     if (m_is_multiplayer) {
@@ -75,6 +77,18 @@ int GameSession::Run() {
     // const name
     Sound sounds;
     sounds.play(GAME_START);
+    std::vector<MapObject> walls_objs = m_level.GetAllObjects("wall");
+    std::cout << "SIZE " << walls_objs.size() << std::endl;
+    std::vector<std::shared_ptr<Wall>> walls;
+
+    for (auto i: walls_objs) {
+        sf::Vector2f wall_pos = {i.rect.left, i.rect.top - i.rect.width};
+        std::cout << wall_pos.x << " " << wall_pos.y << std::endl;
+        std::shared_ptr<Wall> wall = std::make_shared<Wall>(
+        m_level, OBJECT_IMAGE, sf::IntRect(256, 16, 16, 16), wall_pos, 0,
+        100, Direction::UP);
+        walls.push_back(wall);
+    }
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.07,
         100, Direction::UP);
@@ -221,10 +235,10 @@ int GameSession::Run() {
         }
 
         for (auto &i : all_bots) {
-            i->move(time, *this_player, all_bots);
+            i->move(time, *this_player, all_bots, walls);
         }
 
-        if (!this_player->makeAction(time)) {
+        if (!this_player->makeAction(time, walls)) {
             sounds.play(BACKGROUND);
         }
         this_player->checkCollisionsBots(all_bots);
@@ -343,11 +357,11 @@ int GameSession::Run() {
         {  // Drawing is here
 
             for (auto& curr_bullet : all_bullets) {
-                curr_bullet->move(time, all_bots);
+                curr_bullet->move(time, all_bots, walls);
             }
 
             for (auto& curr_bullet : bots_bullets) {
-                curr_bullet->move(time, *this_player);
+                curr_bullet->move(time, *this_player, walls);
             }
 
             m_cam.changeViewCoords(new_pos);
@@ -380,6 +394,14 @@ int GameSession::Run() {
             }
 
             m_window.draw(this_player->getSprite());
+            for (int i = 0; i < walls.size(); i++) {
+                if (walls[i]->getHp() >= 0) {
+                    m_window.draw(walls[i]->getSprite());
+                }
+                if (walls[i]->getHp() <= 0) {
+                    walls.erase(walls.begin() + i);
+                }
+            }
             for (int i = 0; i < all_bots.size(); i++) {
                 if (all_bots[i]->getHp() > 0) {
                     m_window.draw(all_bots[i]->getSprite());
