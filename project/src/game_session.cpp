@@ -104,6 +104,7 @@ int GameSession::Run() {
 
     std::vector<std::shared_ptr<Bullet>> new_bullets;
     std::vector<std::shared_ptr<Bullet>> all_bullets;
+    std::vector<std::shared_ptr<Bullet>> bots_bullets;
     sf::Clock clock, timer_bots;
     bool is_new_user = true;
 
@@ -123,7 +124,7 @@ int GameSession::Run() {
         clock.restart();  //перезагружает время
         time /= 800;      //скорость игры
         
-        if (times.asSeconds() > 10 && sounds.MainSoundStopped() && count_bots < 6) {
+        if (times.asSeconds() > 10 && sounds.MainSoundStopped() && count_bots < 4) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
@@ -147,6 +148,7 @@ int GameSession::Run() {
                 m_window.close();
                 exit(0);
             }
+
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Escape) {
                     sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
@@ -155,8 +157,10 @@ int GameSession::Run() {
                     if (gameMenu.show(menu_window) == STOP_RUN) {
                         return STOP_RUN;
                     }
+                    clock.restart();
                 }
             }
+
             if (this_player->getShot()) {
                 this_player->setShot(false);
                 // sf::Vector2f coords = this_player.getPos();
@@ -170,8 +174,9 @@ int GameSession::Run() {
                     bullet_pos.y = this_player->getPos().y + 3.5;
                 }
                 auto new_b = std::make_shared<Bullet>(m_level,
-                    OBJECT_IMAGE, BULLET_SOUND,sf::IntRect(323, 102, 4, 4), bullet_pos, 0.3,
-                    bullet_dir, 1);
+                                                      OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
+                                                      bullet_pos, 0.3,
+                                                      bullet_dir, 1);
 
                 // sf::Packet packet;
                 // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -182,6 +187,36 @@ int GameSession::Run() {
                 new_bullets.push_back(new_b);
                 sounds.play(FIRE);
                 // sounds[static_cast<int>(SoundType::BULLET)].play();
+            }
+
+            for (auto &i : all_bots) {
+                if (i->getShot()) {
+                    i->setShot(false);
+                    // sf::Vector2f coords = this_player.getPos();
+                    auto bullet_dir = i->getDir();
+                    sf::Vector2f bullet_pos;
+                    if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
+                        bullet_pos.x = i->getPos().x + 4.5;
+                        bullet_pos.y = i->getPos().y + 4.5;
+                    } else {
+                        bullet_pos.x = i->getPos().x + 3.5;
+                        bullet_pos.y = i->getPos().y + 3.5;
+                    }
+                    auto new_b = std::make_shared<Bullet>(m_level,
+                                                          OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
+                                                          bullet_pos, 0.3,
+                                                          bullet_dir, 1);
+
+                    // sf::Packet packet;
+                    // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
+                    // PlayerActionType::NewBullet};
+                    // action_vector.actions.push_back(new_bullet_action);
+
+                    bots_bullets.push_back(new_b);  // Copying is too expensive
+                    new_bullets.push_back(new_b);
+                    sounds.play(FIRE);
+                    // sounds[static_cast<int>(SoundType::BULLET)].play();
+                }
             }
         }
 
@@ -311,6 +346,10 @@ int GameSession::Run() {
                 curr_bullet->move(time, all_bots);
             }
 
+            for (auto& curr_bullet : bots_bullets) {
+                curr_bullet->move(time, *this_player);
+            }
+
             m_cam.changeViewCoords(new_pos);
             m_cam.changeView();
 
@@ -324,6 +363,14 @@ int GameSession::Run() {
                     m_window.draw(all_bullets[i]->getSprite());
                 } else {
                     all_bullets.erase(all_bullets.begin() + i);
+                    sounds.play(BRICK);
+                }
+            }
+            for (int i = 0; i < bots_bullets.size(); i++) {
+                if (bots_bullets[i]->getLife()) {
+                    m_window.draw(bots_bullets[i]->getSprite());
+                } else {
+                    bots_bullets.erase(bots_bullets.begin() + i);
                     sounds.play(BRICK);
                 }
             }

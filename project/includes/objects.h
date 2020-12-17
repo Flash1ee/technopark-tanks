@@ -68,6 +68,8 @@ class Sound {
 
 enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };
 class Bots;
+class Player;
+
 class Object {
    public:
     Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
@@ -79,11 +81,9 @@ class Object {
     void setDir(Direction dir);
 
 
-    // void setPos(const sf::Vector2f& new_pos);
     sf::Sprite& getSprite();
-    float getX() const;
-    float getY() const;
     sf::IntRect getRect();
+    bool comparisonPos(Player &p, std::vector<Bots*> b);
 
 
    protected:
@@ -109,7 +109,9 @@ public:
         m_objects = mapObj.GetAllObjects("solid");
         };
     void move(float time, std::vector<Bots*> b);
+    void move(float time, Player& p);
     void checkCollisionsObject(std::vector<Bots*> b);
+    void checkCollisionsObject(Player& p);
     // void sound();
     int getLife() const;
 private:
