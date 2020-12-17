@@ -11,8 +11,8 @@
 
 int main(int argc, char* argv[]) {
     int gamePlaying = 1;
-    sf::RenderWindow menuWindow(sf::VideoMode(1024, 768), std::string("Menu"), sf::Style::None);
     while (gamePlaying) {
+        sf::RenderWindow menuWindow(sf::VideoMode(1024, 768), std::string("Menu"), sf::Style::None);
     // std::string window_title = std::string("Tanks") + std::string(argv[1]);
         // std::string window_title = std::string("Tanks");
 
