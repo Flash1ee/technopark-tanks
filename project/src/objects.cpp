@@ -22,7 +22,7 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
     // this->sprite.setScale(5,5);
 }
 
-void Tank::move(float time) {
+void Tank::move(float time, std::vector<std::shared_ptr<Wall>> walls) {
     switch (dir) {
         case Direction::RIGHT:
             dx = speed;
@@ -61,6 +61,7 @@ void Tank::move(float time) {
     coords.x += dx * time;
     coords.y += dy * time;
     checkCollisionsMap(x_old, y_old, dx, dy);
+    checkCollisionsWall(x_old, y_old, dx, dy, walls);
 
     // checkCollisionsMap(0, dy);
     setPos();
@@ -71,7 +72,7 @@ void Tank::move(float time) {
     //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
-void Bullet::move(float time, Player& p) {
+void Bullet::move(float time, Player& p, std::vector<std::shared_ptr<Wall>> walls) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -96,6 +97,7 @@ void Bullet::move(float time, Player& p) {
     }
 
     this->checkCollisionsObject(p);
+    this->checkCollisionsObject(walls);
     if (m_life == 1) {
         coords.x += dx * time;
         coords.y += dy * time;
@@ -104,7 +106,7 @@ void Bullet::move(float time, Player& p) {
     // sprite.setPosition(coords.x + 7, coords.y + 7);
 }
 
-void Bullet::move(float time, std::vector<Bots*> b) {
+void Bullet::move(float time, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -129,6 +131,7 @@ void Bullet::move(float time, std::vector<Bots*> b) {
     }
 
     this->checkCollisionsObject(b);
+    this->checkCollisionsObject(walls);
     if (m_life == 1) {
         coords.x += dx * time;
         coords.y += dy * time;
@@ -145,32 +148,32 @@ void Object::setDir(Direction dir) {
 
 Direction Tank::getDir() const { return this->dir; }
 
-int Tank::makeAction(float time) {
+int Tank::makeAction(float time, std::vector<std::shared_ptr<Wall>> walls) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         this->shot = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         this->sprite.setRotation(0);
         this->dir = Direction::UP;
-        this->move(time);
+        this->move(time, walls);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         this->sprite.setRotation(-90);
         this->dir = Direction::LEFT;
-        this->move(time);
+        this->move(time, walls);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         this->sprite.setRotation(90);
         this->dir = Direction::RIGHT;
-        this->move(time);
+        this->move(time, walls);
         return 0;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         this->sprite.setRotation(180);
         this->dir = Direction::DOWN;
-        this->move(time);
+        this->move(time, walls);
         return 0;
     }
     return -1;
@@ -213,7 +216,32 @@ void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
         }
     }
 }
-
+void Tank::checkCollisionsWall(float x_old, float y_old, float x, float y, std::vector<std::shared_ptr<Wall>> walls) {
+    for (auto &i : walls) {
+        if (getRect().intersects(static_cast<sf::IntRect>(i->getRect()))) {
+            if (dy > 0) {
+                // this->y =i.rect.top - this->rect.height;
+                coords.y = y_old;
+                this->dy = 0;
+            }
+            if (dy < 0) {
+                // this->y = i.rect.top + this->rect.height;
+                coords.y = y_old;
+                this->dy = 0;
+            }
+            if (dx > 0) {
+                // this->x = i.rect.left - this->rect.width;
+                coords.x = x_old;
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                // this->x = i.rect.left + this->rect.width;
+                coords.x = x_old;
+                this->dx = 0;
+            }
+        }
+    }
+}
 void Bullet::checkCollisionsObject(std::vector<Bots*> b) {
     for (auto &i : m_objects) {
             if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
@@ -239,7 +267,15 @@ void Bullet::checkCollisionsObject(Player& p) {
         m_life = 0;
     }
 }
-
+void Bullet::checkCollisionsObject(std::vector<std::shared_ptr<Wall>> walls) {
+    for (auto &i : walls) {
+        if (getRect().intersects(i->getRect())) {
+            i->setHp(i->getHp() - 5);
+            m_life = 0;
+            std::cout << i->getHp() <<std::endl;
+        }
+    }
+}
 int Tank::getHp() const {
     return this->m_hp;
 }
@@ -247,11 +283,40 @@ int Tank::getHp() const {
 void Tank::setHp(int hp) {
     this->m_hp = hp;
 }
+void Wall ::setHp(int hp) {
+    this->m_hp = hp;
+}
 
 int Bullet::getLife() const {
     return this->m_life;
 }
 
+void Player::checkCollisionsWall(std::vector<std::shared_ptr<Wall>> walls) {
+    for (auto &i : walls) {
+            if (getRect().intersects(static_cast<sf::IntRect>(i->getRect()))) {
+                if (dy > 0) {
+                    // this->y =i.rect.top - this->rect.height;
+                    coords.y = i->getPos().y - rect.height;
+                    this->dy = 0;
+                }
+                if (dy < 0) {
+                    // this->y = i.rect.top + this->rect.height;
+                    coords.y = i->getPos().y + rect.height;
+                    this->dy = 0;
+                }
+                if (dx > 0) {
+                    // this->x = i.rect.left - this->rect.width;
+                    coords.x = i->getPos().x - rect.width;
+                    this->dx = 0;
+                }
+                if (dx < 0) {
+                    // this->x = i.rect.left + this->rect.width;
+                    coords.x = i->getPos().x + rect.width;
+                    this->dx = 0;
+                }
+            }
+        }
+}
 void Player::checkCollisionsBots(std::vector<Bots*> b) {
     for (auto &i : m_objects) {
         for (auto &it : b) {
@@ -280,7 +345,6 @@ void Player::checkCollisionsBots(std::vector<Bots*> b) {
         }
     }
 }
-
 sf::IntRect Object::getRect() {
     return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }
@@ -299,7 +363,36 @@ bool Object::comparisonPos(Player &p, std::vector<Bots*> b) {
         }
     }
 }
+void Bots::checkCollisionsWalls(float x_old, float y_old, float x, float y, 
+                                    std::vector<std::shared_ptr<Wall>> walls) {
+        for (auto &it : walls) {
+            if (getRect().intersects(static_cast<sf::IntRect>(it->getRect()))) {
+                std::cout <<"collision"<<std::endl;
+                if (dy > 0) {
+                    // this->y =i.rect.top - this->rect.height;
+                    coords.y = y_old;
+                    this->dy = 0;
+                }
+                if (dy < 0) {
+                    // this->y = i.rect.top + this->rect.height;
+                    coords.y = y_old;
+                    this->dy = 0;
+                }
+                if (dx > 0) {
+                    // this->x = i.rect.left - this->rect.width;
+                    coords.x = x_old;
+                    this->dx = 0;
+                }
+                if (dx < 0) {
+                    // this->x = i.rect.left + this->rect.width;
+                    coords.x = x_old;
+                    this->dx = 0;
+                }
+            }
+        }
 
+
+}
 void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
                               Player &p, std::vector<Bots*> b) {
     std::random_device rd;
@@ -362,7 +455,7 @@ void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
     }
 }
 
-void Bots::move(float time, Player &p, std::vector<Bots*> b) {
+void Bots::move(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -391,6 +484,7 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b) {
     coords.x += dx * time;
     coords.y += dy * time;
     this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b);
+    this->checkCollisionsWalls(x_old, y_old, dx, dy, walls);
     if (true) {
         this->setShot(true);
     }
@@ -475,4 +569,7 @@ bool Sound::MainSoundStopped() {
         return true;
     }
     return false;
+}
+int Wall::getHp() const {
+    return this->m_hp;
 }

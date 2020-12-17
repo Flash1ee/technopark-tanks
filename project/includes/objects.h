@@ -96,9 +96,20 @@ class Object {
     sf::Texture texture;
     sf::Sprite sprite;
     std::vector<MapObject> m_objects;
-    // sf::Sound m_sound;
-    // sf::SoundBuffer m_buffer;
-    // Object();
+};
+class Wall: public Object {
+    private:
+     int m_hp;
+    public:
+     Wall(Level& mapObj, sf::String textureFile, sf::IntRect rect,
+           sf::Vector2f pos, float speed, int hp, Direction dir)
+        : Object(textureFile, rect, pos, speed, dir) {
+            m_objects = mapObj.GetAllObjects("wall");
+            m_hp = hp;
+        }
+    int getHp() const;
+    void setHp(int hp);
+          
 };
 
 class Bullet : public Object {
@@ -108,10 +119,11 @@ public:
         : Object(textureFile, rect, pos, speed, dir), m_life(life) {
         m_objects = mapObj.GetAllObjects("solid");
         };
-    void move(float time, std::vector<Bots*> b);
-    void move(float time, Player& p);
+    void move(float time, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls);
+    void move(float time, Player& p, std::vector<std::shared_ptr<Wall>> walls);
     void checkCollisionsObject(std::vector<Bots*> b);
     void checkCollisionsObject(Player& p);
+    void checkCollisionsObject(std::vector<std::shared_ptr<Wall>> walls);
     // void sound();
     int getLife() const;
 private:
@@ -135,21 +147,23 @@ class Tank : public Object {  //класс любого танка
 
    public:
     virtual void checkCollisionsMap(float x_old, float y_old, float x, float y);
-    virtual void move(float time);
-    int makeAction(float time);
+    virtual void checkCollisionsWall(float x_old, float y_old, float x, float y, std::vector<std::shared_ptr<Wall>> walls);
+
+    virtual void move(float time, std::vector<std::shared_ptr<Wall>> walls);
+    int makeAction(float time, std::vector<std::shared_ptr<Wall>> walls);
     Direction getDir() const;
     bool getShot() const;
     int getHp() const;
     void setHp(int hp);
     void setShot(bool shot);
 };
-
 class Player : public Tank {  //класс игрока
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
     void checkCollisionsBots(std::vector<Bots*> b);
+    void checkCollisionsWall(std::vector<std::shared_ptr<Wall>> walls);
     
 };
 
@@ -162,5 +176,9 @@ public:
             }
     void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
                                 std::vector<Bots*> b);
-    void move(float time, Player &p, std::vector<Bots*> b);
+    void checkCollisionsWalls(float x_old, float y_old, float x, float y, 
+                                    std::vector<std::shared_ptr<Wall>> walls);
+    
+    
+    void move(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls);
 };

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="128">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="134">
  <tileset firstgid="1" name="textures_sprites" tilewidth="16" tileheight="16" tilecount="400" columns="25">
   <image source="../resources/sprites.png" width="400" height="256"/>
  </tileset>
@@ -41,9 +41,9 @@
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="73"/>
-   <tile gid="42"/>
+   <tile gid="22"/>
    <tile gid="70"/>
-   <tile gid="42"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="73"/>
@@ -66,9 +66,9 @@
    <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
-   <tile gid="42"/>
-   <tile gid="42"/>
-   <tile gid="42"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="22"/>
    <tile gid="73"/>
@@ -646,9 +646,6 @@
   <object id="36" name="solid" x="208" y="64" width="16" height="64"/>
   <object id="37" name="solid" x="176" y="64" width="16" height="64"/>
   <object id="38" name="solid" x="192" y="96" width="16" height="16"/>
-  <object id="39" name="solid" x="176" y="16" width="16" height="32"/>
-  <object id="40" name="solid" x="208" y="16" width="16" height="32"/>
-  <object id="41" name="solid" x="192" y="32" width="16" height="16"/>
   <object id="42" name="solid" x="128" y="48" width="16" height="48"/>
   <object id="43" name="solid" x="96" y="32" width="16" height="64"/>
   <object id="44" name="solid" x="128" y="128" width="32" height="16"/>
@@ -705,5 +702,10 @@
   <object id="125" name="player3" gid="1" x="157" y="380" width="16" height="16"/>
   <object id="126" name="player3" gid="5" x="228" y="36" width="16" height="16"/>
   <object id="127" name="player4" gid="5" x="158" y="36" width="16" height="16"/>
+  <object id="129" name="wall" gid="42" x="208" y="32" width="16" height="16"/>
+  <object id="130" name="wall" gid="42" x="208" y="48" width="16" height="16"/>
+  <object id="131" name="wall" gid="42" x="192" y="48" width="16" height="16"/>
+  <object id="132" name="wall" gid="42" x="176" y="32" width="16" height="16"/>
+  <object id="133" name="wall" gid="42" x="176" y="48" width="16" height="16"/>
  </objectgroup>
 </map>
