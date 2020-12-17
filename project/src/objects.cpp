@@ -240,6 +240,8 @@ void Bullet::checkCollisionsObject(Player& p) {
     }
 }
 
+
+
 int Tank::getHp() const {
     return this->m_hp;
 }
@@ -287,15 +289,13 @@ sf::IntRect Object::getRect() {
 
 bool Object::comparisonPos(Player &p, std::vector<Bots*> b) {
     for (auto &it : b) {
-        for (int i = 0; i < 100; i++) {
-            if ((p.coords.x == (it->coords.x + i)) || (p.coords.x == (it->coords.x - i))) {
-                return true;
-            }
-            if ((p.coords.y == (it->coords.y + i)) || (p.coords.y == (it->coords.y - i))) {
-                return true;
-            } else {
-                return false;
-            }
+        if (abs(p.coords.x - it->coords.x) < 3) {
+            return true;
+        }
+        if (abs(p.coords.y - it->coords.y) < 3) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
@@ -391,8 +391,10 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b) {
     coords.x += dx * time;
     coords.y += dy * time;
     this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b);
-    if (true) {
-        this->setShot(true);
+    if (comparisonPos(p, b)) {
+        for (int i = 0; i < b.size(); i++) {
+            b[i]->setShot(true);
+        }
     }
     setPos();
 

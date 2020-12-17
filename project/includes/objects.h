@@ -163,4 +163,6 @@ public:
     void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
                                 std::vector<Bots*> b);
     void move(float time, Player &p, std::vector<Bots*> b);
+private:
+
 };
