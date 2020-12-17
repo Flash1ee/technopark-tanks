@@ -18,7 +18,9 @@
 #define GAME_COUNT 3
 #define FONT_PATH "../resources/20085.ttf"
 #define BACKGROUND_PATH "../resources/background.jpg"
+#define BACKGROUND1_PATH "../resources/background1.jpg"
 #define MUSIC_PATH "../resources/menu_music.ogg"
+#define PAUSE_MUSIC_PATH "../resources/pause_music.ogg"
 
 
 enum class MenuSelector {

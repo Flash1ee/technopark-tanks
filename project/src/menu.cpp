@@ -5,17 +5,17 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
     if (!this->font.loadFromFile(FONT_PATH)) {
         throw std::exception();
     };
-    if (!bg.loadFromFile(BACKGROUND_PATH)) {
-        throw std::exception();
-    };
-    if (!music.openFromFile(MUSIC_PATH)) {
-        throw std::exception();
-    };
-    this->background.setTexture(bg);
-    background.setPosition(0, 0);
     selectedIndex = 0;
     switch (selector) {
         case 0: {
+            if (!bg.loadFromFile(BACKGROUND_PATH)) {
+                throw std::exception();
+            };
+            this->background.setTexture(bg);
+            background.setPosition(0, 0);
+            if (!music.openFromFile(MUSIC_PATH)) {
+                throw std::exception();
+            };
             this->buttons.resize(MAIN_COUNT);
             auto height = window.getSize().y / this->buttons.size();
             for (int i = 0; i < this->buttons.size(); i++) {
@@ -28,6 +28,14 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
         }
 
         case 1: {
+            if (!bg.loadFromFile(BACKGROUND1_PATH)) {
+                throw std::exception();
+            };
+            this->background.setTexture(bg);
+            background.setPosition(0, 0);
+            if (!music.openFromFile(PAUSE_MUSIC_PATH)) {
+                throw std::exception();
+            };
             this->buttons.resize(GAME_COUNT);
             auto height = window.getSize().y / this->buttons.size();
             for (int i = 0; i < this->buttons.size(); i++) {
