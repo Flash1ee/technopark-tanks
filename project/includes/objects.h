@@ -83,7 +83,7 @@ class Object {
 
     sf::Sprite& getSprite();
     sf::IntRect getRect();
-    bool comparisonPos(Player &p, std::vector<Bots*> b);
+    int comparisonPos(Player &p, std::vector<Bots*> b);
 
 
    protected:
@@ -119,13 +119,14 @@ public:
         : Object(textureFile, rect, pos, speed, dir), m_life(life) {
         m_objects = mapObj.GetAllObjects("solid");
         };
-    void move(float time, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls);
-    void move(float time, Player& p, std::vector<std::shared_ptr<Wall>> walls);
-    void checkCollisionsObject(std::vector<Bots*> b);
+    void move(float time, Player& p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls);
+    void moveBots(float time, Player& p, std::vector<std::shared_ptr<Wall>> walls);
+    void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls);
     void checkCollisionsObject(Player& p);
     void checkCollisionsObject(std::vector<std::shared_ptr<Wall>> walls);
     // void sound();
     int getLife() const;
+    Direction getDir() const;
 private:
     int m_life;
     // int m_damage;
@@ -176,9 +177,11 @@ public:
             }
     void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
                                 std::vector<Bots*> b);
-    void move(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls);
-private:
+    void move(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls,
+              std::vector<std::shared_ptr<Bullet>> all_bullets);
+    void checkCollisionsBullet(float x_old, float y_old, float x, float y,
+                               std::vector<std::shared_ptr<Bullet>> bullet, Player& p);
+    void checkCollisionsWalls(float x_old, float y_old, float x, float y,
+                              std::vector<std::shared_ptr<Wall>> walls);
 
-    void checkCollisionsWalls(float x_old, float y_old, float x, float y, 
-                                    std::vector<std::shared_ptr<Wall>> walls);
 };
