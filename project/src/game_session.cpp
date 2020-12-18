@@ -213,7 +213,7 @@ int GameSession::Run() {
         }
 
         std::cout << timer.asSeconds() << std::endl;
-        if ((timer.asSeconds() > 1) && (timer.asSeconds() < 1.03)) {
+        if ((timer.asSeconds() > 1) && (timer.asSeconds() < 1.07)) {
 
             for (auto &i : all_bots) {
                 if (i->getShot()) {
