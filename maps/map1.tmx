@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="134">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="155">
  <tileset firstgid="1" name="textures_sprites" tilewidth="16" tileheight="16" tilecount="400" columns="25">
   <image source="../resources/sprites.png" width="400" height="256"/>
  </tileset>
@@ -84,7 +84,7 @@
    <tile gid="73"/>
    <tile gid="17"/>
    <tile gid="73"/>
-   <tile gid="17"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="17"/>
    <tile gid="73"/>
@@ -275,7 +275,7 @@
    <tile gid="22"/>
    <tile gid="17"/>
    <tile gid="17"/>
-   <tile gid="17"/>
+   <tile gid="22"/>
    <tile gid="17"/>
    <tile gid="73"/>
    <tile gid="73"/>
@@ -467,7 +467,7 @@
    <tile gid="23"/>
    <tile gid="73"/>
    <tile gid="17"/>
-   <tile gid="17"/>
+   <tile gid="22"/>
    <tile gid="17"/>
    <tile gid="73"/>
    <tile gid="73"/>
@@ -566,9 +566,9 @@
    <tile gid="73"/>
    <tile gid="23"/>
    <tile gid="73"/>
-   <tile gid="42"/>
-   <tile gid="42"/>
-   <tile gid="42"/>
+   <tile gid="95"/>
+   <tile gid="95"/>
+   <tile gid="95"/>
    <tile gid="73"/>
    <tile gid="22"/>
    <tile gid="73"/>
@@ -576,7 +576,7 @@
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="17"/>
-   <tile gid="17"/>
+   <tile gid="22"/>
    <tile gid="17"/>
    <tile gid="73"/>
    <tile gid="199"/>
@@ -591,9 +591,9 @@
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="73"/>
-   <tile gid="42"/>
+   <tile gid="95"/>
    <tile gid="70"/>
-   <tile gid="42"/>
+   <tile gid="95"/>
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="73"/>
@@ -636,10 +636,9 @@
   <object id="18" name="solid" x="336" y="96" width="16" height="112"/>
   <object id="19" name="solid" x="336" y="224" width="16" height="80"/>
   <object id="21" name="solid" x="320" y="288" width="16" height="80"/>
-  <object id="22" name="solid" x="336" y="352" width="32" height="16"/>
   <object id="29" name="solid" x="352" y="336" width="16" height="32"/>
   <object id="31" name="solid" x="304" y="208" width="16" height="32"/>
-  <object id="32" name="solid" x="288" y="160" width="48" height="16"/>
+  <object id="32" name="solid" x="288" y="160" width="32" height="16"/>
   <object id="33" name="solid" x="304" y="128" width="16" height="32"/>
   <object id="34" name="solid" x="272" y="32" width="16" height="64"/>
   <object id="35" name="solid" x="240" y="48" width="16" height="48"/>
@@ -659,7 +658,7 @@
   <object id="53" name="solid" x="48" y="192" width="16" height="16"/>
   <object id="54" name="solid" x="48" y="96" width="16" height="80"/>
   <object id="56" name="solid" x="32" y="32" width="48" height="16"/>
-  <object id="57" name="solid" x="64" y="48" width="16" height="64"/>
+  <object id="57" name="solid" x="64" y="64" width="16" height="48"/>
   <object id="58" name="solid" x="48" y="224" width="16" height="80"/>
   <object id="59" name="solid" x="64" y="288" width="16" height="48"/>
   <object id="60" name="solid" x="32" y="336" width="16" height="32"/>
@@ -668,8 +667,6 @@
   <object id="64" name="solid" x="144" y="304" width="16" height="48"/>
   <object id="65" name="solid" x="176" y="272" width="16" height="64"/>
   <object id="66" name="solid" x="208" y="272" width="16" height="64"/>
-  <object id="68" name="solid" x="176" y="352" width="16" height="32"/>
-  <object id="71" name="solid" x="208" y="352" width="16" height="32"/>
   <object id="72" name="solid" x="240" y="304" width="16" height="48"/>
   <object id="73" name="solid" x="272" y="304" width="16" height="64"/>
   <object id="74" name="solid" x="240" y="256" width="32" height="16"/>
@@ -692,20 +689,39 @@
   <object id="104" name="solid" x="80" y="128" width="16" height="48"/>
   <object id="105" name="solid" x="80" y="224" width="16" height="48"/>
   <object id="106" name="solid" x="48" y="352" width="16" height="16"/>
-  <object id="107" name="solid" x="192" y="352" width="16" height="16"/>
-  <object id="109" name="solid" x="192" y="288" width="16" height="16"/>
   <object id="115" name="solid" x="64" y="352" width="16" height="16"/>
   <object id="117" name="solid" x="320" y="48" width="16" height="16"/>
   <object id="121" name="spawn1" x="20" y="168" width="16" height="16"/>
   <object id="122" name="spawn2" x="363" y="220" width="16" height="16"/>
-  <object id="124" name="player1" gid="1" x="229" y="380" width="16" height="16"/>
-  <object id="125" name="player3" gid="1" x="157" y="380" width="16" height="16"/>
-  <object id="126" name="player3" gid="5" x="228" y="36" width="16" height="16"/>
-  <object id="127" name="player4" gid="5" x="158" y="36" width="16" height="16"/>
+  <object id="124" name="player1" gid="1" x="250.636" y="379.818" width="16" height="16"/>
+  <object id="125" name="player3" gid="1" x="132.818" y="381.273" width="16" height="16"/>
+  <object id="126" name="player3" gid="5" x="249.636" y="35.2727" width="16" height="16"/>
+  <object id="127" name="player4" gid="5" x="128.545" y="36" width="16" height="16"/>
   <object id="129" name="wall" gid="42" x="208" y="32" width="16" height="16"/>
   <object id="130" name="wall" gid="42" x="208" y="48" width="16" height="16"/>
   <object id="131" name="wall" gid="42" x="192" y="48" width="16" height="16"/>
   <object id="132" name="wall" gid="42" x="176" y="32" width="16" height="16"/>
   <object id="133" name="wall" gid="42" x="176" y="48" width="16" height="16"/>
+  <object id="134" name="wall" gid="42" x="208" y="384" width="16" height="16"/>
+  <object id="135" name="wall" gid="42" x="208" y="368" width="16" height="16"/>
+  <object id="136" name="wall" gid="42" x="192" y="368" width="16" height="16"/>
+  <object id="137" name="wall" gid="42" x="176" y="368" width="16" height="16"/>
+  <object id="138" name="wall" gid="42" x="176" y="384" width="16" height="16"/>
+  <object id="139" name="wall" gid="42" x="336" y="368" width="16" height="16"/>
+  <object id="140" name="wall" gid="42" x="336" y="224" width="16" height="16"/>
+  <object id="141" name="wall" gid="42" x="48" y="224" width="16" height="16"/>
+  <object id="142" name="wall" gid="42" x="64" y="64" width="16" height="16"/>
+  <object id="143" name="wall" gid="42" x="64" y="352" width="16" height="16"/>
+  <object id="144" name="wall" gid="42" x="320" y="80" width="16" height="16"/>
+  <object id="145" name="wall" gid="42" x="48" y="192" width="16" height="16"/>
+  <object id="146" name="wall" gid="42" x="192" y="320" width="16" height="16"/>
+  <object id="147" name="wall" gid="42" x="192" y="288" width="16" height="16"/>
+  <object id="148" name="wall" gid="42" x="192" y="304" width="16" height="16"/>
+  <object id="149" name="wall" gid="42" x="192" y="336" width="16" height="16"/>
+  <object id="150" name="wall" gid="42" x="224" y="32" width="16" height="16"/>
+  <object id="151" name="wall" gid="42" x="224" y="48" width="16" height="16"/>
+  <object id="152" name="wall" gid="42" x="192" y="64" width="16" height="16"/>
+  <object id="153" name="wall" gid="42" x="160" y="32" width="16" height="16"/>
+  <object id="154" name="wall" gid="42" x="160" y="48" width="16" height="16"/>
  </objectgroup>
 </map>
