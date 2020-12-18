@@ -34,7 +34,7 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
                 buttons[i].setColor(gameMenu[i].color);
                 buttons[i].setFont(font);
                 buttons[i].setString(gameMenu[i].text);
-                buttons[i].setPosition(100, 50 + height * (i));
+                buttons[i].setPosition(0, 50 + height * (i));
             }
             break;
         }
@@ -67,7 +67,7 @@ int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::stri
             }
 
             default: {
-                throw std::exception();
+                // throw std::exception();
                 break;
             }
         }
@@ -136,6 +136,7 @@ int Menu::show(sf::RenderWindow& window) {
 }
 
 void Menu::draw(sf::RenderWindow& window) {
+    window.clear();
     window.draw(background);
     for (int i = 0; i < buttons.size(); i++) {
         window.draw(buttons[i]);

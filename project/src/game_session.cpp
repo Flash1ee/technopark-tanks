@@ -15,7 +15,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
                          std::string server_ip, int server_port)
     :
-      m_window(sf::VideoMode(1024, 768), window_title),
+      m_window(sf::VideoMode(1024, 769), window_title),
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player1");
@@ -168,10 +168,12 @@ int GameSession::Run() {
 
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Escape) {
-                    sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
-                                                sf::Style::None);
-                    Menu gameMenu(1, menu_window);
-                    if (gameMenu.show(menu_window) == STOP_RUN) {
+                    // sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
+                    //                             sf::Style::None);
+
+                    Menu gameMenu(1, m_window);
+                    m_window.setView(m_window.getDefaultView());  //"оживляем" камеру в окне sfml
+                    if (gameMenu.show(m_window) == STOP_RUN) {
                         return STOP_RUN;
                     }
                     clock.restart();
