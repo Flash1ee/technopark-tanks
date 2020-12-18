@@ -152,9 +152,9 @@ Direction Bullet::getDir() const {
 }
 
 int Tank::makeAction(float time, std::vector<std::shared_ptr<Wall>> walls) {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        this->shot = true;
-    }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+    //     this->shot = true;
+    // }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         this->sprite.setRotation(0);
         this->dir = Direction::UP;

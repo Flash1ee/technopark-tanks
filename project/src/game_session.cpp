@@ -132,6 +132,9 @@ int GameSession::Run() {
     int time_before = clock.getElapsedTime().asSeconds();
     timer_bots.restart();
 
+    sf::Clock main_timer;
+    sf::Time last_pl_bull = main_timer.getElapsedTime();
+
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
         sf::Time timer = timer_shoots.getElapsedTime();
@@ -179,6 +182,12 @@ int GameSession::Run() {
                     }
                     clock.restart();
                 }
+                if (event.key.code == sf::Keyboard::Space
+                    && (main_timer.getElapsedTime().asSeconds() - last_pl_bull.asSeconds() > 0.4) ) 
+                    {
+                    this_player->setShot(true);
+                    last_pl_bull = main_timer.getElapsedTime();
+                }
             }
 
             if (this_player->getShot()) {
@@ -213,7 +222,7 @@ int GameSession::Run() {
         }
 
         std::cout << timer.asSeconds() << std::endl;
-        if ((timer.asSeconds() > 1) && (timer.asSeconds() < 1.07)) {
+        if ((timer.asSeconds() > 1) && (timer.asSeconds() < 1.02)) {
 
             for (auto &i : all_bots) {
                 if (i->getShot()) {
