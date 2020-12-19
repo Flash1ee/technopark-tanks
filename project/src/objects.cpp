@@ -264,6 +264,16 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
     }
 }
 
+int BaseEnemy::getCount() const {
+    return this->m_count_for_kills;
+}
+int BasePlayer::getHp() const {
+    return this->m_hp;
+}
+int BaseEnemy::getHp() const {
+    return this->m_hp;
+}
+
 void Bullet::checkCollisionsObject(Player& p) {
     for (auto &i : m_objects) {
         if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
@@ -279,7 +289,7 @@ void Bullet::checkCollisionsObject(Player& p) {
 void Bullet::checkCollisionsObject(std::vector<std::shared_ptr<Wall>> walls) {
     for (auto &i : walls) {
         if (getRect().intersects(i->getRect())) {
-            i->setHp(i->getHp() - 5);
+            i->setHp(i->getHp() - 25);
             m_life = 0;
             //std::cout << i->getHp() <<std::endl;
         }

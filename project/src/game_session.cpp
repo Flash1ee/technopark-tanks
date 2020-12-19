@@ -128,6 +128,7 @@ int GameSession::Run() {
     // };
     size_t count_bots = 0;
 
+
     int stop = 0;
     int time_before = clock.getElapsedTime().asSeconds();
     timer_bots.restart();
@@ -222,7 +223,7 @@ int GameSession::Run() {
         }
 
         std::cout << timer.asSeconds() << std::endl;
-        if ((timer.asSeconds() > 1) && (timer.asSeconds() < 1.02)) {
+        if ((timer.asSeconds() > 1) && (timer.asSeconds() < 1.07)) {
 
             for (auto &i : all_bots) {
                 if (i->getShot()) {

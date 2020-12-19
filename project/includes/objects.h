@@ -23,6 +23,15 @@ enum class SoundType {
     COUNT,
     ERROR
 };
+
+class Wall;
+class Base;
+
+struct DestructibleWalls {
+    std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<std::shared_ptr<Base>> bases;
+
+};
 typedef enum {
     BACKGROUND,
     BRICK,
@@ -97,6 +106,35 @@ class Object {
     sf::Sprite sprite;
     std::vector<MapObject> m_objects;
 };
+
+class BasePlayer: public Object {
+private:
+    int m_hp;
+public:
+    BasePlayer(Level& mapObj, sf::String textureFile, sf::IntRect rect,
+         sf::Vector2f pos, float speed, int hp, Direction dir)
+            : Object(textureFile, rect, pos, speed, dir), m_hp(hp) {
+        m_objects = mapObj.GetAllObjects("player_base");
+    }
+    int getHp() const;
+
+};
+
+class BaseEnemy: public Object {
+private:
+    int m_hp;
+    int m_count_for_kills;
+public:
+    BaseEnemy(Level& mapObj, sf::String textureFile, sf::IntRect rect,
+    sf::Vector2f pos, float speed, int hp, Direction dir)
+    : Object(textureFile, rect, pos, speed, dir), m_hp(hp), m_count_for_kills(10) {
+        m_objects = mapObj.GetAllObjects("enemy_base");
+    }
+    int getHp() const;
+    int getCount() const;
+
+};
+
 class Wall: public Object {
     private:
      int m_hp;
