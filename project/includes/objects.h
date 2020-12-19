@@ -119,6 +119,7 @@ public:
         m_objects = mapObj.GetAllObjects("player_base");
     }
     int getHp() const;
+    void setHp(int hp);
 
 };
 
@@ -129,11 +130,13 @@ private:
 public:
     BaseEnemy(Level& mapObj, sf::String textureFile, sf::IntRect rect,
     sf::Vector2f pos, float speed, int hp, Direction dir)
-    : Object(textureFile, rect, pos, speed, dir), m_hp(hp), m_count_for_kills(10) {
+    : Object(textureFile, rect, pos, speed, dir), m_hp(hp), m_count_for_kills(4) {
         m_objects = mapObj.GetAllObjects("enemy_base");
     }
     int getHp() const;
     int getCount() const;
+    void setCount(int count);
+    void setHp(int hp);
 
 };
 
@@ -162,7 +165,7 @@ public:
     void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls);
     void moveBots(float time, Player& p, DestructibleWalls* walls);
     void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls);
-    void checkCollisionsObject(Player& p);
+    void checkCollisionsObject(Player& p, DestructibleWalls* walls);
     void checkCollisionsObject(DestructibleWalls* walls);
     // void sound();
     int getLife() const;
@@ -204,7 +207,6 @@ class Player : public Tank {  //класс игрока
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
     void checkCollisionsBots(std::vector<Bots*> b);
-    void checkCollisionsWall(DestructibleWalls* walls);
     
 };
 

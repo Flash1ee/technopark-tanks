@@ -79,7 +79,7 @@ int GameSession::Run() {
     sounds.play(GAME_START);
     std::vector<MapObject> walls_objs = m_level.GetAllObjects("wall");
     std::vector<MapObject> player_obj = m_level.GetAllObjects("player_base");
-    std::vector<MapObject> enemy_obj = m_level.GetAllObjects("player_base");
+    std::vector<MapObject> enemy_obj = m_level.GetAllObjects("enemy_base");
 
     DestructibleWalls walls;
 
@@ -100,14 +100,13 @@ int GameSession::Run() {
         walls.base_player.push_back(basePlayer);
     }
     for (auto i: enemy_obj) {
-        sf::Vector2f enemy_obj_pos = {i.rect.left, i.rect.top - i.rect.width};
-        std::cout << enemy_obj_pos.x << " " << enemy_obj_pos.y << std::endl;
-        std::shared_ptr<BaseEnemy>  baseEnemy = std::make_shared<BaseEnemy>(
-                m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), enemy_obj_pos, 0,
+        sf::Vector2f base_enemy_pos = {i.rect.left, i.rect.top - i.rect.width};
+        std::cout << base_enemy_pos.x << " " << base_enemy_pos.y << std::endl;
+        std::shared_ptr<BaseEnemy> baseEnemy = std::make_shared<BaseEnemy>(
+                m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_enemy_pos, 0,
                 200, Direction::UP);
         walls.base_enemy.push_back(baseEnemy);
     }
-
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.05,
         100, Direction::UP);
@@ -203,7 +202,7 @@ int GameSession::Run() {
                     clock.restart();
                 }
                 if (event.key.code == sf::Keyboard::Space
-                    && (main_timer.getElapsedTime().asSeconds() - last_pl_bull.asSeconds() > 0.4) ) 
+                    && (main_timer.getElapsedTime().asSeconds() - last_pl_bull.asSeconds() > 0.2) )
                     {
                     this_player->setShot(true);
                     last_pl_bull = main_timer.getElapsedTime();
@@ -463,6 +462,7 @@ int GameSession::Run() {
                 }
                 if (walls.base_enemy[i]->getHp() <= 0) {
                     walls.base_enemy.erase(walls.base_enemy.begin() + i);
+                    exit(0);
                 }
             }
             for (int i = 0; i < all_bots.size(); i++) {
@@ -470,6 +470,7 @@ int GameSession::Run() {
                     m_window.draw(all_bots[i]->getSprite());
                 }
                 if (all_bots[i]->getHp() == 0) {
+                    walls.base_enemy[0]->setCount(walls.base_enemy[0]->getCount() - 1);
                     all_bots.erase(all_bots.begin() + i);
                     sounds.play(KILL);
                     count_bots--;
