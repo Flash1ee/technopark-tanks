@@ -25,11 +25,13 @@ enum class SoundType {
 };
 
 class Wall;
-class Base;
+class BasePlayer;
+class BaseEnemy;
 
 struct DestructibleWalls {
     std::vector<std::shared_ptr<Wall>> walls;
-    std::vector<std::shared_ptr<Base>> bases;
+    std::vector<std::shared_ptr<BasePlayer>> base_player;
+    std::vector<std::shared_ptr<BaseEnemy>> base_enemy;
 
 };
 typedef enum {
@@ -157,11 +159,11 @@ public:
         : Object(textureFile, rect, pos, speed, dir), m_life(life) {
         m_objects = mapObj.GetAllObjects("solid");
         };
-    void move(float time, Player& p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls);
-    void moveBots(float time, Player& p, std::vector<std::shared_ptr<Wall>> walls);
-    void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls);
+    void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls);
+    void moveBots(float time, Player& p, DestructibleWalls* walls);
+    void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls);
     void checkCollisionsObject(Player& p);
-    void checkCollisionsObject(std::vector<std::shared_ptr<Wall>> walls);
+    void checkCollisionsObject(DestructibleWalls* walls);
     // void sound();
     int getLife() const;
     Direction getDir() const;
@@ -186,10 +188,10 @@ class Tank : public Object {  //класс любого танка
 
    public:
     virtual void checkCollisionsMap(float x_old, float y_old, float x, float y);
-    virtual void checkCollisionsWall(float x_old, float y_old, float x, float y, std::vector<std::shared_ptr<Wall>> walls);
+    virtual void checkCollisionsWall(float x_old, float y_old, float x, float y, DestructibleWalls* walls);
 
-    virtual void move(float time, std::vector<std::shared_ptr<Wall>> walls);
-    int makeAction(float time, std::vector<std::shared_ptr<Wall>> walls);
+    virtual void move(float time, DestructibleWalls* walls);
+    int makeAction(float time, DestructibleWalls* walls);
     Direction getDir() const;
     bool getShot() const;
     int getHp() const;
@@ -202,7 +204,7 @@ class Player : public Tank {  //класс игрока
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
     void checkCollisionsBots(std::vector<Bots*> b);
-    void checkCollisionsWall(std::vector<std::shared_ptr<Wall>> walls);
+    void checkCollisionsWall(DestructibleWalls* walls);
     
 };
 
@@ -215,11 +217,11 @@ public:
             }
     void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
                                 std::vector<Bots*> b);
-    void move(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls,
+    void move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls,
               std::vector<std::shared_ptr<Bullet>> all_bullets);
     void checkCollisionsBullet(float x_old, float y_old, float x, float y,
                                std::vector<std::shared_ptr<Bullet>> bullet, Player& p);
     void checkCollisionsWalls(float x_old, float y_old, float x, float y,
-                              std::vector<std::shared_ptr<Wall>> walls);
+                              DestructibleWalls* walls);
 
 };

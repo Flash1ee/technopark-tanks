@@ -78,8 +78,10 @@ int GameSession::Run() {
     Sound sounds;
     sounds.play(GAME_START);
     std::vector<MapObject> walls_objs = m_level.GetAllObjects("wall");
-    std::cout << "SIZE " << walls_objs.size() << std::endl;
-    std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<MapObject> player_obj = m_level.GetAllObjects("player_base");
+    std::vector<MapObject> enemy_obj = m_level.GetAllObjects("player_base");
+
+    DestructibleWalls walls;
 
     for (auto i: walls_objs) {
         sf::Vector2f wall_pos = {i.rect.left, i.rect.top - i.rect.width};
@@ -87,7 +89,15 @@ int GameSession::Run() {
         std::shared_ptr<Wall> wall = std::make_shared<Wall>(
         m_level, OBJECT_IMAGE, sf::IntRect(256, 16, 16, 16), wall_pos, 0,
         100, Direction::UP);
-        walls.push_back(wall);
+        walls.walls.push_back(wall);
+    }
+    for (auto i: player_obj) {
+        sf::Vector2f base_player_pos = {i.rect.left, i.rect.top - i.rect.width};
+        std::cout << base_player_pos.x << " " << base_player_pos.y << std::endl;
+        std::shared_ptr<BasePlayer> basePlayer = std::make_shared<BasePlayer>(
+                m_level, OBJECT_IMAGE, sf::IntRect(256, 16, 16, 16), base_player_pos, 0,
+                200, Direction::UP);
+        walls.base_player.push_back(basePlayer);
     }
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.05,
@@ -258,10 +268,10 @@ int GameSession::Run() {
         }
 
         for (auto &i : all_bots) {
-            i->move(time, *this_player, all_bots, walls, all_bullets);
+            i->move(time, *this_player, all_bots, &walls, all_bullets);
         }
 
-        if (!this_player->makeAction(time, walls)) {
+        if (!this_player->makeAction(time, &walls)) {
             sounds.play(BACKGROUND);
         }
         this_player->checkCollisionsBots(all_bots);
@@ -380,11 +390,11 @@ int GameSession::Run() {
         {  // Drawing is here
 
             for (auto& curr_bullet : all_bullets) {
-                curr_bullet->move(time, *this_player, all_bots, walls);
+                curr_bullet->move(time, *this_player, all_bots, &walls);
             }
 
             for (auto& curr_bullet : bots_bullets) {
-                curr_bullet->moveBots(time, *this_player, walls);
+                curr_bullet->moveBots(time, *this_player, &walls);
             }
 
             m_cam.changeViewCoords(new_pos);
@@ -422,12 +432,20 @@ int GameSession::Run() {
             }
 
 
-            for (int i = 0; i < walls.size(); i++) {
-                if (walls[i]->getHp() >= 0) {
-                    m_window.draw(walls[i]->getSprite());
+            for (int i = 0; i < walls.walls.size(); i++) {
+                if (walls.walls[i]->getHp() >= 0) {
+                    m_window.draw(walls.walls[i]->getSprite());
                 }
-                if (walls[i]->getHp() <= 0) {
-                    walls.erase(walls.begin() + i);
+                if (walls.walls[i]->getHp() <= 0) {
+                    walls.walls.erase(walls.walls.begin() + i);
+                }
+            }
+            for (int i = 0; i < walls.base_player.size(); i++) {
+                if (walls.base_player[i]->getHp() >= 0) {
+                    m_window.draw(walls.base_player[i]->getSprite());
+                }
+                if (walls.base_player[i]->getHp() <= 0) {
+                    walls.base_player.erase(walls.base_player.begin() + i);
                 }
             }
             for (int i = 0; i < all_bots.size(); i++) {

@@ -22,7 +22,7 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
     // this->sprite.setScale(5,5);
 }
 
-void Tank::move(float time, std::vector<std::shared_ptr<Wall>> walls) {
+void Tank::move(float time, DestructibleWalls* walls) {
     switch (dir) {
         case Direction::RIGHT:
             dx = speed;
@@ -72,7 +72,7 @@ void Tank::move(float time, std::vector<std::shared_ptr<Wall>> walls) {
     //в этой функции, иначе бы наш спрайт стоял на месте.
 }
 
-void Bullet::moveBots(float time, Player& p, std::vector<std::shared_ptr<Wall>> walls) {
+void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -106,7 +106,7 @@ void Bullet::moveBots(float time, Player& p, std::vector<std::shared_ptr<Wall>> 
     // sprite.setPosition(coords.x + 7, coords.y + 7);
 }
 
-void Bullet::move(float time, Player&p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls) {
+void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls* walls) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -151,7 +151,7 @@ Direction Bullet::getDir() const {
     return this->dir;
 }
 
-int Tank::makeAction(float time, std::vector<std::shared_ptr<Wall>> walls) {
+int Tank::makeAction(float time, DestructibleWalls* walls) {
     // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
     //     this->shot = true;
     // }
@@ -222,8 +222,8 @@ void Tank::checkCollisionsMap(float x_old, float y_old, float x, float y) {
         }
     }
 }
-void Tank::checkCollisionsWall(float x_old, float y_old, float x, float y, std::vector<std::shared_ptr<Wall>> walls) {
-    for (auto &i : walls) {
+void Tank::checkCollisionsWall(float x_old, float y_old, float x, float y, DestructibleWalls* walls) {
+    for (auto &i : walls->walls) {
         if (getRect().intersects(static_cast<sf::IntRect>(i->getRect()))) {
             if (dy > 0) {
                 // this->y =i.rect.top - this->rect.height;
@@ -248,7 +248,7 @@ void Tank::checkCollisionsWall(float x_old, float y_old, float x, float y, std::
         }
     }
 }
-void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls) {
+void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls) {
     for (auto &i : m_objects) {
             if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
                 m_life = 0;
@@ -286,8 +286,8 @@ void Bullet::checkCollisionsObject(Player& p) {
     }
 }
 
-void Bullet::checkCollisionsObject(std::vector<std::shared_ptr<Wall>> walls) {
-    for (auto &i : walls) {
+void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
+    for (auto &i : walls->walls) {
         if (getRect().intersects(i->getRect())) {
             i->setHp(i->getHp() - 25);
             m_life = 0;
@@ -311,8 +311,8 @@ int Bullet::getLife() const {
     return this->m_life;
 }
 
-void Player::checkCollisionsWall(std::vector<std::shared_ptr<Wall>> walls) {
-    for (auto &i : walls) {
+void Player::checkCollisionsWall(DestructibleWalls* walls) {
+    for (auto &i : walls->walls) {
             if (getRect().intersects(static_cast<sf::IntRect>(i->getRect()))) {
                 if (dy > 0) {
                     // this->y =i.rect.top - this->rect.height;
@@ -417,10 +417,10 @@ void Bots::checkCollisionsBullet(float x_old, float y_old, float x, float y,
 }
 
 void Bots::checkCollisionsWalls(float x_old, float y_old, float x, float y, 
-                                    std::vector<std::shared_ptr<Wall>> walls) {
+                                    DestructibleWalls* walls) {
     std::random_device rd;
     std::uniform_int_distribution<int> uid(0, 3);
-        for (auto &it : walls) {
+        for (auto &it : walls->walls) {
             if (getRect().intersects(static_cast<sf::IntRect>(it->getRect()))) {
                 //std::cout <<"collision"<<std::endl;
                 if (dy > 0) {
@@ -515,7 +515,7 @@ void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
     }
 }
 
-void Bots::move(float time, Player &p, std::vector<Bots*> b, std::vector<std::shared_ptr<Wall>> walls, std::vector<std::shared_ptr<Bullet>> all_bullets) {
+void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<std::shared_ptr<Bullet>> all_bullets) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
