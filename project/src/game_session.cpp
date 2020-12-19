@@ -10,6 +10,7 @@
 #include "game.h"
 #include "game_map.hpp"
 #include "game_session.hpp"
+#include "statistics.h"
 
 GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
@@ -75,6 +76,7 @@ int GameSession::Run() {
 
     // TmxObject Player_obj = m_level.GetFirstObject("player"); //TODO: make
     // const name
+    Statistic stats(m_window);
     Sound sounds;
     sounds.play(GAME_START);
     std::vector<MapObject> walls_objs = m_level.GetAllObjects("wall");
@@ -85,7 +87,7 @@ int GameSession::Run() {
 
     for (auto i: walls_objs) {
         sf::Vector2f wall_pos = {i.rect.left, i.rect.top - i.rect.width};
-        std::cout << wall_pos.x << " " << wall_pos.y << std::endl;
+        // std::cout << wall_pos.x << " " << wall_pos.y << std::endl;
         std::shared_ptr<Wall> wall = std::make_shared<Wall>(
         m_level, OBJECT_IMAGE, sf::IntRect(256, 16, 16, 16), wall_pos, 0,
         100, Direction::UP);
@@ -93,7 +95,7 @@ int GameSession::Run() {
     }
     for (auto i: player_obj) {
         sf::Vector2f base_player_pos = {i.rect.left, i.rect.top - i.rect.width};
-        std::cout << base_player_pos.x << " " << base_player_pos.y << std::endl;
+        // std::cout << base_player_pos.x << " " << base_player_pos.y << std::endl;
         std::shared_ptr<BasePlayer> basePlayer = std::make_shared<BasePlayer>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_player_pos, 0,
                 200, Direction::UP);
@@ -101,7 +103,7 @@ int GameSession::Run() {
     }
     for (auto i: enemy_obj) {
         sf::Vector2f base_enemy_pos = {i.rect.left, i.rect.top - i.rect.width};
-        std::cout << base_enemy_pos.x << " " << base_enemy_pos.y << std::endl;
+        // std::cout << base_enemy_pos.x << " " << base_enemy_pos.y << std::endl;
         std::shared_ptr<BaseEnemy> baseEnemy = std::make_shared<BaseEnemy>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_enemy_pos, 0,
                 200, Direction::UP);
@@ -152,7 +154,11 @@ int GameSession::Run() {
     timer_bots.restart();
 
     sf::Clock main_timer;
-    sf::Time last_pl_bull = main_timer.getElapsedTime();
+    sf::Time last_pl_bull;
+    sf::Time pause_time;
+    sf::Time start_pause_time;
+    pause_time.Zero;
+    last_pl_bull.Zero;
 
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
@@ -191,6 +197,7 @@ int GameSession::Run() {
 
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Escape) {
+                    start_pause_time = main_timer.getElapsedTime(); 
                     // sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
                     //                             sf::Style::None);
 
@@ -199,6 +206,7 @@ int GameSession::Run() {
                     if (gameMenu.show(m_window) == STOP_RUN) {
                         return STOP_RUN;
                     }
+                    pause_time += main_timer.getElapsedTime() - start_pause_time;
                     clock.restart();
                 }
                 if (event.key.code == sf::Keyboard::Space
@@ -240,7 +248,7 @@ int GameSession::Run() {
 
         }
 
-        std::cout << timer.asSeconds() << std::endl;
+        // std::cout << timer.asSeconds() << std::endl;
         if ((timer.asSeconds() > 1) && (timer.asSeconds() < 1.07)) {
 
             for (auto &i : all_bots) {
@@ -405,12 +413,11 @@ int GameSession::Run() {
                 curr_bullet->moveBots(time, *this_player, &walls);
             }
 
-            m_cam.changeViewCoords(new_pos);
-            m_cam.changeView();
+            m_cam.changeViewCoords(new_pos, m_level.GetTilemapWidth(), m_level.GetTilemapHeight());
+            // m_cam.changeView();
 
             m_window.setView(m_cam.view);  //"оживляем" камеру в окне sfml
             m_window.clear();
-
             m_level.Draw(m_window);
 
             for (int i = 0; i < all_bullets.size(); i++) {
@@ -476,6 +483,8 @@ int GameSession::Run() {
                     count_bots--;
                 }
             }
+            stats.update(m_window, this_player->getHp(), main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
+            stats.draw(m_window);
             m_window.display();
 
         }
