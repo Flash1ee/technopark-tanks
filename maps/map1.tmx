@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="155">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="159">
  <tileset firstgid="1" name="textures_sprites" tilewidth="16" tileheight="16" tilecount="400" columns="25">
   <image source="../resources/sprites.png" width="400" height="256"/>
  </tileset>
@@ -42,7 +42,7 @@
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="22"/>
-   <tile gid="70"/>
+   <tile gid="22"/>
    <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
@@ -592,7 +592,7 @@
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="95"/>
-   <tile gid="70"/>
+   <tile gid="22"/>
    <tile gid="95"/>
    <tile gid="73"/>
    <tile gid="73"/>
@@ -723,5 +723,7 @@
   <object id="152" name="wall" gid="42" x="192" y="64" width="16" height="16"/>
   <object id="153" name="wall" gid="42" x="160" y="32" width="16" height="16"/>
   <object id="154" name="wall" gid="42" x="160" y="48" width="16" height="16"/>
+  <object id="157" name="player_base" gid="70" x="192" y="384" width="16" height="16"/>
+  <object id="158" name="enemy_base" gid="70" x="192" y="32" width="16" height="16"/>
  </objectgroup>
 </map>
