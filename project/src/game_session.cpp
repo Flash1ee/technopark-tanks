@@ -79,7 +79,7 @@ int GameSession::Run() {
     sounds.play(GAME_START);
     std::vector<MapObject> walls_objs = m_level.GetAllObjects("wall");
     std::vector<MapObject> player_obj = m_level.GetAllObjects("player_base");
-    std::vector<MapObject> enemy_obj = m_level.GetAllObjects("player_base");
+    std::vector<MapObject> enemy_obj = m_level.GetAllObjects("enemy_base");
 
     DestructibleWalls walls;
 
@@ -95,9 +95,17 @@ int GameSession::Run() {
         sf::Vector2f base_player_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::cout << base_player_pos.x << " " << base_player_pos.y << std::endl;
         std::shared_ptr<BasePlayer> basePlayer = std::make_shared<BasePlayer>(
-                m_level, OBJECT_IMAGE, sf::IntRect(256, 16, 16, 16), base_player_pos, 0,
+                m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_player_pos, 0,
                 200, Direction::UP);
         walls.base_player.push_back(basePlayer);
+    }
+    for (auto i: enemy_obj) {
+        sf::Vector2f base_enemy_pos = {i.rect.left, i.rect.top - i.rect.width};
+        std::cout << base_enemy_pos.x << " " << base_enemy_pos.y << std::endl;
+        std::shared_ptr<BaseEnemy> baseEnemy = std::make_shared<BaseEnemy>(
+                m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_enemy_pos, 0,
+                200, Direction::UP);
+        walls.base_enemy.push_back(baseEnemy);
     }
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.05,
@@ -446,6 +454,14 @@ int GameSession::Run() {
                 }
                 if (walls.base_player[i]->getHp() <= 0) {
                     walls.base_player.erase(walls.base_player.begin() + i);
+                }
+            }
+            for (int i = 0; i < walls.base_enemy.size(); i++) {
+                if (walls.base_enemy[i]->getHp() >= 0) {
+                    m_window.draw(walls.base_enemy[i]->getSprite());
+                }
+                if (walls.base_enemy[i]->getHp() <= 0) {
+                    walls.base_enemy.erase(walls.base_enemy.begin() + i);
                 }
             }
             for (int i = 0; i < all_bots.size(); i++) {
