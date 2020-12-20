@@ -42,6 +42,12 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
         //     exit(-1);
         // }
     }
+    if (!dead.loadFromFile(WASTED)) {
+        throw std::exception();
+    };
+    m_dead.setTexture(dead);
+    m_dead.setTextureRect(sf::IntRect( 3, 150, 390, 104));
+    m_dead.setScale(0.5, 0.5);
 }
 
 GameSession::~GameSession() {};
@@ -156,9 +162,13 @@ int GameSession::Run() {
     sf::Clock main_timer;
     sf::Time last_pl_bull;
     sf::Time pause_time;
+    sf::Time win_time;
+    sf::Time kill_time;
     sf::Time start_pause_time;
     pause_time.Zero;
     last_pl_bull.Zero;
+    win_time.Zero;
+    kill_time.Zero;
 
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
@@ -217,7 +227,7 @@ int GameSession::Run() {
                 }
             }
 
-            if (this_player->getShot()) {
+            if (this_player->getShot() && this_player->getHp() > 0) {
                 this_player->setShot(false);
                 // sf::Vector2f coords = this_player.getPos();
                 auto bullet_dir = this_player->getDir();
@@ -287,8 +297,10 @@ int GameSession::Run() {
             i->move(time, *this_player, all_bots, &walls, all_bullets);
         }
 
-        if (!this_player->makeAction(time, &walls)) {
-            sounds.play(BACKGROUND);
+        if (this_player->getHp() > 0) {
+            if (!this_player->makeAction(time, &walls)) {
+                sounds.play(BACKGROUND);
+            }
         }
         this_player->checkCollisionsBots(all_bots);
         old_pos = new_pos;
@@ -450,8 +462,6 @@ int GameSession::Run() {
             }
             if (this_player->getHp() > 0) {
                 m_window.draw(this_player->getSprite());
-            } else {
-                exit(0);
             }
 
 
@@ -496,10 +506,26 @@ int GameSession::Run() {
                     count_bots--;
                 }
             }
-            stats.update(m_window, this_player->getHp(), main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
+            if (this_player->getHp() <= 0) {
+                if (kill_time == sf::Time::Zero) {
+                    kill_time = main_timer.getElapsedTime();
+                    sounds.play(WASTED_S);
+                    stats.update(m_window, this_player->getHp(), 
+                        main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
+                }
+                m_cam.view.zoom(1.0001);
+                if (main_timer.getElapsedTime().asSeconds() - 
+                    kill_time.asSeconds() > 7) {
+                        return STOP_RUN;
+                }
+                m_dead.setPosition(m_window.getView().getCenter().x - 90, m_window.getView().getCenter().y - 26);
+                m_window.draw(m_dead);
+            } else {
+            stats.update(m_window, this_player->getHp(), 
+                        main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
+            }
             stats.draw(m_window);
             m_window.display();
-
         }
     }
     return 0;

@@ -40,12 +40,12 @@ void Statistic::update(sf::RenderWindow& window, int hp, double time) {
 
     text[1].setString(str_time.str());
 
-    if ((hp < 100) && (hp >= 83)) {
+    if ((hp < 100) && (hp > 83)) {
         health[2].setTextureRect(full);
         health[1].setTextureRect(full);
         health[0].setTextureRect(full);
     }
-    if ((hp < 83) && (hp >= 68)) {
+    if ((hp <= 83) && (hp >= 68)) {
         health[2].setTextureRect(half);
         health[1].setTextureRect(full);
         health[0].setTextureRect(full);

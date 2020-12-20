@@ -16,6 +16,7 @@
 #define SPAWN_SOUND "../sounds/bonus.ogg"
 #define BRICK_SOUND "../sounds/brick.ogg"
 #define KILL_SOUND "../sounds/explosion.ogg"
+#define WASTED_SOUND "../sounds/wasted.ogg"
 
 
 enum class SoundType {
@@ -42,6 +43,7 @@ typedef enum {
     GAME_OVER,
     GAME_START,
     SPAWN,
+    WASTED_S,
     COUNT
 } sound_action;
 class Sound {
@@ -69,6 +71,9 @@ class Sound {
 
     sf::SoundBuffer steel;
     sf::Sound steel_sound;
+
+    sf::SoundBuffer wasted;
+    sf::Sound wasted_sound;
     public:
     void play(sound_action action);
     // void play();

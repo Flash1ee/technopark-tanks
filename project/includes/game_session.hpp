@@ -22,6 +22,10 @@ class GameSession {
     Client m_game_client;
     Cam m_cam;
     sf::Vector2f m_player_pos;
+    sf::Texture dead;
+    sf::Sprite m_dead;
+    sf::Texture win;
+    sf::Sprite m_win;
 
     bool m_is_multiplayer;
     sf::RenderWindow m_window;

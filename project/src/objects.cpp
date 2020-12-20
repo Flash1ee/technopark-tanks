@@ -306,7 +306,7 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
     for (int i = 0; i < b.size(); i++) {
         if (getRect().intersects(b[i]->getRect())) {
             //std::cout << "Dir =" << i << static_cast<int>(b[i]->getDir()) << std::endl;
-            b[i]->setHp(b[i]->getHp() - 20  );
+            b[i]->setHp(b[i]->getHp() - 20);
             m_life = 0;
         }
     }
@@ -345,7 +345,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
         }
     }
     if (getRect().intersects(p.getRect())) {
-        p.setHp(p.getHp() - 25);
+        p.setHp(p.getHp() - 100);
         m_life = 0;
     }
 }
@@ -714,6 +714,9 @@ Sound::Sound() {
 
     steel.loadFromFile(SPAWN_SOUND);
     steel_sound.setBuffer(steel);
+
+    wasted.loadFromFile(WASTED_SOUND);
+    wasted_sound.setBuffer(wasted);
 }
 void Sound::play(sound_action action) {
     switch(action) {
@@ -749,6 +752,11 @@ void Sound::play(sound_action action) {
         case SPAWN:
             if (this->steel_sound.getStatus() != sf::Sound::Playing) {
                 this->steel_sound.play();
+            }
+            break;
+        case WASTED_S:
+            if (this->wasted_sound.getStatus() != sf::Sound::Playing) {
+                this->wasted_sound.play();
             }
             break;
     }
