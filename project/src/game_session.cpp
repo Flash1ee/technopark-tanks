@@ -170,7 +170,7 @@ int GameSession::Run() {
         time /= 800;      //скорость игры
 
 
-        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 4) {
+        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 20) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
@@ -407,6 +407,13 @@ int GameSession::Run() {
 
             for (auto& curr_bullet : all_bullets) {
                 curr_bullet->move(time, *this_player, all_bots, &walls);
+                // for (auto &wall : walls.walls) {
+                //     if (wall->getCrash()) {
+                //         std::cout << "CRASHING" << std::endl;
+                //         m_window.draw(wall->getCrashSprite());
+                //         wall->updateCrash();
+                //     }
+                // }
             }
 
             for (auto& curr_bullet : bots_bullets) {
@@ -429,6 +436,7 @@ int GameSession::Run() {
                 }
             }
             for (int i = 0; i < bots_bullets.size(); i++) {
+                
                 if (bots_bullets[i]->getLife()) {
                     m_window.draw(bots_bullets[i]->getSprite());
                 } else {
@@ -448,8 +456,13 @@ int GameSession::Run() {
 
 
             for (int i = 0; i < walls.walls.size(); i++) {
-                if (walls.walls[i]->getHp() >= 0) {
-                    m_window.draw(walls.walls[i]->getSprite());
+                if (walls.walls[i]->getHp() > 0) {
+                        m_window.draw(walls.walls[i]->getSprite());
+                    //     if (walls.walls[i]->getCrash()) {
+                    
+                    //     m_window.draw(walls.walls[i]->getCrashSprite());
+                    //     // walls.walls[i]->updateCrash();
+                    // }
                 }
                 if (walls.walls[i]->getHp() <= 0) {
                     walls.walls.erase(walls.walls.begin() + i);

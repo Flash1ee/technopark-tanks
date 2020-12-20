@@ -349,19 +349,34 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
         m_life = 0;
     }
 }
-
+#define WALL_DAMAGE 25
 void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
     for (auto &i : walls->walls) {
         if (getRect().intersects(i->getRect())) {
-            i->setHp(i->getHp() - 25);
+            std::cout << this->coords.x << " " << this->coords.y << std::endl;
+            if (static_cast<Direction>(getDir()) == Direction::UP) {
+                i->rect.height -= 4;
+            }
+            if (static_cast<Direction>(getDir()) == Direction::DOWN) {
+                i->rect.height -= 4;
+            }
+            if (static_cast<Direction>(getDir()) == Direction::LEFT) {
+                i->rect.width -= 4;
+            }
+            if (static_cast<Direction>(getDir()) == Direction::RIGHT) {
+                i->rect.width -= 4;
+            }
+
+            i->setHp(i->getHp() - WALL_DAMAGE);
+            i->getSprite().setTextureRect(i->rect);
+            std::cout << i->getHp() << std::endl;
+
             m_life = 0;
-            //std::cout << i->getHp() <<std::endl;
         }
     }
     for (auto &i : walls->base_player) {
         if (getRect().intersects(i->getRect())) {
             m_life = 0;
-            //std::cout << i->getHp() <<std::endl;
         }
     }
     for (auto &i : walls->base_enemy) {
@@ -370,7 +385,6 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
                 i->setHp(i->getHp() - 25);
             }
             m_life = 0;
-            //std::cout << i->getHp() <<std::endl;
         }
     }
 }
@@ -747,4 +761,27 @@ bool Sound::MainSoundStopped() {
 }
 int Wall::getHp() const {
     return this->m_hp;
+}
+void Wall::setCrash(sf::Vector2f &pos) {
+    std::cout << "setPositionCrash " <<pos.x << " " << pos.y << std::endl; 
+    sprite_crash.setPosition(coords.x + rect.width / 2,
+                             coords.y + rect.height / 2);
+    crash = true;
+}
+bool Wall::getCrash() {
+    if (crash) {
+        return true;
+    }
+    return false;
+}
+sf::Sprite Wall::getCrashSprite() {
+    std::cout << "get" << cords_crash.x << " " << cords_crash.y << std::endl;
+    return this->sprite_crash;
+}
+void Wall::updateCrash() {
+    std::cout << "UPDATE TO FALSE" << std::endl;
+    crash = false;
+}
+void Wall::setPosWall() {
+    this->sprite.setPosition(coords.x + rect.width, coords.y + rect.height);
 }
