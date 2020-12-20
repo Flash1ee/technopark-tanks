@@ -151,30 +151,20 @@ public:
 class Wall: public Object {
     private:
      int m_hp;
-     bool crash;
-     sf::IntRect rect_crash;
-     sf::Vector2f cords_crash;
-     sf::Sprite sprite_crash;
     public:
+     sf::IntRect rect_texture;
+     sf::Vector2f bef_coords;
      Wall(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Object(textureFile, rect, pos, speed, dir) {
             m_objects = mapObj.GetAllObjects("wall");
             m_hp = hp;
-            rect_crash = sf::IntRect(289, 128, 13, 13);
-            crash = false;
-            sprite_crash.setTexture(this->texture);
-            sprite_crash.setOrigin(rect_crash.width / 2, rect_crash.height / 2);
-            sprite_crash.setTextureRect(rect_crash);
+            rect_texture = rect;
+            bef_coords = sf::Vector2f(pos.x, pos.y);
             
         }
-    void setCrash(sf::Vector2f &pos);
-    bool getCrash();
-    void updateCrash();
-    sf::Sprite getCrashSprite();
     int getHp() const;
     void setHp(int hp);
-    void setPosWall();
           
 };
 

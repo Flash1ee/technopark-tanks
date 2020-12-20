@@ -463,8 +463,6 @@ int GameSession::Run() {
             if (this_player->getHp() > 0) {
                 m_window.draw(this_player->getSprite());
             }
-
-
             for (int i = 0; i < walls.walls.size(); i++) {
                 if (walls.walls[i]->getHp() > 0) {
                         m_window.draw(walls.walls[i]->getSprite());
