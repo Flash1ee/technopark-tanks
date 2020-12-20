@@ -83,6 +83,10 @@ class Player;
 
 class Object {
    public:
+    sf::IntRect rect;
+    sf::Vector2f coords;  //координаты
+
+
     Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
            float speed, Direction dir);
 
@@ -98,11 +102,10 @@ class Object {
 
 
    protected:
-    sf::Vector2f coords;  //координаты
+    // sf::Vector2f coords;  //координаты
     float dx, dy;         // current delta coordinats
     float speed;          //скорость (множитель времени)
     Direction dir;
-    sf::IntRect rect;
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
@@ -143,15 +146,30 @@ public:
 class Wall: public Object {
     private:
      int m_hp;
+     bool crash;
+     sf::IntRect rect_crash;
+     sf::Vector2f cords_crash;
+     sf::Sprite sprite_crash;
     public:
      Wall(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Object(textureFile, rect, pos, speed, dir) {
             m_objects = mapObj.GetAllObjects("wall");
             m_hp = hp;
+            rect_crash = sf::IntRect(289, 128, 13, 13);
+            crash = false;
+            sprite_crash.setTexture(this->texture);
+            sprite_crash.setOrigin(rect_crash.width / 2, rect_crash.height / 2);
+            sprite_crash.setTextureRect(rect_crash);
+            
         }
+    void setCrash(sf::Vector2f &pos);
+    bool getCrash();
+    void updateCrash();
+    sf::Sprite getCrashSprite();
     int getHp() const;
     void setHp(int hp);
+    void setPosWall();
           
 };
 
