@@ -349,35 +349,35 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
         m_life = 0;
     }
 }
+#define BLOCK_SIZE 16
+#define WALL_INIT 100
 #define WALL_DAMAGE 25
 void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
+    auto shift = BLOCK_SIZE * (WALL_DAMAGE / (double)WALL_INIT);
     for (auto &i : walls->walls) {
         if (getRect().intersects(i->getRect())) {
-            std::cout << this->coords.x << " " << this->coords.y << std::endl;
+            // std::cout << this->coords.x << " " << this->coords.y << std::endl;
             if (static_cast<Direction>(getDir()) == Direction::UP) {
-                i->rect.height -= 4;
-                // i->coords.y -= 4;
-                // i->getSprite().setTextureRect(i->rect);
-                // i->setPos();
+                i->rect.height -= shift;
             }
             if (static_cast<Direction>(getDir()) == Direction::DOWN) {
-                i->rect.height -= 4;
-                i->coords.y += 4;
+                i->rect.height -= shift;
+                i->coords.y += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.height / 2);
             }
             if (static_cast<Direction>(getDir()) == Direction::LEFT) {
-                i->rect.width -= 4;
+                i->rect.width -= shift;
 
             }
             if (static_cast<Direction>(getDir()) == Direction::RIGHT) {
-                i->rect.width -= 4;
-                i->coords.x += 4;
+                i->rect.width -= shift;
+                i->coords.x += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.width / 2);
             }
             i->getSprite().setTextureRect(i->rect);
-            auto pos = sf::Vector2f(i->coords.x + i->rect.width / 2, i->coords.y + i->rect.height / 2);
+
             i->setHp(i->getHp() - WALL_DAMAGE);
-            std::cout << i->getHp() << std::endl;
+            
 
             m_life = 0;
         }
