@@ -339,7 +339,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
     }
     for (auto &i : walls->base_player) {
         if (getRect().intersects(i->getRect())) {
-            i->setHp(i->getHp() - 25);
+            i->setHp(i->getHp() - 19);
             m_life = 0;
             //std::cout << i->getHp() <<std::endl;
         }
