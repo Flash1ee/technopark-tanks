@@ -170,7 +170,7 @@ int GameSession::Run() {
         time /= 800;      //скорость игры
 
 
-        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 20) {
+        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 4) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
