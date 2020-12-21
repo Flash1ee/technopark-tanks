@@ -26,11 +26,13 @@ enum class SoundType {
 };
 
 class Wall;
+class Brick;
 class BasePlayer;
 class BaseEnemy;
 
 struct DestructibleWalls {
     std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<std::shared_ptr<Brick>> bricks;
     std::vector<std::shared_ptr<BasePlayer>> base_player;
     std::vector<std::shared_ptr<BaseEnemy>> base_enemy;
 
@@ -158,6 +160,13 @@ class Wall: public Object {
            sf::Vector2f pos, float speed, int hp, Direction dir)
         : Object(textureFile, rect, pos, speed, dir) {
             m_objects = mapObj.GetAllObjects("wall");
+            for (auto &i : mapObj.GetAllObjects("wall_player")) {
+                m_objects.push_back(i);
+            }
+            for (auto &i : mapObj.GetAllObjects("wall_enemy")) {
+                m_objects.push_back(i);
+            }
+            
             m_hp = hp;
             rect_texture = rect;
             bef_coords = sf::Vector2f(pos.x, pos.y);
@@ -166,6 +175,25 @@ class Wall: public Object {
     int getHp() const;
     void setHp(int hp);
           
+};
+
+class Brick : public Object {
+    private:
+     int m_hp;
+    public:
+     sf::IntRect rect_texture;
+     sf::Vector2f bef_coords;
+     Brick(Level& mapObj, sf::String textureFile, sf::IntRect rect,
+           sf::Vector2f pos, float speed, int hp, Direction dir)
+        : Object(textureFile, rect, pos, speed, dir) {
+            m_objects = mapObj.GetAllObjects("brick");
+            m_hp = hp;
+            rect_texture = rect;
+            bef_coords = sf::Vector2f(pos.x, pos.y);
+            
+        }
+    int getHp() const;
+    void setHp(int hp);
 };
 
 class Bullet : public Object {
