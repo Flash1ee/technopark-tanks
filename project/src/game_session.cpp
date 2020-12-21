@@ -103,7 +103,7 @@ int GameSession::Run() {
         sf::Vector2f wall_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::shared_ptr<Wall> wall = std::make_shared<Wall>(
         m_level, OBJECT_IMAGE, sf::IntRect(256, 16, 16, 16), wall_pos, 0,
-        100, Direction::UP);
+        100, Direction::UP, i.name);
         walls.walls.push_back(wall);
     }
     for (auto i: brick_objs) {
@@ -236,10 +236,11 @@ int GameSession::Run() {
                     bullet_pos.x = this_player->getPos().x + 3.5;
                     bullet_pos.y = this_player->getPos().y + 3.5;
                 }
+                bool is_bot = false;
                 auto new_b = std::make_shared<Bullet>(m_level,
                                                       OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
                                                       bullet_pos, 0.3,
-                                                      bullet_dir, 1);
+                                                      bullet_dir, 1, is_bot);
 
                 // sf::Packet packet;
                 // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -271,10 +272,11 @@ int GameSession::Run() {
                         bullet_pos.x = i->getPos().x + 3.5;
                         bullet_pos.y = i->getPos().y + 3.5;
                     }
+                    auto is_bot = true;
                     auto new_b = std::make_shared<Bullet>(m_level,
                                                           OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
                                                           bullet_pos, 0.3,
-                                                          bullet_dir, 1);
+                                                          bullet_dir, 1, is_bot);
 
                     // sf::Packet packet;
                     // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -391,7 +393,7 @@ int GameSession::Run() {
                                 Direction dir = action.direction;
                                 std::shared_ptr<Bullet> new_b(new Bullet(m_level,
                                     OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(321, 100, 8, 8),
-                                    pos, 0.5, dir, 1));
+                                    pos, 0.5, dir, 1, false));
                                 all_bullets.push_back(new_b);
                             } break;
 

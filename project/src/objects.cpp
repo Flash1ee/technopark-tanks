@@ -5,7 +5,7 @@
 
 Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
                float speed, Direction dir = Direction::UP)
-    : coords(pos), rect(rect), dx(0), dy(0), speed(speed), dir(dir) {
+    : coords(pos), rect(rect), dx(0), dy(0), speed(speed), dir(dir){
     this->image.loadFromFile(textureFile);
     this->image.createMaskFromColor(sf::Color(0, 0, 1));
     this->image.createMaskFromColor(sf::Color(0, 0, 0));
@@ -333,19 +333,19 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
     auto shift = BLOCK_SIZE * (WALL_DAMAGE / (double)WALL_INIT);
     for (auto &i : walls->walls) {
         if (getRect().intersects(i->getRect())) {
-            if (static_cast<Direction>(getDir()) == Direction::UP) {
+            if (static_cast<Direction>(getDir()) == Direction::UP && !m_is_bot) {
                 i->rect.height -= shift;
             }
-            if (static_cast<Direction>(getDir()) == Direction::DOWN) {
+            if (static_cast<Direction>(getDir()) == Direction::DOWN && !m_is_bot) {
                 i->rect.height -= shift;
                 i->coords.y += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.height / 2);
             }
-            if (static_cast<Direction>(getDir()) == Direction::LEFT) {
+            if (static_cast<Direction>(getDir()) == Direction::LEFT && !m_is_bot) {
                 i->rect.width -= shift;
 
             }
-            if (static_cast<Direction>(getDir()) == Direction::RIGHT) {
+            if (static_cast<Direction>(getDir()) == Direction::RIGHT && !m_is_bot) {
                 i->rect.width -= shift;
                 i->coords.x += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.width / 2);
@@ -358,19 +358,19 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
     }
     for (auto &i : walls->bricks) {
         if (getRect().intersects(i->getRect())) {
-            if (static_cast<Direction>(getDir()) == Direction::UP) {
+            if (static_cast<Direction>(getDir()) == Direction::UP && !m_is_bot) {
                 i->rect.height -= shift;
             }
-            if (static_cast<Direction>(getDir()) == Direction::DOWN) {
+            if (static_cast<Direction>(getDir()) == Direction::DOWN && !m_is_bot) {
                 i->rect.height -= shift;
                 i->coords.y += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.height / 2);
             }
-            if (static_cast<Direction>(getDir()) == Direction::LEFT) {
+            if (static_cast<Direction>(getDir()) == Direction::LEFT && !m_is_bot) {
                 i->rect.width -= shift;
 
             }
-            if (static_cast<Direction>(getDir()) == Direction::RIGHT) {
+            if (static_cast<Direction>(getDir()) == Direction::RIGHT && !m_is_bot) {
                 i->rect.width -= shift;
                 i->coords.x += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.width / 2);
