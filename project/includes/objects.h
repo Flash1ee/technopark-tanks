@@ -26,12 +26,14 @@ enum class SoundType {
 };
 
 class Wall;
+class Object;
 class Brick;
 class BasePlayer;
 class BaseEnemy;
 
 struct DestructibleWalls {
     std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<std::shared_ptr<Object>> grass;
     std::vector<std::shared_ptr<Brick>> bricks;
     std::vector<std::shared_ptr<BasePlayer>> base_player;
     std::vector<std::shared_ptr<BaseEnemy>> base_enemy;

@@ -96,8 +96,18 @@ int GameSession::Run() {
     std::vector<MapObject> brick_objs = m_level.GetAllObjects("brick");
     std::vector<MapObject> player_obj = m_level.GetAllObjects("player_base");
     std::vector<MapObject> enemy_obj = m_level.GetAllObjects("enemy_base");
+    std::vector<MapObject> grass_obj = m_level.GetAllObjects("grass");
+
 
     DestructibleWalls walls;
+
+
+    for (auto i: grass_obj) {
+        sf::Vector2f grass_pos = {i.rect.left, i.rect.top - i.rect.width};
+        std::shared_ptr<Object> grass = std::make_shared<Object>(OBJECT_IMAGE,
+        sf::IntRect(272, 32, 16, 16), grass_pos, 0, Direction::UP);
+        walls.grass.push_back(grass);
+    }
 
     for (auto i: walls_objs) {
         sf::Vector2f wall_pos = {i.rect.left, i.rect.top - i.rect.width};
@@ -516,6 +526,9 @@ int GameSession::Run() {
                     sounds.play(KILL);
                     count_bots--;
                 }
+            }
+            for (int i = 0; i < walls.grass.size(); i++) {
+                        m_window.draw(walls.grass[i]->getSprite());
             }
             if (this_player->getHp() <= 0) {
                 if (kill_time == sf::Time::Zero) {
