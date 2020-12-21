@@ -345,7 +345,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
         }
     }
     if (getRect().intersects(p.getRect())) {
-        p.setHp(p.getHp() - 100);
+        p.setHp(p.getHp() - 19);
         m_life = 0;
     }
 }
