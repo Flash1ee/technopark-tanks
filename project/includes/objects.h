@@ -136,16 +136,13 @@ public:
 class BaseEnemy: public Object {
 private:
     int m_hp;
-    int m_count_for_kills;
 public:
     BaseEnemy(Level& mapObj, sf::String textureFile, sf::IntRect rect,
     sf::Vector2f pos, float speed, int hp, Direction dir)
-    : Object(textureFile, rect, pos, speed, dir), m_hp(hp), m_count_for_kills(4) {
+    : Object(textureFile, rect, pos, speed, dir), m_hp(hp) {
         m_objects = mapObj.GetAllObjects("enemy_base");
     }
     int getHp() const;
-    int getCount() const;
-    void setCount(int count);
     void setHp(int hp);
 
 };
@@ -211,7 +208,7 @@ public:
     void moveBots(float time, Player& p, DestructibleWalls* walls);
     void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls);
     void checkCollisionsObject(Player& p, DestructibleWalls* walls);
-    void checkCollisionsObject(DestructibleWalls* walls);
+    void checkCollisionsObject(DestructibleWalls* walls, Player& p);
     // void sound();
     int getLife() const;
     Direction getDir() const;
@@ -251,8 +248,12 @@ class Player : public Tank {  //класс игрока
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {}
+        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(5) {}
     void checkCollisionsBots(std::vector<Bots*> b);
+    int getCount() const;
+    void setCount(int count);
+private:
+    int m_count_for_kills;
     
 };
 
@@ -271,5 +272,6 @@ public:
                                std::vector<std::shared_ptr<Bullet>> bullet, Player& p);
     void checkCollisionsWalls(float x_old, float y_old, float x, float y,
                               DestructibleWalls* walls);
+    int checkCollisionsBase(std::vector<Bots*> b, DestructibleWalls* walls);
 
 };

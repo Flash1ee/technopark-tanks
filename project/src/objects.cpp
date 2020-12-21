@@ -78,7 +78,7 @@ void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
     }
 
     this->checkCollisionsObject(p, walls);
-    this->checkCollisionsObject(walls);
+    this->checkCollisionsObject(walls, p);
     if (m_life == 1) {
         coords.x += dx * time;
         coords.y += dy * time;
@@ -111,7 +111,7 @@ void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls*
     }
 
     this->checkCollisionsObject(time, p, b, walls);
-    this->checkCollisionsObject(walls);
+    this->checkCollisionsObject(walls, p);
     if (m_life == 1) {
         coords.x += dx * time;
         coords.y += dy * time;
@@ -290,10 +290,10 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
     }
 }
 
-int BaseEnemy::getCount() const {
+int Player::getCount() const {
     return this->m_count_for_kills;
 }
-void BaseEnemy::setCount(int count) {
+void Player::setCount(int count) {
     this->m_count_for_kills = count;
 }
 int BasePlayer::getHp() const {
@@ -317,7 +317,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
     }
     for (auto &i : walls->base_player) {
         if (getRect().intersects(i->getRect())) {
-            i->setHp(i->getHp() - 19);
+            i->setHp(i->getHp() - 35);
             m_life = 0;
         }
     }
@@ -329,7 +329,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
 #define BLOCK_SIZE 16
 #define WALL_INIT 100
 #define WALL_DAMAGE 25
-void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
+void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
     auto shift = BLOCK_SIZE * (WALL_DAMAGE / (double)WALL_INIT);
     for (auto &i : walls->walls) {
         if (getRect().intersects(i->getRect())) {
@@ -390,7 +390,7 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
     }
     for (auto &i : walls->base_enemy) {
         if (getRect().intersects(i->getRect())) {
-            if (i->getCount() <= 0) {
+            if (p.getCount() <= 0) {
                 i->setHp(i->getHp() - 25);
             }
             m_life = 0;
@@ -450,6 +450,18 @@ int Object::comparisonPos(Player &p, std::vector<Bots*> b) {
             return i;
         }
         if (abs(p.coords.y - b[i]->coords.y) < 2) {
+            return i;
+        }
+    }
+    return b.size();
+}
+
+int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
+    for (int i = 0; i < b.size(); i++) {
+        if (abs(walls->base_player[0]->coords.y - b[i]->coords.y) < 2) {
+            return i;
+        }
+        if (abs(walls->base_player[0]->coords.x - b[i]->coords.x) < 6) {
             return i;
         }
     }
@@ -675,6 +687,11 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* 
 
     for (int i = 0; i < b.size(); i++) {
         if (comparisonPos(p, b) == i) {
+            b[i]->setShot(true);
+        }
+    }
+    for (int i = 0; i < b.size(); i++) {
+        if (checkCollisionsBase(b, walls) == i) {
             b[i]->setShot(true);
         }
     }

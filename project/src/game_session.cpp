@@ -117,7 +117,7 @@ int GameSession::Run() {
         sf::Vector2f base_player_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::shared_ptr<BasePlayer> basePlayer = std::make_shared<BasePlayer>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_player_pos, 0,
-                200, Direction::UP);
+                100, Direction::UP);
         walls.base_player.push_back(basePlayer);
     }
     for (auto i: enemy_obj) {
@@ -494,6 +494,7 @@ int GameSession::Run() {
                 }
                 if (walls.base_player[i]->getHp() <= 0) {
                     walls.base_player.erase(walls.base_player.begin() + i);
+                    exit(0);
                 }
             }
             for (int i = 0; i < walls.base_enemy.size(); i++) {
@@ -510,7 +511,7 @@ int GameSession::Run() {
                     m_window.draw(all_bots[i]->getSprite());
                 }
                 if (all_bots[i]->getHp() == 0) {
-                    walls.base_enemy[0]->setCount(walls.base_enemy[0]->getCount() - 1);
+                    this_player->setCount(this_player->getCount() - 1);
                     all_bots.erase(all_bots.begin() + i);
                     sounds.play(KILL);
                     count_bots--;
