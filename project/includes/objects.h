@@ -17,6 +17,7 @@
 #define BRICK_SOUND "../sounds/brick.ogg"
 #define KILL_SOUND "../sounds/explosion.ogg"
 #define WASTED_SOUND "../sounds/wasted.ogg"
+#define FINISH_SOUND "../sounds/finish.ogg"
 
 
 enum class SoundType {
@@ -46,6 +47,7 @@ typedef enum {
     GAME_START,
     SPAWN,
     WASTED_S,
+    FINISH,
     COUNT
 } sound_action;
 class Sound {
@@ -76,6 +78,9 @@ class Sound {
 
     sf::SoundBuffer wasted;
     sf::Sound wasted_sound;
+
+    sf::SoundBuffer finish;
+    sf::Sound finish_sound;
     public:
     void play(sound_action action);
     // void play();
@@ -248,7 +253,7 @@ class Player : public Tank {  //класс игрока
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(5) {}
+        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(1) {}
     void checkCollisionsBots(std::vector<Bots*> b);
     int getCount() const;
     void setCount(int count);

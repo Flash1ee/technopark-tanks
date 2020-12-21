@@ -726,6 +726,9 @@ Sound::Sound() {
 
     wasted.loadFromFile(WASTED_SOUND);
     wasted_sound.setBuffer(wasted);
+
+    finish.loadFromFile(FINISH_SOUND);
+    finish_sound.setBuffer(finish);
 }
 void Sound::play(sound_action action) {
     switch(action) {
@@ -766,6 +769,11 @@ void Sound::play(sound_action action) {
         case WASTED_S:
             if (this->wasted_sound.getStatus() != sf::Sound::Playing) {
                 this->wasted_sound.play();
+            }
+            break;
+        case FINISH:
+            if (this->finish_sound.getStatus() != sf::Sound::Playing) {
+                this->finish_sound.play();
             }
             break;
     }

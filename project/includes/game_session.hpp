@@ -26,7 +26,10 @@ class GameSession {
     sf::Sprite m_dead;
     sf::Texture win;
     sf::Sprite m_win;
-
+    sf::Text bots_left;
+    sf::Text m_left_bots;
+    sf::Font font;  
+    sf::Music finish;
     bool m_is_multiplayer;
     sf::RenderWindow m_window;
 };

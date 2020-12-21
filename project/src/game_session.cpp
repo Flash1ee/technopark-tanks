@@ -42,12 +42,23 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
         //     exit(-1);
         // }
     }
+    if (!this->font.loadFromFile(FONT)) {
+        throw std::exception();
+    };
+    bots_left.setColor(sf::Color::Red);
+    bots_left.setFont(font);
+
+    m_left_bots.setColor(sf::Color::Red);
+    m_left_bots.setFont(font);
+
     if (!dead.loadFromFile(WASTED)) {
         throw std::exception();
     };
     m_dead.setTexture(dead);
     m_dead.setTextureRect(sf::IntRect( 3, 150, 390, 104));
     m_dead.setScale(0.5, 0.5);
+
+    finish.openFromFile(MORTAL_PATH);
 }
 
 GameSession::~GameSession() {};
@@ -161,11 +172,13 @@ int GameSession::Run() {
     sf::Time pause_time;
     sf::Time win_time;
     sf::Time kill_time;
+    sf::Time destroy_time;
     sf::Time start_pause_time;
     pause_time.Zero;
     last_pl_bull.Zero;
     win_time.Zero;
     kill_time.Zero;
+    destroy_time.Zero;
 
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
@@ -536,6 +549,33 @@ int GameSession::Run() {
                         main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
             }
             stats.draw(m_window);
+            if (main_timer.getElapsedTime().asSeconds() < 4) {
+                bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
+                bots_left.setOutlineThickness(2);
+                std::ostringstream str_str;
+                str_str << "KILL " << this_player->getCount() << " BOTS!!!";
+                bots_left.setString(str_str.str());
+                m_window.draw(bots_left);
+            }
+            if (this_player->getCount() > 0) {
+                std::ostringstream bots_count;
+                bots_count << this_player->getCount();
+                m_left_bots.setString(bots_count.str());
+                m_left_bots.setCharacterSize(15);
+                m_left_bots.setPosition(walls.base_player[0]->coords.x + 3, 0);
+                m_window.draw(m_left_bots);
+            } else {
+                if (destroy_time == sf::Time::Zero) {
+                    destroy_time = main_timer.getElapsedTime();
+                    sounds.play(FINISH);
+                    finish.play();
+                }
+                if (main_timer.getElapsedTime().asSeconds() - destroy_time.asSeconds() < 4) {
+                    bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
+                    bots_left.setString("DESTROY BASE!!!");
+                    m_window.draw(bots_left);
+                }
+            }
             m_window.display();
         }
     }
