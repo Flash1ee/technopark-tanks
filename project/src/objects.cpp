@@ -333,19 +333,19 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls) {
     auto shift = BLOCK_SIZE * (WALL_DAMAGE / (double)WALL_INIT);
     for (auto &i : walls->walls) {
         if (getRect().intersects(i->getRect())) {
-            if (static_cast<Direction>(getDir()) == Direction::UP && !m_is_bot) {
+            if (static_cast<Direction>(getDir()) == Direction::UP && ((!m_is_bot) || (m_is_bot && i->getName() == "wall_player"))) {
                 i->rect.height -= shift;
             }
-            if (static_cast<Direction>(getDir()) == Direction::DOWN && !m_is_bot) {
+            if (static_cast<Direction>(getDir()) == Direction::DOWN && (!m_is_bot || (m_is_bot && i->getName() == "wall_player"))) {
                 i->rect.height -= shift;
                 i->coords.y += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.height / 2);
             }
-            if (static_cast<Direction>(getDir()) == Direction::LEFT && !m_is_bot) {
+            if (static_cast<Direction>(getDir()) == Direction::LEFT && (!m_is_bot || (m_is_bot && i->getName() == "wall_player"))) {
                 i->rect.width -= shift;
 
             }
-            if (static_cast<Direction>(getDir()) == Direction::RIGHT && !m_is_bot) {
+            if (static_cast<Direction>(getDir()) == Direction::RIGHT && (!m_is_bot || (m_is_bot && i->getName() == "wall_player"))) {
                 i->rect.width -= shift;
                 i->coords.x += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.width / 2);
@@ -764,4 +764,7 @@ int Wall::getHp() const {
 }
 int Brick::getHp() const {
     return this->m_hp;
+}
+std::string Wall::getName() {
+    return m_type;
 }

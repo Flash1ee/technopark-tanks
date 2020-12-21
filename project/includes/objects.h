@@ -175,6 +175,7 @@ class Wall: public Object {
             bef_coords = sf::Vector2f(pos.x, pos.y);
             
         }
+    std::string getName();
     int getHp() const;
     void setHp(int hp);
           
