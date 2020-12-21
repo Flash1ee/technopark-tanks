@@ -317,7 +317,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
     }
     for (auto &i : walls->base_player) {
         if (getRect().intersects(i->getRect())) {
-            i->setHp(i->getHp() - 50);
+            i->setHp(i->getHp() - 100);
             m_life = 0;
         }
     }
@@ -338,6 +338,7 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
                 i->getSprite().setTextureRect(i->rect);
 
                 i->setHp(i->getHp() - WALL_DAMAGE);
+
             }
             if (static_cast<Direction>(getDir()) == Direction::DOWN && ((m_is_bot && i->getName() == "wall_player"))) {
                 i->rect.height -= shift;
@@ -346,12 +347,14 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
                 i->getSprite().setTextureRect(i->rect);
 
                 i->setHp(i->getHp() - WALL_DAMAGE);
+
             }
             if (static_cast<Direction>(getDir()) == Direction::LEFT && ((m_is_bot && i->getName() == "wall_player"))) {
                 i->rect.width -= shift;
                 i->getSprite().setTextureRect(i->rect);
 
                 i->setHp(i->getHp() - WALL_DAMAGE);
+
             }
             if (static_cast<Direction>(getDir()) == Direction::RIGHT && ((m_is_bot && i->getName() == "wall_player"))) {
                 i->rect.width -= shift;
@@ -360,28 +363,32 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
                 i->getSprite().setTextureRect(i->rect);
 
                 i->setHp(i->getHp() - WALL_DAMAGE);
+
             }
-            if (static_cast<Direction>(getDir()) == Direction::UP && ((!m_is_bot && i->getName() == "wall_enemy")) && (p.getCount() <= 0)) {
+            if (static_cast<Direction>(getDir()) == Direction::UP && ((!m_is_bot && i->getName() == "wall_enemy") && (p.getCount() <= 0))) {
                 i->rect.height -= shift;
                 i->getSprite().setTextureRect(i->rect);
 
                 i->setHp(i->getHp() - WALL_DAMAGE);
+
             }
-            if (static_cast<Direction>(getDir()) == Direction::DOWN && ((!m_is_bot && i->getName() == "wall_enemy")) && (p.getCount() <= 0)) {
+            if (static_cast<Direction>(getDir()) == Direction::DOWN && ((!m_is_bot && i->getName() == "wall_enemy") && (p.getCount() <= 0))) {
                 i->rect.height -= shift;
                 i->coords.y += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.height / 2);
                 i->getSprite().setTextureRect(i->rect);
 
                 i->setHp(i->getHp() - WALL_DAMAGE);
+
             }
-            if (static_cast<Direction>(getDir()) == Direction::LEFT && ((!m_is_bot && i->getName() == "wall_enemy")) && (p.getCount() <= 0)) {
+            if (static_cast<Direction>(getDir()) == Direction::LEFT && ((!m_is_bot && i->getName() == "wall_enemy") && (p.getCount() <= 0))) {
                 i->rect.width -= shift;
                 i->getSprite().setTextureRect(i->rect);
 
                 i->setHp(i->getHp() - WALL_DAMAGE);
+
             }
-            if (static_cast<Direction>(getDir()) == Direction::RIGHT && ((!m_is_bot && i->getName() == "wall_enemy")) && (p.getCount() <= 0)) {
+            if (static_cast<Direction>(getDir()) == Direction::RIGHT && ((!m_is_bot && i->getName() == "wall_enemy") && (p.getCount() <= 0))) {
                 i->rect.width -= shift;
                 i->coords.x += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.width / 2);
@@ -389,6 +396,38 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
 
                 i->setHp(i->getHp() - WALL_DAMAGE);
             }
+            if (static_cast<Direction>(getDir()) == Direction::UP && ((!m_is_bot && i->getName() != "wall_enemy" && i->getName() != "wall_player"))) {
+                i->rect.height -= shift;
+                i->getSprite().setTextureRect(i->rect);
+
+                i->setHp(i->getHp() - WALL_DAMAGE);
+
+            }
+            if (static_cast<Direction>(getDir()) == Direction::DOWN && ((!m_is_bot && i->getName() != "wall_enemy" && i->getName() != "wall_player"))) {
+                i->rect.height -= shift;
+                i->coords.y += shift;
+                i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.height / 2);
+                i->getSprite().setTextureRect(i->rect);
+
+                i->setHp(i->getHp() - WALL_DAMAGE);
+
+            }
+            if (static_cast<Direction>(getDir()) == Direction::LEFT && ((!m_is_bot && i->getName() != "wall_enemy" && i->getName() != "wall_player"))) {
+                i->rect.width -= shift;
+                i->getSprite().setTextureRect(i->rect);
+
+                i->setHp(i->getHp() - WALL_DAMAGE);
+
+            }
+            if (static_cast<Direction>(getDir()) == Direction::RIGHT && ((!m_is_bot && i->getName() != "wall_enemy" && i->getName() != "wall_player"))) {
+                i->rect.width -= shift;
+                i->coords.x += shift;
+                i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.width / 2);
+                i->getSprite().setTextureRect(i->rect);
+
+                i->setHp(i->getHp() - WALL_DAMAGE);
+            }
+
             m_life = 0;
         }
 
@@ -496,8 +535,8 @@ int Object::comparisonPos(Player &p, std::vector<Bots*> b) {
 int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
     std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
     for (int i = 0; i < b.size(); i++) {
-        std::cout << "Bot:y" << i << b[i]->coords.y << std::endl;
-        if (abs(walls->base_player[0]->coords.y - b[i]->coords.y) < 2) {
+
+        if (abs(walls->base_player[0]->coords.y - b[i]->coords.y) < 10) {
             return i;
         }
         if (abs(walls->base_player[0]->coords.x - b[i]->coords.x) < 6) {
