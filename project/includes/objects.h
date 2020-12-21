@@ -27,12 +27,14 @@ enum class SoundType {
 };
 
 class Wall;
+class Object;
 class Brick;
 class BasePlayer;
 class BaseEnemy;
 
 struct DestructibleWalls {
     std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<std::shared_ptr<Object>> grass;
     std::vector<std::shared_ptr<Brick>> bricks;
     std::vector<std::shared_ptr<BasePlayer>> base_player;
     std::vector<std::shared_ptr<BaseEnemy>> base_enemy;
@@ -253,7 +255,7 @@ class Player : public Tank {  //класс игрока
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(1) {}
+        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(8) {}
     void checkCollisionsBots(std::vector<Bots*> b);
     int getCount() const;
     void setCount(int count);
