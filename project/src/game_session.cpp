@@ -86,6 +86,14 @@ int GameSession::Run() {
     Sound sounds;
     sounds.play(GAME_START);
     std::vector<MapObject> walls_objs = m_level.GetAllObjects("wall");
+    for (auto &i : m_level.GetAllObjects("wall_player")) {
+        walls_objs.push_back(i);
+    }
+    for (auto &i : m_level.GetAllObjects("wall_enemy")) {
+        walls_objs.push_back(i);
+    }
+
+    std::vector<MapObject> brick_objs = m_level.GetAllObjects("brick");
     std::vector<MapObject> player_obj = m_level.GetAllObjects("player_base");
     std::vector<MapObject> enemy_obj = m_level.GetAllObjects("enemy_base");
 
@@ -93,15 +101,20 @@ int GameSession::Run() {
 
     for (auto i: walls_objs) {
         sf::Vector2f wall_pos = {i.rect.left, i.rect.top - i.rect.width};
-        // std::cout << wall_pos.x << " " << wall_pos.y << std::endl;
         std::shared_ptr<Wall> wall = std::make_shared<Wall>(
         m_level, OBJECT_IMAGE, sf::IntRect(256, 16, 16, 16), wall_pos, 0,
-        100, Direction::UP);
+        100, Direction::UP, i.name);
         walls.walls.push_back(wall);
+    }
+    for (auto i: brick_objs) {
+        sf::Vector2f brick_pos = {i.rect.left, i.rect.top - i.rect.width};
+        std::shared_ptr<Brick> brick = std::make_shared<Brick>(
+        m_level, OBJECT_IMAGE, sf::IntRect(256, 0, 16, 16), brick_pos, 0,
+        100, Direction::UP);
+        walls.bricks.push_back(brick);
     }
     for (auto i: player_obj) {
         sf::Vector2f base_player_pos = {i.rect.left, i.rect.top - i.rect.width};
-        // std::cout << base_player_pos.x << " " << base_player_pos.y << std::endl;
         std::shared_ptr<BasePlayer> basePlayer = std::make_shared<BasePlayer>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_player_pos, 0,
                 200, Direction::UP);
@@ -109,7 +122,6 @@ int GameSession::Run() {
     }
     for (auto i: enemy_obj) {
         sf::Vector2f base_enemy_pos = {i.rect.left, i.rect.top - i.rect.width};
-        // std::cout << base_enemy_pos.x << " " << base_enemy_pos.y << std::endl;
         std::shared_ptr<BaseEnemy> baseEnemy = std::make_shared<BaseEnemy>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_enemy_pos, 0,
                 200, Direction::UP);
@@ -124,18 +136,6 @@ int GameSession::Run() {
     spawn.push_back(m_level.GetFirstObject("spawn1"));
     spawn.push_back(m_level.GetFirstObject("spawn2"));
 
-    // for (int i = 0; i < 2; i++) {
-    //     size_t ind = 0;
-    //     if (i % 2) {
-    //         ind = 1;
-    //     }
-    //     sf::Vector2f m_bot_pos = {spawn[ind].rect.left + spawn[ind].rect.width / 2,
-    //     spawn[ind].rect.top - spawn[ind].rect.width / 2 };
-
-    //     // sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
-    //     all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.07,
-    //                                 100, Direction::UP));
-    // }
 
     sf::Vector2f old_pos = this_player->getPos();
     sf::Vector2f new_pos = old_pos;
@@ -149,9 +149,6 @@ int GameSession::Run() {
     sf::Clock clock, timer_bots, timer_shoots;
     bool is_new_user = true;
 
-    // Sound sounds [static_cast<int>(SoundType::COUNT)] {
-    //     Sound(BULLET_SOUND)wawasaawa
-    // };
     size_t count_bots = 0;
 
 
@@ -239,10 +236,11 @@ int GameSession::Run() {
                     bullet_pos.x = this_player->getPos().x + 3.5;
                     bullet_pos.y = this_player->getPos().y + 3.5;
                 }
+                bool is_bot = false;
                 auto new_b = std::make_shared<Bullet>(m_level,
                                                       OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
                                                       bullet_pos, 0.3,
-                                                      bullet_dir, 1);
+                                                      bullet_dir, 1, is_bot);
 
                 // sf::Packet packet;
                 // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -274,10 +272,11 @@ int GameSession::Run() {
                         bullet_pos.x = i->getPos().x + 3.5;
                         bullet_pos.y = i->getPos().y + 3.5;
                     }
+                    auto is_bot = true;
                     auto new_b = std::make_shared<Bullet>(m_level,
                                                           OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
                                                           bullet_pos, 0.3,
-                                                          bullet_dir, 1);
+                                                          bullet_dir, 1, is_bot);
 
                     // sf::Packet packet;
                     // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -394,7 +393,7 @@ int GameSession::Run() {
                                 Direction dir = action.direction;
                                 std::shared_ptr<Bullet> new_b(new Bullet(m_level,
                                     OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(321, 100, 8, 8),
-                                    pos, 0.5, dir, 1));
+                                    pos, 0.5, dir, 1, false));
                                 all_bullets.push_back(new_b);
                             } break;
 
@@ -474,6 +473,19 @@ int GameSession::Run() {
                 }
                 if (walls.walls[i]->getHp() <= 0) {
                     walls.walls.erase(walls.walls.begin() + i);
+                }
+            }
+            for (int i = 0; i < walls.bricks.size(); i++) {
+                if (walls.bricks[i]->getHp() > 0) {
+                        m_window.draw(walls.bricks[i]->getSprite());
+                    //     if (walls.walls[i]->getCrash()) {
+                    
+                    //     m_window.draw(walls.walls[i]->getCrashSprite());
+                    //     // walls.walls[i]->updateCrash();
+                    // }
+                }
+                if (walls.bricks[i]->getHp() <= 0) {
+                    walls.bricks.erase(walls.bricks.begin() + i);
                 }
             }
             for (int i = 0; i < walls.base_player.size(); i++) {

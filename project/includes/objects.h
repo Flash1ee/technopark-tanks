@@ -26,11 +26,13 @@ enum class SoundType {
 };
 
 class Wall;
+class Brick;
 class BasePlayer;
 class BaseEnemy;
 
 struct DestructibleWalls {
     std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<std::shared_ptr<Brick>> bricks;
     std::vector<std::shared_ptr<BasePlayer>> base_player;
     std::vector<std::shared_ptr<BaseEnemy>> base_enemy;
 
@@ -151,13 +153,44 @@ public:
 class Wall: public Object {
     private:
      int m_hp;
+     std::string m_type;
+     bool m_crash_enemy;
     public:
      sf::IntRect rect_texture;
      sf::Vector2f bef_coords;
      Wall(Level& mapObj, sf::String textureFile, sf::IntRect rect,
-           sf::Vector2f pos, float speed, int hp, Direction dir)
+           sf::Vector2f pos, float speed, int hp, Direction dir, std::string name)
         : Object(textureFile, rect, pos, speed, dir) {
             m_objects = mapObj.GetAllObjects("wall");
+            for (auto &i : mapObj.GetAllObjects("wall_player")) {
+                m_objects.push_back(i);
+            }
+            for (auto &i : mapObj.GetAllObjects("wall_enemy")) {
+                m_objects.push_back(i);
+            }
+            m_crash_enemy = false;
+            m_type = name;
+            m_hp = hp;
+            rect_texture = rect;
+            bef_coords = sf::Vector2f(pos.x, pos.y);
+            
+        }
+    std::string getName();
+    int getHp() const;
+    void setHp(int hp);
+          
+};
+
+class Brick : public Object {
+    private:
+     int m_hp;
+    public:
+     sf::IntRect rect_texture;
+     sf::Vector2f bef_coords;
+     Brick(Level& mapObj, sf::String textureFile, sf::IntRect rect,
+           sf::Vector2f pos, float speed, int hp, Direction dir)
+        : Object(textureFile, rect, pos, speed, dir) {
+            m_objects = mapObj.GetAllObjects("brick");
             m_hp = hp;
             rect_texture = rect;
             bef_coords = sf::Vector2f(pos.x, pos.y);
@@ -165,14 +198,13 @@ class Wall: public Object {
         }
     int getHp() const;
     void setHp(int hp);
-          
 };
 
 class Bullet : public Object {
 public:
     Bullet(Level& mapObj, sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
-           float speed, Direction dir, int life)
-        : Object(textureFile, rect, pos, speed, dir), m_life(life) {
+           float speed, Direction dir, int life, bool bot)
+        : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot) {
         m_objects = mapObj.GetAllObjects("solid");
         };
     void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls);
@@ -185,6 +217,7 @@ public:
     Direction getDir() const;
 private:
     int m_life;
+    int m_is_bot;
     // int m_damage;
 };
 
