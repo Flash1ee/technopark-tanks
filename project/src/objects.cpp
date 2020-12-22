@@ -3,6 +3,10 @@
 #include <random>
 #include <iostream>
 
+#define BLOCK_SIZE 16
+#define WALL_INIT 100
+#define WALL_DAMAGE 10
+
 Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
                float speed, Direction dir = Direction::UP)
     : coords(pos), rect(rect), dx(0), dy(0), speed(speed), dir(dir){
@@ -317,7 +321,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
     }
     for (auto &i : walls->base_player) {
         if (getRect().intersects(i->getRect())) {
-            i->setHp(i->getHp() - 100);
+            i->setHp(i->getHp() - WALL_DAMAGE);
             m_life = 0;
         }
     }
@@ -326,9 +330,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
         m_life = 0;
     }
 }
-#define BLOCK_SIZE 16
-#define WALL_INIT 100
-#define WALL_DAMAGE 25
+
 void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
     auto shift = BLOCK_SIZE * (WALL_DAMAGE / (double)WALL_INIT);
     for (auto &i : walls->walls) {
@@ -467,7 +469,7 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
     for (auto &i : walls->base_enemy) {
         if (getRect().intersects(i->getRect())) {
             if (p.getCount() <= 0) {
-                i->setHp(i->getHp() - 200);
+                i->setHp(i->getHp() - WALL_DAMAGE);
             }
             m_life = 0;
         }
@@ -879,3 +881,11 @@ int Brick::getHp() const {
 std::string Wall::getName() {
     return m_type;
 }
+int BasePlayer::getBulletsToDeath() {
+    return m_hp / 10;
+}
+int BaseEnemy::getBulletsToDeath() {
+    return m_hp / 10;
+}
+
+

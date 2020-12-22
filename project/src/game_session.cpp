@@ -158,7 +158,7 @@ int GameSession::Run() {
         sf::Vector2f base_enemy_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::shared_ptr<BaseEnemy> baseEnemy = std::make_shared<BaseEnemy>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_enemy_pos, 0,
-                200, Direction::UP);
+                100, Direction::UP);
         walls.base_enemy.push_back(baseEnemy);
     }
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
