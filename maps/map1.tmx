@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="316">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="326">
  <tileset firstgid="1" name="textures_sprites" tilewidth="16" tileheight="16" tilecount="400" columns="25">
   <image source="../resources/sprites.png" width="400" height="256"/>
  </tileset>
@@ -210,7 +210,7 @@
    <tile gid="73"/>
    <tile gid="95"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="22"/>
@@ -224,7 +224,7 @@
    <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="22"/>
    <tile gid="73"/>
@@ -235,7 +235,7 @@
    <tile gid="73"/>
    <tile gid="95"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="22"/>
@@ -249,7 +249,7 @@
    <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="22"/>
    <tile gid="73"/>
@@ -260,7 +260,7 @@
    <tile gid="73"/>
    <tile gid="95"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="22"/>
@@ -306,7 +306,7 @@
    <tile gid="73"/>
    <tile gid="199"/>
    <tile gid="199"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="95"/>
    <tile gid="23"/>
@@ -328,7 +328,7 @@
    <tile gid="73"/>
    <tile gid="22"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="199"/>
    <tile gid="199"/>
    <tile gid="73"/>
@@ -360,7 +360,7 @@
    <tile gid="73"/>
    <tile gid="94"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="73"/>
@@ -385,7 +385,7 @@
    <tile gid="73"/>
    <tile gid="94"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="73"/>
    <tile gid="73"/>
@@ -410,7 +410,7 @@
    <tile gid="73"/>
    <tile gid="94"/>
    <tile gid="73"/>
-   <tile gid="68"/>
+   <tile gid="22"/>
    <tile gid="73"/>
    <tile gid="22"/>
    <tile gid="22"/>
@@ -797,10 +797,15 @@
   <object id="307" name="solid" x="208" y="192" width="32" height="16"/>
   <object id="308" name="solid" x="176" y="208" width="48" height="16"/>
   <object id="309" name="solid" x="176" y="176" width="48" height="16"/>
-  <object id="311" name="solid" x="368" y="192" width="16" height="16"/>
-  <object id="312" name="solid" x="16" y="192" width="16" height="16"/>
-  <object id="313" name="solid" x="80" y="224" width="16" height="48"/>
-  <object id="314" name="solid" x="80" y="128" width="16" height="48"/>
-  <object id="315" name="solid" x="304" y="128" width="16" height="32"/>
+  <object id="316" name="grase" gid="68" x="368" y="208" width="16" height="16"/>
+  <object id="317" name="grass" gid="68" x="304" y="160" width="16" height="16"/>
+  <object id="318" name="grass" gid="68" x="304" y="144" width="16" height="16"/>
+  <object id="319" name="grass" gid="68" x="16" y="208" width="16" height="16"/>
+  <object id="320" name="grass" gid="68" x="80" y="272" width="16" height="16"/>
+  <object id="321" name="grass" gid="68" x="80" y="256" width="16" height="16"/>
+  <object id="322" name="grass" gid="68" x="80" y="240" width="16" height="16"/>
+  <object id="323" name="grass" gid="68" x="80" y="144" width="16" height="16"/>
+  <object id="324" name="grass" gid="68" x="80" y="160" width="16" height="16"/>
+  <object id="325" name="grass" gid="68" x="80" y="176" width="16" height="16"/>
  </objectgroup>
 </map>

@@ -21,7 +21,9 @@
 #define BACKGROUND1_PATH "../resources/background1.jpg"
 #define MUSIC_PATH "../resources/menu_music.ogg"
 #define PAUSE_MUSIC_PATH "../resources/pause_music.ogg"
+#define MORTAL_PATH "../resources/mortal.ogg"
 #define WASTED "../resources/wasted1.png"
+#define WIN "../resources/victory.png"
 
 
 enum class MenuSelector {

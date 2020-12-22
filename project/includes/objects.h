@@ -17,6 +17,8 @@
 #define BRICK_SOUND "../sounds/brick.ogg"
 #define KILL_SOUND "../sounds/explosion.ogg"
 #define WASTED_SOUND "../sounds/wasted.ogg"
+#define FINISH_SOUND "../sounds/finish.ogg"
+#define WIN_SOUND "../sounds/win.ogg"
 
 
 enum class SoundType {
@@ -26,12 +28,14 @@ enum class SoundType {
 };
 
 class Wall;
+class Object;
 class Brick;
 class BasePlayer;
 class BaseEnemy;
 
 struct DestructibleWalls {
     std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<std::shared_ptr<Object>> grass;
     std::vector<std::shared_ptr<Brick>> bricks;
     std::vector<std::shared_ptr<BasePlayer>> base_player;
     std::vector<std::shared_ptr<BaseEnemy>> base_enemy;
@@ -46,6 +50,8 @@ typedef enum {
     GAME_START,
     SPAWN,
     WASTED_S,
+    FINISH,
+    WIN_S,
     COUNT
 } sound_action;
 class Sound {
@@ -76,6 +82,12 @@ class Sound {
 
     sf::SoundBuffer wasted;
     sf::Sound wasted_sound;
+
+    sf::SoundBuffer finish;
+    sf::Sound finish_sound;
+
+    sf::SoundBuffer win;
+    sf::Sound win_sound;
     public:
     void play(sound_action action);
     // void play();
@@ -130,6 +142,7 @@ public:
     }
     int getHp() const;
     void setHp(int hp);
+    int getBulletsToDeath();
 
 };
 
@@ -144,6 +157,8 @@ public:
     }
     int getHp() const;
     void setHp(int hp);
+    int getBulletsToDeath();
+
 
 };
 
@@ -248,7 +263,7 @@ class Player : public Tank {  //класс игрока
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(7) {}
+        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(1) {}
     void checkCollisionsBots(std::vector<Bots*> b);
     int getCount() const;
     void setCount(int count);

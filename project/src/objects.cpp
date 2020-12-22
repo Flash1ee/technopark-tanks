@@ -3,6 +3,10 @@
 #include <random>
 #include <iostream>
 
+#define BLOCK_SIZE 16
+#define WALL_INIT 100
+#define WALL_DAMAGE 10
+
 Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
                float speed, Direction dir = Direction::UP)
     : coords(pos), rect(rect), dx(0), dy(0), speed(speed), dir(dir){
@@ -317,7 +321,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
     }
     for (auto &i : walls->base_player) {
         if (getRect().intersects(i->getRect())) {
-            i->setHp(i->getHp() - 100);
+            i->setHp(i->getHp() - WALL_DAMAGE);
             m_life = 0;
         }
     }
@@ -326,9 +330,7 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
         m_life = 0;
     }
 }
-#define BLOCK_SIZE 16
-#define WALL_INIT 100
-#define WALL_DAMAGE 25
+
 void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
     auto shift = BLOCK_SIZE * (WALL_DAMAGE / (double)WALL_INIT);
     for (auto &i : walls->walls) {
@@ -467,7 +469,7 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
     for (auto &i : walls->base_enemy) {
         if (getRect().intersects(i->getRect())) {
             if (p.getCount() <= 0) {
-                i->setHp(i->getHp() - 200);
+                i->setHp(i->getHp() - WALL_DAMAGE);
             }
             m_life = 0;
         }
@@ -533,7 +535,7 @@ int Object::comparisonPos(Player &p, std::vector<Bots*> b) {
 }
 
 int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
-    std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
+    // std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
     for (int i = 0; i < b.size(); i++) {
 
         if (abs(walls->base_player[0]->coords.y - b[i]->coords.y) < 10) {
@@ -804,6 +806,12 @@ Sound::Sound() {
 
     wasted.loadFromFile(WASTED_SOUND);
     wasted_sound.setBuffer(wasted);
+
+    finish.loadFromFile(FINISH_SOUND);
+    finish_sound.setBuffer(finish);
+
+    win.loadFromFile(WIN_SOUND);
+    win_sound.setBuffer(win);
 }
 void Sound::play(sound_action action) {
     switch(action) {
@@ -846,6 +854,16 @@ void Sound::play(sound_action action) {
                 this->wasted_sound.play();
             }
             break;
+        case FINISH:
+            if (this->finish_sound.getStatus() != sf::Sound::Playing) {
+                this->finish_sound.play();
+            }
+            break;
+        case WIN_S:
+            if (this->win_sound.getStatus() != sf::Sound::Playing) {
+                this->win_sound.play();
+            }
+            break;
     }
 }
 bool Sound::MainSoundStopped() {
@@ -863,3 +881,11 @@ int Brick::getHp() const {
 std::string Wall::getName() {
     return m_type;
 }
+int BasePlayer::getBulletsToDeath() {
+    return m_hp / 10;
+}
+int BaseEnemy::getBulletsToDeath() {
+    return m_hp / 10;
+}
+
+
