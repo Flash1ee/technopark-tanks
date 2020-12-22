@@ -117,6 +117,8 @@ int GameSession::Run() {
         walls_objs.push_back(i);
     }
 
+    bool wictory = false;
+
     std::vector<MapObject> brick_objs = m_level.GetAllObjects("brick");
     std::vector<MapObject> player_obj = m_level.GetAllObjects("player_base");
     std::vector<MapObject> enemy_obj = m_level.GetAllObjects("enemy_base");
@@ -213,7 +215,7 @@ int GameSession::Run() {
         time /= 800;      //скорость игры
 
 
-        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 4) {
+        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 4 && !wictory) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
@@ -621,6 +623,7 @@ int GameSession::Run() {
                     for (int i = 0; i < all_bots.size(); i++) {
                         all_bots[i]->setHp(0);
                     }
+                    wictory = true;
                 }
             }
             m_window.display();

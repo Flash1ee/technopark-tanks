@@ -535,7 +535,7 @@ int Object::comparisonPos(Player &p, std::vector<Bots*> b) {
 }
 
 int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
-    std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
+    // std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
     for (int i = 0; i < b.size(); i++) {
 
         if (abs(walls->base_player[0]->coords.y - b[i]->coords.y) < 10) {
@@ -810,8 +810,8 @@ Sound::Sound() {
     finish.loadFromFile(FINISH_SOUND);
     finish_sound.setBuffer(finish);
 
-    finish.loadFromFile(WIN_SOUND);
-    finish_sound.setBuffer(win);
+    win.loadFromFile(WIN_SOUND);
+    win_sound.setBuffer(win);
 }
 void Sound::play(sound_action action) {
     switch(action) {
