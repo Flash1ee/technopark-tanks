@@ -49,10 +49,12 @@ bool Client::connectToServer()
     return true;
 }
 
-Client::~Client()
-{
-    m_socket->disconnect();
-    std::cout << "Client disconnected" << std::endl;
+Client::~Client() {
+//    m_socket->disconnect();
+//    if (m_socket != nullptr) {
+//        delete m_socket;
+//    }
+//    std::cout << "Client disconnected" << std::endl;
 }
 
 void Client::RunClient()
