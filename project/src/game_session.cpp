@@ -327,7 +327,9 @@ int GameSession::Run() {
                     sf::Packet packet;
                     PlayerAction action = {m_game_client.m_id, new_pos, dir,
                                            PlayerActionType::UpdatePlayer};
-
+                    std::cout << "CUR POS " << this_player->getPos().x <<  this_player->getPos().y << std::endl;
+                    std::cout << "OLD POS " << old_pos.x <<  old_pos.y << std::endl;
+                    std::cout << "NEW POS " << new_pos.x << new_pos.y << std::endl;
                     action_vector.actions.push_back(action);
                     old_pos = new_pos;
                 }
@@ -360,8 +362,9 @@ int GameSession::Run() {
 
                 m_game_client.RecieveFromServer(packet);
 
-                if (packet.getDataSize() > 0) {
-                    packet >> others_actions;
+                packet >> others_actions;
+
+                if (others_actions.actions.size() > 0) {
 
                     for (auto& action : others_actions.actions) {
                         switch (action.msg_type) {
@@ -383,14 +386,17 @@ int GameSession::Run() {
                                           << std::endl;
                                 int id = action.player_id;
                                 sf::Vector2f new_pos = action.position;
+                                std::cout << "GET POS " << new_pos.x << " " << new_pos.y << std::endl;
                                 players[id]->setPos(new_pos);
+                                Direction new_dir = action.direction;
+                                players[id]->setDir(new_dir);   
                             } break;
 
                             case PlayerActionType::NewBullet: {
                                 std::cout << "Other player shooted"
                                           << std::endl;
-                                sf::Vector2f pos = action.position;
-                                Direction dir = action.direction;
+                                sf::Vector2f pos = action.position;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+                                Direction dir = action.direction;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
                                 std::shared_ptr<Bullet> new_b(new Bullet(m_level,
                                     OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(321, 100, 8, 8),
                                     pos, 0.5, dir, 1, false));
