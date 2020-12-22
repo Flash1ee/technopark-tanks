@@ -16,7 +16,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
                          std::string server_ip, int server_port)
     :
-      m_window(sf::VideoMode(1920, 1080), window_title),
+      m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen),
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player1");
@@ -591,7 +591,7 @@ int GameSession::Run() {
                 m_window.draw(m_left_bots);
             } else {
                 std::ostringstream bots_hp;
-                bots_hp << walls.base_enemy[0]->getHp() << " HP";
+                bots_hp << walls.base_enemy[0]->getBulletsToDeath() << " HP";
                 bots_base_hp.setString(bots_hp.str());
                 bots_base_hp.setPosition(walls.base_player[0]->coords.x - 6, 0);
                 bots_base_hp.setCharacterSize(15);

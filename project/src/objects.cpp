@@ -810,8 +810,8 @@ Sound::Sound() {
     finish.loadFromFile(FINISH_SOUND);
     finish_sound.setBuffer(finish);
 
-    finish.loadFromFile(WIN_SOUND);
-    finish_sound.setBuffer(win);
+    win.loadFromFile(WIN_SOUND);
+    win_sound.setBuffer(win);
 }
 void Sound::play(sound_action action) {
     switch(action) {
