@@ -352,9 +352,7 @@ int GameSession::Run() {
                 packet << action_vector;
                 m_game_client.SendToServer(packet);
                 std::cout << "I send all my action to server" << std::endl;
-            } else
-                std::cout << "Nothing to send right now" << std::endl;
-
+            } 
             {  // getting info from server and applying it to current session
                 PlayerActionVector others_actions;
 
@@ -414,8 +412,6 @@ int GameSession::Run() {
                         }
                     }
 
-                } else {
-                    std::cout << "Nothing to apply right now" << std::endl;
                 }
             }
         }
