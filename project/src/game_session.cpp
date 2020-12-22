@@ -569,7 +569,7 @@ int GameSession::Run() {
                 }
                 m_dead.setPosition(m_window.getView().getCenter().x - 90, m_window.getView().getCenter().y - 26);
                 m_window.draw(m_dead);
-            } else {
+            } else if (walls.base_enemy[0]->getHp() > 0){
             stats.update(m_window, this_player->getHp(), 
                         main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
             }
