@@ -13,7 +13,8 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
     this->texture.loadFromImage(this->image);
     this->sprite.setTexture(this->texture);
 
-    this->sprite.setOrigin(static_cast<double>(rect.width) / 2, static_cast<double>(rect.height) / 2);
+    this->sprite.setOrigin(static_cast<double>(rect.width) / 2, 
+                           static_cast<double>(rect.height) / 2);
     this->sprite.setTextureRect(rect);
     setPos();
 }
@@ -85,110 +86,83 @@ void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
     setPos();
 }
 
-void Object::make_rotation(sf::Sprite& sprite, Direction& dir)
-{
-    switch (dir)
-    {
-    case Direction::UP:
-        {
-            sprite.setRotation(0);
-        }
-        break;
-    case Direction::DOWN:
-        {
-            sprite.setRotation(180);
-        }
-        break;
-    case Direction::RIGHT:
-        {
-            sprite.setRotation(90);
-        }
-        break;
-    case Direction::LEFT:
-        {
-            sprite.setRotation(-90);
-        }
-        break;
-    
-    default:
-        break;
+void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls* walls) {
+    switch (dir) {
+        case Direction::RIGHT:
+            this->sprite.setRotation(90);
+            dx = speed;
+            dy = 0;
+            break;
+        case Direction::LEFT:
+            this->sprite.setRotation(-90);
+            dx = -speed;
+            dy = 0;
+            break;
+        case Direction::DOWN:
+            this->sprite.setRotation(180);
+            dx = 0;
+            dy = speed;
+            break;
+        case Direction::UP:
+            this->sprite.setRotation(0);
+            dx = 0;
+            dy = -speed;
+            break;
     }
+
+    this->checkCollisionsObject(time, p, b, walls);
+    this->checkCollisionsObject(walls, p);
+    if (m_life == 1) {
+        coords.x += dx * time;
+        coords.y += dy * time;
+    }
+    setPos();
 }
-
-// void Bullet::move(float time) {
-//     make_rotation(this->sprite, this->dir);
-//     switch (dir) {
-//         case Direction::RIGHT:
-//             dx = speed;
-//             dy = 0;
-//             break;
-//         case Direction::LEFT:
-//             dx = -speed;
-//             dy = 0;
-//             break;
-//         case Direction::DOWN:
-//             dx = 0;
-//             dy = speed;
-//             break;
-//         case Direction::UP:
-//             dx = 0;
-//             dy = -speed;
-//             break;
-//     }
-
-//     this->checkCollisionsObject(time, p, b, walls);
-//     this->checkCollisionsObject(walls, p);
-//     if (m_life == 1) {
-//         coords.x += dx * time;
-//         coords.y += dy * time;
-//     }
-//     setPos();
-// }
 sf::Sprite &Object::getSprite() { return this->sprite; }
 
-Direction Object::getDir() const { return this->dir; }
-
-void Tank::setDir(Direction dir)
-{
+void Object::setDir(Direction dir) {
     this->dir = dir;
-    make_rotation(this->sprite, this->dir);
 }
 
-// int Tank::makeAction(float time) {
-//     make_rotation(this->sprite, this->dir);
-//     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-//         this->shot = true;
-//     }
-//     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-//         this->dir = Direction::UP;
-//         this->move(time, walls);
-//         return 0;
-//     }
-//     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-//         this->dir = Direction::LEFT;
-//         this->move(time, walls);
-//         return 0;
-//     }
-//     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-//         this->dir = Direction::RIGHT;
-//         this->move(time, walls);
-//         return 0;
-//     }
-//     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-//         this->dir = Direction::DOWN;
-//         this->move(time, walls);
-//         return 0;
-//     }
-    
-//     return -1;
-// }
+Direction Tank::getDir() const { return this->dir; }
+Direction Bullet::getDir() const {
+    return this->dir;
+}
+
+int Tank::makeAction(float time, DestructibleWalls* walls) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        this->sprite.setRotation(0);
+        this->dir = Direction::UP;
+        this->move(time, walls);
+        return 0;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        this->sprite.setRotation(-90);
+        this->dir = Direction::LEFT;
+        this->move(time, walls);
+        return 0;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        this->sprite.setRotation(90);
+        this->dir = Direction::RIGHT;
+        this->move(time, walls);
+        return 0;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        this->sprite.setRotation(180);
+        this->dir = Direction::DOWN;
+        this->move(time, walls);
+        return 0;
+    }
+    return -1;
+}
 
 sf::Vector2f Object::getPos() const { return this->coords; }
 
-void Object::setPos(const sf::Vector2f &new_pos) 
-{
+void Object::setPos(const sf::Vector2f &new_pos) {
     this->coords = new_pos;
-    this->sprite.setPosition(coords.x + (rect.width / 2), coords.y + (rect.height / 2));
+    this->sprite.setPosition(coords.x + rect.width / 2,
+                             coords.y + rect.height / 2);
 }
 void Object::setPos() { setPos(this->coords); }
 void Tank::setShot(bool shot) {
@@ -518,30 +492,30 @@ int Bullet::getLife() const {
     return this->m_life;
 }
 
-// void Player::checkCollisionsBot(std::vector<std::shared_ptr<Bot>> b) {
-//     for (auto &i : m_objects) {
-//         for (auto &it : b) {
-//             if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(it->getRect())) {
-//                 if (dy > 0) {
-//                     coords.y = it->getPos().y - rect.height;
-//                     this->dy = 0;
-//                 }
-//                 if (dy < 0) {
-//                     coords.y = it->getPos().y + rect.height;
-//                     this->dy = 0;
-//                 }
-//                 if (dx > 0) {
-//                     coords.x = it->getPos().x - rect.width;
-//                     this->dx = 0;
-//                 }
-//                 if (dx < 0) {
-//                     coords.x = it->getPos().x + rect.width;
-//                     this->dx = 0;
-//                 }
-//             }
-//         }
-//     }
-// }
+void Player::checkCollisionsBots(std::vector<Bots*> b) {
+    for (auto &i : m_objects) {
+        for (auto &it : b) {
+            if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(it->getRect())) {
+                if (dy > 0) {
+                    coords.y = it->getPos().y - rect.height;
+                    this->dy = 0;
+                }
+                if (dy < 0) {
+                    coords.y = it->getPos().y + rect.height;
+                    this->dy = 0;
+                }
+                if (dx > 0) {
+                    coords.x = it->getPos().x - rect.width;
+                    this->dx = 0;
+                }
+                if (dx < 0) {
+                    coords.x = it->getPos().x + rect.width;
+                    this->dx = 0;
+                }
+            }
+        }
+    }
+}
 sf::IntRect Object::getRect() {
     return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }
@@ -705,59 +679,59 @@ void Bots::checkCollisionsWalls(float x_old, float y_old, float x, float y,
 
 }
 
-// void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
-//                               Player &p, std::vector<std::shared_ptr<Bots>> b) {
-//     std::random_device rd;
-//     std::uniform_int_distribution<int> uid(0, 3);
-//     for (auto &i : m_objects) {
-//         for (auto &it : b) {
-//             if ((getRect().intersects(static_cast<sf::IntRect>(i.rect)) &&
-//                 i.name == "solid") || (getRect().intersects(it->getRect())) && (getRect()) != it->getRect()) {
-//                 if (dy > 0) {
-//                     coords.y = y_old;
-//                     this->dy = 0;
-//                     dir = static_cast<Direction>(uid(rd));
-//                 }
-//                 if (dy < 0) {
-//                     coords.y = y_old;
-//                     this->dy = 0;
-//                     dir = static_cast<Direction>(uid(rd));
-//                 }
-//                 if (dx > 0) {
-//                     coords.x = x_old;
-//                     this->dx = 0;
-//                     dir = static_cast<Direction>(uid(rd));
-//                 }
-//                 if (dx < 0) {
-//                     coords.x = x_old;
-//                     this->dx = 0;
-//                     dir = static_cast<Direction>(uid(rd));
-//                 }
-//             } else if (getRect().intersects(static_cast<sf::IntRect>(p.getRect()))) {
-//                 if (dy > 0) {
-//                     coords.y = p.getPos().y - rect.height;
-//                     this->dy = 0;
-//                     dir = static_cast<Direction>(uid(rd));
-//                 }
-//                 if (dy < 0) {
-//                     coords.y = p.getPos().y + rect.height;
-//                     this->dy = 0;
-//                     dir = static_cast<Direction>(uid(rd));
-//                 }
-//                 if (dx > 0) {
-//                     coords.x = p.getPos().x - rect.width;
-//                     this->dx = 0;
-//                     dir = static_cast<Direction>(uid(rd));
-//                 }
-//                 if (dx < 0) {
-//                     coords.x = p.getPos().x + rect.width;
-//                     this->dx = 0;
-//                     dir = static_cast<Direction>(uid(rd));
-//                 }
-//             }
-//         }
-//     }
-// }
+void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
+                              Player &p, std::vector<Bots*> b) {
+    std::random_device rd;
+    std::uniform_int_distribution<int> uid(0, 3);
+    for (auto &i : m_objects) {
+        for (auto &it : b) {
+            if ((getRect().intersects(static_cast<sf::IntRect>(i.rect)) &&
+                i.name == "solid") || (getRect().intersects(it->getRect())) && (getRect()) != it->getRect()) {
+                if (dy > 0) {
+                    coords.y = y_old;
+                    this->dy = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dy < 0) {
+                    coords.y = y_old;
+                    this->dy = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dx > 0) {
+                    coords.x = x_old;
+                    this->dx = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dx < 0) {
+                    coords.x = x_old;
+                    this->dx = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+            } else if (getRect().intersects(static_cast<sf::IntRect>(p.getRect()))) {
+                if (dy > 0) {
+                    coords.y = p.getPos().y - rect.height;
+                    this->dy = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dy < 0) {
+                    coords.y = p.getPos().y + rect.height;
+                    this->dy = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dx > 0) {
+                    coords.x = p.getPos().x - rect.width;
+                    this->dx = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+                if (dx < 0) {
+                    coords.x = p.getPos().x + rect.width;
+                    this->dx = 0;
+                    dir = static_cast<Direction>(uid(rd));
+                }
+            }
+        }
+    }
+}
 
 void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<std::shared_ptr<Bullet>> all_bullets) {
     switch (dir) {

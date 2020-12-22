@@ -104,11 +104,7 @@ class Object {
 
 
     sf::Sprite& getSprite();
-    float getX() const;
-    float getY() const;
-    Direction getDir() const;
     sf::IntRect getRect();
-    void make_rotation(sf::Sprite& sprite, Direction& dir);
     int comparisonPos(Player &p, std::vector<Bots*> b);
 
 
@@ -238,7 +234,6 @@ class Tank : public Object {  //класс любого танка
 
    public:
     virtual void checkCollisionsMap(float x_old, float y_old, float x, float y);
-    void setDir(Direction dir);
     virtual void checkCollisionsWall(float x_old, float y_old, float x, float y, DestructibleWalls* walls);
 
     virtual void move(float time, DestructibleWalls* walls);
@@ -269,7 +264,6 @@ public:
             : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {
                 m_objects = mapObj.GetAllObjects();
             }
-
     void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
                                 std::vector<Bots*> b);
     void move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls,

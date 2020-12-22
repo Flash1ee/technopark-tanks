@@ -37,39 +37,10 @@ enum GameActionType { WaitingForPlayers = 0, GameBegin, GameEnd };
 sf::Packet& operator<<(sf::Packet& packet, const GameActionType& msg_type);
 sf::Packet& operator>>(sf::Packet& packet, GameActionType& msg_type);
 
-class PlayerActionVector
-{
-public:
-
-    PlayerActionVector()
-    {
-    }
-    ~PlayerActionVector()
-    {
-        actions.clear();
-    }
-
-    void push(const PlayerAction& action)
-    {
-        actions.push_back(action);
-    }
-
-    PlayerAction pop()
-    {
-        auto action = actions.back();
-        actions.pop_back();
-        return action;
-    }
-
-    int get_size() const
-    {
-        return actions.size();
-    }
-
-    friend sf::Packet& operator << (sf::Packet& packet, const PlayerActionVector& msg_vec);
-    friend sf::Packet& operator >> (sf::Packet& packet, PlayerActionVector& msg_vec);
-
-private:
+struct PlayerActionVector {
+    int size;
     std::vector<PlayerAction> actions;
 };
 
+sf::Packet& operator<<(sf::Packet& packet, const PlayerActionVector& msg_vec);
+sf::Packet& operator>>(sf::Packet& packet, PlayerActionVector& msg_vec);

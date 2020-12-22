@@ -8,61 +8,44 @@
 
 #include "client_server_config.h"
 #include "server.h"
-#include "messages.hpp"
-
-enum class ClientStatus
-{
-    Connected = 0,
-    ReadyToPlay,
-    InGame,
-    Disconnected,
-};
-
-struct client_data
-{
-public:
-
-    client_data()
-    {
-        socket = std::make_shared<sf::TcpSocket>();
-    }
-    ~client_data() {}
-
-    std::shared_ptr<sf::TcpSocket> socket;
-    ClientStatus status;
-};
 
 
 Server::Server(int port) {
+    std::cout << "Server Running" << std::endl;
+    // m_listener.getLocalPort();
     if (m_listener.listen(port) != sf::Socket::Done) {
         throw std::runtime_error(std::strerror(errno));
     }
     m_listener.setBlocking(false);
-
-    std::cout << "Server Running" << std::endl;
+    // m_selector.add(m_listener);
 }
 
 Server::~Server() {
     m_listener.close();
     m_selector.clear();
-
     std::cout << "Server stop" << std::endl;
 }
 
-bool Server::add_new_client() {
+bool Server::addNewClient() {
     client_data curr_client;
+    // curr_client.socket->setBlocking(false);
 
     if (m_listener.accept(*curr_client.socket) == sf::Socket::Done) {
         std::cout << "Accepted\n";
-        int id = this->get_new_id();
+        int id = m_clients.size();
         curr_client.status = ClientStatus::Connected;
 
-        std::cout << "New connection with id = " << id << "accepted" << std::endl;
+        std::cout << "New connection with id = " << id << "accepted"
+                  << std::endl;
 
-        PlayerAction msg_to_player;
+        PlayerAction
+            msg_to_player;  //= {curr_client.id, sf::Vector2f{100.0 *
+                            //(curr_client.id + 1), (100.0 * curr_client.id +
+                            //1)}, PlayerActionType::NewPlayer};
 
         msg_to_player.player_id = id;
-        msg_to_player.position = sf::Vector2f {50.0 * (id + 1), (50.0 * (id + 1))};
+        msg_to_player.position =
+            sf::Vector2f{100.0 * (id + 1), (100.0 * (id + 1))};
         msg_to_player.msg_type = PlayerActionType::NewPlayer;
 
         sf::Packet packet;
@@ -74,8 +57,7 @@ bool Server::add_new_client() {
         } else {
             std::cout << "ID sent to user" << std::endl;
         }
-        
-        curr_client.socket->setBlocking(false);
+
         m_selector.add(*curr_client.socket);
         m_clients.insert(std::make_pair(id, curr_client));
     }
@@ -83,85 +65,99 @@ bool Server::add_new_client() {
     return true;
 }
 
-bool Server::send_to_all(const sf::Packet& packet, int exclude_id = -1)
-{
-    for(auto& curr_client : m_clients)
-    {
-        if(curr_client.first == exclude_id)
-        {
-            std::cout << "Dont send message to its owner" << std::endl;
-            continue;
+bool Server::sendToAll(sf::Packet& packet, int exclude_id = -1) {
+    for (auto& curr_client : m_clients) {
+        if (curr_client.first == exclude_id) continue;
+
+        while (curr_client.second.socket->send(packet) == sf::Socket::Partial) {
         }
-        sf::Packet tmp_packet = packet;
-        while(curr_client.second.socket->send(tmp_packet) == sf::Socket::Partial) {}
+        // {
+        //     std::cout << "Error while sending data to all users" <<
+        //     std::endl; return false;
+        // }
     }
 
     return true;
 }
 
-bool Server::recieve_from_client(sf::Packet& packet) { }
+bool Server::recieveFromClient(sf::Packet& packet) {
+    // for(auto& curr_client : m_clients)
+    // {
+    //     if (m_selector.isReady(*curr_client.second.socket))
+    //     {
+    //         if (curr_client.second.socket->receive(packet) ==
+    //         sf::Socket::Done)
+    //         {
+    //             std::string text;
+    //             packet >> text;
+    //             std::cout << "Recieved data. Text = " << text << std::endl;
+
+    //         }
+    //     }
+    // }
+
+    // return true;
+}
 
 bool Server::runGame() {
-
     GameActionType msg = GameActionType::GameBegin;
     sf::Packet packet;
     packet << msg;
 
-    send_to_all(packet);
+    sendToAll(packet);
 
-    while (true)
-    {
-        if(m_selector.wait())
-        {
-            for(auto& curr_client : m_clients)
-            {
-                if (m_selector.isReady(*curr_client.second.socket))
-                {
-                    while (curr_client.second.socket->receive(packet) != sf::Socket::Done) {}
-
-                    send_to_all(packet, curr_client.first);
-                    std::cout << "SEND ACTION TO ALL PLAYERS" << std::endl;
-
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::cout << "game in progress..." << std::endl;
+        for (auto& curr_client : m_clients) {
+            if (m_selector.isReady(*curr_client.second.socket)) {
+                std::cout << "some player made action" << std::endl;
+                while (curr_client.second.socket->receive(packet) !=
+                       sf::Socket::Done) {
                 }
+
+                sendToAll(packet, curr_client.first);
             }
         }
-        
     }
 }
 
 bool Server::waitPlayersConnection() {
     while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        std::cout << "waiting players..." << std::endl;
 
-        //std::this_thread::sleep_for(std::chrono::seconds(3));
-        //std::cout << "waiting players..." << std::endl;
+        addNewClient();
 
-        add_new_client();
+        // if (m_selector.wait())
+        //{
+        //     if (m_selector.isReady(m_listener))
+        //     {
+        //         std::cout << "ready to accept connection" << std::endl;
+        //         addNewClient();
+        //     }
+        //     else // Server will ignore messages from clients on this step.
+        //     {
+        //         std::cout << "ready to get data" << std::endl;
+        //         sf::Packet packet;
+        //         int id;
+        //         recieveFromClient(packet, id);
+        //     }
+        // }
 
-        if (m_clients.size() == m_players_count) {
+        if (m_clients.size() == 2) {
             std::cout << "Ready to start game" << std::endl;
             return true;
         }
     }
 
+    // return true;
 }
 
-int Server::get_new_id() const
-{
-    int max_id;
-    if(m_clients.size() == 0)
-    {
-        max_id = 0;
-    }
-    else
-    {
-        max_id = m_clients.rbegin()->first;
-    }
-    
-    return max_id + 1;
-}
+std::unique_ptr<Server> server_ptr;
 
 int main() {
-    std::unique_ptr<Server> server_ptr(new Server(PORT));
+    server_ptr.reset(new Server(PORT));
 
     server_ptr->waitPlayersConnection();
     server_ptr->runGame();
