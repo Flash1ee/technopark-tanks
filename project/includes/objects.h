@@ -137,6 +137,7 @@ public:
     }
     int getHp() const;
     void setHp(int hp);
+    int getBulletsToDeath();
 
 };
 
@@ -151,6 +152,8 @@ public:
     }
     int getHp() const;
     void setHp(int hp);
+    int getBulletsToDeath();
+
 
 };
 
