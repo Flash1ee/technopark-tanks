@@ -807,6 +807,9 @@ Sound::Sound() {
 
     finish.loadFromFile(FINISH_SOUND);
     finish_sound.setBuffer(finish);
+
+    finish.loadFromFile(WIN_SOUND);
+    finish_sound.setBuffer(win);
 }
 void Sound::play(sound_action action) {
     switch(action) {
@@ -852,6 +855,11 @@ void Sound::play(sound_action action) {
         case FINISH:
             if (this->finish_sound.getStatus() != sf::Sound::Playing) {
                 this->finish_sound.play();
+            }
+            break;
+        case WIN_S:
+            if (this->win_sound.getStatus() != sf::Sound::Playing) {
+                this->win_sound.play();
             }
             break;
     }

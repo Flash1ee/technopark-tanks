@@ -27,6 +27,8 @@ class GameSession {
     sf::Texture win;
     sf::Sprite m_win;
     sf::Text bots_left;
+    sf::Text bots_base_hp;
+    sf::Text player_base_hp;
     sf::Text m_left_bots;
     sf::Font font;  
     sf::Music finish;
