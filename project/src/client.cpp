@@ -15,36 +15,37 @@ Client::Client(std::string str_ip, int port) {
     Client(sf::IpAddress(str_ip), port);
 }
 
-sf::Vector2f Client::connectToServer(std::string server_ip, int server_port) {
-    m_ip_adress = server_ip;
-    m_port = server_port;
+bool Client::connectToServer() {
+   m_socket = std::make_shared<sf::TcpSocket>();
 
-    m_socket = new sf::TcpSocket;
-    PlayerAction new_player_msg;
-
-    if (m_socket->connect(m_ip_adress, m_port) == sf::Socket::Done) {
+    if (m_socket->connect(m_ip_adress, m_port) == sf::Socket::Done)
+    {
         std::cout << "connected!" << std::endl;
         m_socket->setBlocking(false);
-        sf::Packet packet;
+        // sf::Packet packet;
 
-        while (m_socket->receive(packet) != sf::Socket::Done) {
-        }
-        if (packet.getDataSize() > 0) {
-            packet >> new_player_msg;
-            m_id = new_player_msg.player_id;
+        // while (m_socket->receive(packet) != sf::Socket::Done) { }
+        // if (packet.getDataSize() > 0)
+        // {
+        //     PlayerAction new_player_msg;
+        //     packet >> new_player_msg;
+        //     m_user_id = new_player_msg.player_id;
 
-            std::cout << "My ID is " << m_id << std::endl;
-        } else {
-            std::cout << "Cant get my ID" << std::endl;
-            throw std::runtime_error("Can't get user ID\n");
-        }
+        //     std::cout << "My ID is " << m_id << std::endl;
+        // }
+        // else
+        // {
+        //     throw std::runtime_error("Can't get user ID\n");
+        // }
 
-    } else {
-        std::cout << "can not connect!" << std::endl;
+    }
+    else 
+    {
         throw std::runtime_error("Can't connect to server\n");
     }
 
-    return new_player_msg.position;
+    return true;
+
 }
 
 Client::~Client() {

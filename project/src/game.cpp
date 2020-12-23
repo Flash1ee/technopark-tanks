@@ -18,8 +18,8 @@ int main(int argc, char* argv[]) {
         std::string player_skin(OBJECT_IMAGE);
         std::string map_skin(MAP_ONE);
         // std::string server_ip = sf::IpAddress::getLocalAddress().toString();
-        std::string server_ip = "25.59.142.74";
-        sf::RenderWindow window(sf::VideoMode(1920, 1080), std::string("Tanks"), sf::Style::Fullscreen);
+        std::string server_ip = "25.63.213.59";
+        sf::RenderWindow window(sf::VideoMode(1920, 1080), std::string("Tanks"));
 
         // GameSession game_session(window_title, map_skin, player_skin, true,
         // server_ip, PORT);

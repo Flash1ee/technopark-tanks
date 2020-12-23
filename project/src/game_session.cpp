@@ -20,28 +20,9 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player1");
-    
 
     sf::FloatRect p_pos = player.rect;
-    m_player_pos = {p_pos.left + p_pos.width / 2, p_pos.top - p_pos.width / 2};
-    if (m_is_multiplayer) {
-        m_player_pos = m_game_client.connectToServer(server_ip, server_port);
 
-        // sf::Packet packet;
-
-        // if(m_game_client.RecieveFromServer(packet))
-        // {
-        //     int id;
-        //     packet >> id;
-
-        //     std::cout << "Client id on server = " << id << std::endl;
-        // }
-        // else
-        // {
-        //     std::cout << "cannot get client id from server" << std::endl;
-        //     exit(-1);
-        // }
-    }
     if (!this->font.loadFromFile(FONT)) {
         throw std::exception();
     };
@@ -95,17 +76,37 @@ void GameSession::WaitForOtherPlayers() {
 }
 
 int GameSession::Run() {
-    if (m_is_multiplayer) {
-        WaitForOtherPlayers();
-        // RunOnlineGame()
-    }
-    // else
-    // {
-    //     RunOfflineGame();
-    // }
+    sf::Vector2f this_player_pos;
 
-    // TmxObject Player_obj = m_level.GetFirstObject("player"); //TODO: make
-    // const name
+    if (m_is_multiplayer) {
+        if(m_game_client.connectToServer())
+        {
+            sf::Packet packet;
+            PlayerAction new_player_msg;
+            
+            while (m_game_client.m_socket->receive(packet) != sf::Socket::Done) { }
+
+            //if(m_game_client.RecieveFromServer(packet))
+            if(packet.getDataSize() > 0)
+            {
+                packet >> new_player_msg;
+                m_user_id = new_player_msg.player_id;
+                this_player_pos = new_player_msg.position;
+
+                std::cout << "Client id on server = " << m_user_id << std::endl;
+            }
+            else
+            {
+                std::cout << "cannot get client id from server" << std::endl;
+                exit(-1);
+            }
+        }
+
+        WaitForOtherPlayers();
+
+    }
+    std::cout << "here" << std::endl;
+
     Statistic stats(m_window);
     Sound sounds;
     sounds.play(GAME_START);
@@ -163,18 +164,15 @@ int GameSession::Run() {
                 100, Direction::UP);
         walls.base_enemy.push_back(baseEnemy);
     }
+
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
-        m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.05,
+        m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), this_player_pos, 0.05,
         100, Direction::UP);
 
     std::vector<Bots*> all_bots;
     std::vector<MapObject> spawn;
     spawn.push_back(m_level.GetFirstObject("spawn1"));
     spawn.push_back(m_level.GetFirstObject("spawn2"));
-
-
-    sf::Vector2f old_pos = this_player->getPos();
-    sf::Vector2f new_pos = old_pos;
 
     std::map<int, std::shared_ptr<Player>> players;
     std::map<std::vector<Bots*>, bool> shot;
@@ -343,7 +341,7 @@ int GameSession::Run() {
 
             if (is_new_user) {
                 sf::Packet new_player_packet;
-                PlayerAction create_new_player = {m_game_client.m_id, curr_player_pos,
+                PlayerAction create_new_player = {m_user_id, curr_player_pos,
                                                   curr_player_dir,
                                                   PlayerActionType::NewPlayer};
                 new_player_packet << create_new_player;
@@ -354,7 +352,7 @@ int GameSession::Run() {
             else
             {
                 sf::Packet packet;
-                PlayerAction action = {m_game_client.m_id, curr_player_pos, curr_player_dir, PlayerActionType::UpdatePlayer};
+                PlayerAction action = {m_user_id, curr_player_pos, curr_player_dir, PlayerActionType::UpdatePlayer};
                 action_vector.actions.push_back(action);
             }
 
@@ -457,7 +455,7 @@ int GameSession::Run() {
                 curr_bullet->moveBots(time, *this_player, &walls);
             }
 
-            m_cam.changeViewCoords(new_pos, m_level.GetTilemapWidth(), m_level.GetTilemapHeight());
+            m_cam.changeViewCoords(this_player->getPos(), m_level.GetTilemapWidth(), m_level.GetTilemapHeight());
             // m_cam.changeView();
 
             m_window.setView(m_cam.view);  //"оживляем" камеру в окне sfml
