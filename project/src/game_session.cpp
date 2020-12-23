@@ -214,6 +214,7 @@ void GameSession::Run() {
                 m_game_client.RecieveFromServer(packet_from_server);
 
                 packet_from_server >> others_actions;
+                std::cout << "RECEIVE PACKET: " << others_actions.get_size() << std::endl;
                 
                 if(others_actions.get_size() > 0)
                 {
