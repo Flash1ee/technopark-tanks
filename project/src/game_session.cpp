@@ -215,7 +215,7 @@ int GameSession::Run() {
         time /= 800;      //скорость игры
 
 
-        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 4 && !wictory) {
+        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 0 && !wictory) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
@@ -280,15 +280,10 @@ int GameSession::Run() {
                                                       bullet_pos, 0.3,
                                                       bullet_dir, 1, is_bot);
 
-                // sf::Packet packet;
-                // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
-                // PlayerActionType::NewBullet};
-                // action_vector.actions.push_back(new_bullet_action);
 
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
                 sounds.play(FIRE);
-                // sounds[static_cast<int>(SoundType::BULLET)].play();
             }
 
 
@@ -340,43 +335,35 @@ int GameSession::Run() {
             }
         }
         this_player->checkCollisionsBots(all_bots);
-        old_pos = new_pos;
-        new_pos = this_player->getPos();
 
         if (m_is_multiplayer) {
             PlayerActionVector action_vector;
+            auto curr_player_pos = this_player->getPos();
+            auto curr_player_dir = this_player->getDir();
 
             if (is_new_user) {
                 sf::Packet new_player_packet;
-                PlayerAction create_new_player = {m_game_client.m_id, new_pos,
-                                                  this_player->getDir(),
+                PlayerAction create_new_player = {m_game_client.m_id, curr_player_pos,
+                                                  curr_player_dir,
                                                   PlayerActionType::NewPlayer};
                 new_player_packet << create_new_player;
                 m_game_client.SendToServer(new_player_packet);
                 is_new_user = false;
                 std::cout << "I notified server about me" << std::endl;
             }
+            else
+            {
+                sf::Packet packet;
+                PlayerAction action = {m_game_client.m_id, curr_player_pos, curr_player_dir, PlayerActionType::UpdatePlayer};
+                action_vector.actions.push_back(action);
+            }
 
             {  // Gathering info for sending to server
-
-                Direction dir = this_player->getDir();
-
-                if (new_pos != old_pos) {
-                    sf::Packet packet;
-                    PlayerAction action = {m_game_client.m_id, new_pos, dir,
-                                           PlayerActionType::UpdatePlayer};
-                    std::cout << "CUR POS " << this_player->getPos().x <<  this_player->getPos().y << std::endl;
-                    std::cout << "OLD POS " << old_pos.x <<  old_pos.y << std::endl;
-                    std::cout << "NEW POS " << new_pos.x << new_pos.y << std::endl;
-                    action_vector.actions.push_back(action);
-                    old_pos = new_pos;
-                }
-
                 if (new_bullets.size() > 0) {
                     PlayerAction action;
                     for (auto& curr_bullet : new_bullets) {
                         action = {
-                            -1, new_pos, dir,
+                            -1, curr_bullet->getPos(), curr_bullet->getDir(),
                             PlayerActionType::NewBullet};  // bullets have no id
                         action_vector.actions.push_back(action);
                     }
@@ -418,19 +405,18 @@ int GameSession::Run() {
                             } break;
 
                             case PlayerActionType::UpdatePlayer: {
-                                std::cout << "Other player should be updated"
-                                          << std::endl;
+                                std::cout << "Other player should be updated" << std::endl;
                                 int id = action.player_id;
                                 sf::Vector2f new_pos = action.position;
-                                std::cout << "GET POS " << new_pos.x << " " << new_pos.y << std::endl;
-                                players[id]->setPos(new_pos);
                                 Direction new_dir = action.direction;
+                                players[id]->setPos(new_pos);
                                 players[id]->setDir(new_dir);   
+
+                                std::cout << "Other player new pos is " << new_pos.x << " " << new_pos.y << std::endl;
                             } break;
 
                             case PlayerActionType::NewBullet: {
-                                std::cout << "Other player shooted"
-                                          << std::endl;
+                                std::cout << "Other player shooted" << std::endl;
                                 sf::Vector2f pos = action.position;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
                                 Direction dir = action.direction;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
                                 std::shared_ptr<Bullet> new_b(new Bullet(m_level,
