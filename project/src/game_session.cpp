@@ -404,7 +404,7 @@ int GameSession::Run() {
 
                                 auto new_palyer = std::make_shared<Player>(m_level,
                                                                            OBJECT_IMAGE,
-                                                                           sf::IntRect(1, 2, 13, 13),
+                                                                           sf::IntRect(1, 130, 16, 16),
                                                                            pos, 0.07, 100, dir);
 
                                 std::cout << "Other player added. Position is " << pos.x << " " << pos.y << std::endl;
@@ -422,6 +422,7 @@ int GameSession::Run() {
                                     std::cout << "PNX" << std::endl;
                                 }
                                 auto new_dir = action.direction;
+                                std::cout << "RECIEVED DIR IS " << static_cast<int>(new_dir) << std::endl;
                                 auto new_pos = action.position;
                                 std::cout << "NEW DIR RECEIVED is "<< (int)new_dir << std::endl;
 

@@ -124,8 +124,41 @@ void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls*
 }
 sf::Sprite &Object::getSprite() { return this->sprite; }
 
-void Object::setDir(Direction dir) {
+void make_rotation(sf::Sprite& sprite, Direction& dir)
+{
+    switch (dir)
+    {
+    case Direction::UP:
+        {
+            sprite.setRotation(0);
+        }
+        break;
+    case Direction::DOWN:
+        {
+            sprite.setRotation(180);
+            
+        }
+        break;
+    case Direction::RIGHT:
+        {
+            sprite.setRotation(90);
+            
+        }
+        break;
+    case Direction::LEFT:
+        {
+            sprite.setRotation(-90);
+        }
+        break;
+    
+    default:
+        break;
+    }
+}
+void Object::setDir(Direction dir)
+{
     this->dir = dir;
+    make_rotation(this->sprite, this->dir);
 }
 
 Direction Tank::getDir() const { return this->dir; }
@@ -134,31 +167,33 @@ Direction Bullet::getDir() const {
 }
 
 int Tank::makeAction(float time, DestructibleWalls* walls) {
+    int status = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        this->sprite.setRotation(0);
         this->dir = Direction::UP;
         this->move(time, walls);
-        return 0;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        this->sprite.setRotation(-90);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         this->dir = Direction::LEFT;
         this->move(time, walls);
-        return 0;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        this->sprite.setRotation(90);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         this->dir = Direction::RIGHT;
         this->move(time, walls);
-        return 0;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        this->sprite.setRotation(180);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         this->dir = Direction::DOWN;
         this->move(time, walls);
-        return 0;
     }
-    return -1;
+    else
+    {
+        status = -1;
+    }
+
+    if(status != -1 )
+        make_rotation(this->sprite, this->dir);
+
+    return status;
+    
 }
 
 sf::Vector2f Object::getPos() const { return this->coords; }
