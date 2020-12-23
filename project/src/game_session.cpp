@@ -22,15 +22,6 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     MapObject player = m_level.GetFirstObject("player1");
 
     sf::FloatRect p_pos = player.rect;
-<<<<<<< HEAD
-    m_player_pos = {p_pos.left + p_pos.width / 2, p_pos.top - p_pos.width / 2};
-    if (m_is_multiplayer) {
-        m_player_pos = m_game_client.connectToServer(server_ip, server_port);
-
-    }
-=======
-
->>>>>>> d87c0a6aafe0a205a2152cb7f318807801c62aa1
     if (!this->font.loadFromFile(FONT)) {
         throw std::exception();
     };
