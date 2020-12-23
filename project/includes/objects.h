@@ -17,6 +17,8 @@
 #define BRICK_SOUND "../sounds/brick.ogg"
 #define KILL_SOUND "../sounds/explosion.ogg"
 #define FINISH_SOUND "../sounds/finish.ogg"
+#define VISABILITY_SOUND "../sounds/visability.ogg"
+#define RICOSCHET_SOUND "../sounds/ricochet.ogg"
 
 
 enum class SoundType {
@@ -48,6 +50,8 @@ typedef enum {
     GAME_START,
     SPAWN,
     FINISH,
+    VISABILITY,
+    RICOCHET,
     COUNT
 } sound_action;
 class Sound {
@@ -78,6 +82,12 @@ class Sound {
 
     sf::SoundBuffer finish;
     sf::Sound finish_sound;
+
+    sf::SoundBuffer visability;
+    sf::Sound visability_sound;
+
+    sf::SoundBuffer ricochet;
+    sf::Sound ricochet_sound;
 
     public:
     void play(sound_action action);
@@ -209,18 +219,24 @@ public:
            float speed, Direction dir, int life, bool bot)
         : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot) {
         m_objects = mapObj.GetAllObjects("solid");
+
+        ricochet.loadFromFile(RICOSCHET_SOUND);
+        ricochet_sound.setBuffer(ricochet);
         };
     void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls);
     void moveBots(float time, Player& p, DestructibleWalls* walls);
     void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls);
     void checkCollisionsObject(Player& p, DestructibleWalls* walls);
     void checkCollisionsObject(DestructibleWalls* walls, Player& p);
+    void play();
     // void sound();
     int getLife() const;
     Direction getDir() const;
 private:
     int m_life;
     int m_is_bot;
+    sf::SoundBuffer ricochet;
+    sf::Sound ricochet_sound;
     // int m_damage;
 };
 

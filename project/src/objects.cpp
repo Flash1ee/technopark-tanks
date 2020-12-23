@@ -285,10 +285,15 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
                 m_life = 0;
             }
         }
-
     for (int i = 0; i < b.size(); i++) {
         if (getRect().intersects(b[i]->getRect())) {
-            b[i]->setHp(b[i]->getHp() - 20);
+            auto probability = rand() % 100;
+            if (probability < 50) {
+                this->play();
+            }
+            else {
+                b[i]->setHp(b[i]->getHp() - 20);
+            }
             m_life = 0;
         }
     }
@@ -819,6 +824,12 @@ Sound::Sound() {
 
     finish.loadFromFile(FINISH_SOUND);
     finish_sound.setBuffer(finish);
+
+    visability.loadFromFile(VISABILITY_SOUND);
+    visability_sound.setBuffer(visability);
+
+    ricochet.loadFromFile(RICOSCHET_SOUND);
+    ricochet_sound.setBuffer(ricochet);
 }
 void Sound::play(sound_action action) {
     switch(action) {
@@ -861,6 +872,16 @@ void Sound::play(sound_action action) {
                 this->finish_sound.play();
             }
             break;
+        case VISABILITY:
+            if (this->visability_sound.getStatus() != sf::Sound::Playing) {
+                this->visability_sound.play();
+            }
+            break;
+        case RICOCHET:
+            if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+                this->ricochet_sound.play();
+            }
+            break;
     }
 }
 bool Sound::MainSoundStopped() {
@@ -883,6 +904,11 @@ int BasePlayer::getBulletsToDeath() {
 }
 int BaseEnemy::getBulletsToDeath() {
     return m_hp / 10;
+}
+void Bullet::play() {
+    if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+            this->ricochet_sound.play();
+    }
 }
 
 
