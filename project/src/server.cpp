@@ -62,7 +62,7 @@ bool Server::add_new_client() {
         PlayerAction msg_to_player;
 
         msg_to_player.player_id = id;
-        msg_to_player.position = sf::Vector2f {100.0 * (id + 1), (100.0 * (id + 1))};
+        msg_to_player.position = sf::Vector2f {50.0 * id , 50.0 * id};
         msg_to_player.msg_type = PlayerActionType::NewPlayer;
 
         sf::Packet packet;
