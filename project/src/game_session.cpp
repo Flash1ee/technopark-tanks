@@ -11,6 +11,8 @@
 #include "game_map.hpp"
 #include "game_session.hpp"
 #include "statistics.h"
+#include "end_event.h"
+#include "text_event.h"
 
 GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
@@ -42,34 +44,6 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
         //     exit(-1);
         // }
     }
-    if (!this->font.loadFromFile(FONT)) {
-        throw std::exception();
-    };
-    bots_left.setColor(sf::Color::Red);
-    bots_left.setFont(font);
-
-    m_left_bots.setColor(sf::Color::Red);
-    m_left_bots.setFont(font);
-
-    if (!dead.loadFromFile(WASTED)) {
-        throw std::exception();
-    };
-    m_dead.setTexture(dead);
-    m_dead.setTextureRect(sf::IntRect( 3, 150, 390, 104));
-    m_dead.setScale(0.5, 0.5);
-
-    if (!win.loadFromFile(WIN)) {
-        throw std::exception();
-    };
-    m_win.setTexture(win);
-    m_win.setTextureRect(sf::IntRect(124, 76, 698, 103));
-    m_win.setScale(0.3, 0.3);
-
-    player_base_hp.setColor(sf::Color::Red);
-    player_base_hp.setFont(font);
-
-    bots_base_hp.setColor(sf::Color::Red);
-    bots_base_hp.setFont(font);
 
     finish.openFromFile(MORTAL_PATH);
 }
@@ -106,6 +80,7 @@ int GameSession::Run() {
 
     // TmxObject Player_obj = m_level.GetFirstObject("player"); //TODO: make
     // const name
+    bool was_count = false;
     Statistic stats(m_window);
     Sound sounds;
     sounds.play(GAME_START);
@@ -192,17 +167,19 @@ int GameSession::Run() {
     int time_before = clock.getElapsedTime().asSeconds();
     timer_bots.restart();
 
+    EndEvent wasted(G_LOSE);
+    EndEvent win(G_VICTORY);
+
+    TextEvent bots_count(BOT_KILL, this_player->getCount());
+    TextEvent destroy(DESTROY, this_player->getCount());
+
     sf::Clock main_timer;
     sf::Time last_pl_bull;
     sf::Time pause_time;
-    sf::Time win_time;
-    sf::Time kill_time;
     sf::Time destroy_time;
     sf::Time start_pause_time;
     pause_time.Zero;
     last_pl_bull.Zero;
-    win_time.Zero;
-    kill_time.Zero;
     destroy_time.Zero;
 
     while (m_window.isOpen()) {
@@ -242,6 +219,7 @@ int GameSession::Run() {
 
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Escape) {
+                    finish.pause();
                     start_pause_time = main_timer.getElapsedTime(); 
                     // sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
                     //                             sf::Style::None);
@@ -253,6 +231,7 @@ int GameSession::Run() {
                     }
                     pause_time += main_timer.getElapsedTime() - start_pause_time;
                     clock.restart();
+                    finish.play();
                 }
                 if (event.key.code == sf::Keyboard::Space
                     && (main_timer.getElapsedTime().asSeconds() - last_pl_bull.asSeconds() > 0.2) )
@@ -557,74 +536,50 @@ int GameSession::Run() {
             for (int i = 0; i < walls.grass.size(); i++) {
                         m_window.draw(walls.grass[i]->getSprite());
             }
+
             if (this_player->getHp() <= 0) {
-                if (kill_time == sf::Time::Zero) {
-                    kill_time = main_timer.getElapsedTime();
-                    sounds.play(WASTED_S);
+                if (wasted.GetTimer() == sf::Time::Zero) {
+                    wasted.SetTimer(main_timer.getElapsedTime());
                     stats.update(m_window, this_player->getHp(), 
-                        main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
+                        walls, main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
                 }
-                m_cam.view.zoom(1.0001);
-                if (main_timer.getElapsedTime().asSeconds() - 
-                    kill_time.asSeconds() > 7) {
-                        return STOP_RUN;
+                if (wasted.update(m_window, m_cam.view, main_timer.getElapsedTime())) {
+                    return STOP_RUN;
                 }
-                m_dead.setPosition(m_window.getView().getCenter().x - 90, m_window.getView().getCenter().y - 26);
-                m_window.draw(m_dead);
-            } else if (walls.base_enemy[0]->getHp() > 0){
-            stats.update(m_window, this_player->getHp(), 
-                        main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
-            }
-            stats.draw(m_window);
-            if (main_timer.getElapsedTime().asSeconds() < 4) {
-                bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
-                bots_left.setOutlineThickness(2);
-                std::ostringstream str_str;
-                str_str << "KILL " << this_player->getCount() << " BOTS!!!";
-                bots_left.setString(str_str.str());
-                m_window.draw(bots_left);
-            }
-            if (this_player->getCount() > 0) {
-                std::ostringstream bots_count;
-                bots_count << this_player->getCount();
-                m_left_bots.setString(bots_count.str());
-                m_left_bots.setCharacterSize(15);
-                m_left_bots.setPosition(walls.base_player[0]->coords.x + 3, 0);
-                m_window.draw(m_left_bots);
+            } else if (walls.base_enemy[0]->getHp() > 0) {
+                stats.update(m_window, this_player->getHp(), 
+                        walls, main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
             } else {
-                std::ostringstream bots_hp;
-                bots_hp << walls.base_enemy[0]->getBulletsToDeath() << " HP";
-                bots_base_hp.setString(bots_hp.str());
-                bots_base_hp.setPosition(walls.base_player[0]->coords.x - 6, 0);
-                bots_base_hp.setCharacterSize(15);
-                m_window.draw(bots_base_hp);
-                if (destroy_time == sf::Time::Zero) {
-                    destroy_time = main_timer.getElapsedTime();
-                    sounds.play(FINISH);
+                stats.update(m_window, this_player->getHp(), 
+                        walls, 0);
+            }
+
+            stats.draw(m_window);
+            bots_count.update(m_window, main_timer.getElapsedTime());
+
+            if (this_player->getCount() <= 0) {
+                if (!was_count) {
                     finish.play();
+                    sounds.play(FINISH);
+                    destroy.SetTimer(main_timer.getElapsedTime());
                 }
-                if (main_timer.getElapsedTime().asSeconds() - destroy_time.asSeconds() < 4) {
-                    bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
-                    bots_left.setString("DESTROY BASE!!!");
-                    m_window.draw(bots_left);
+                destroy.update(m_window, main_timer.getElapsedTime());
+                was_count = true;
+            }
+
+
+            if (walls.base_enemy[0]->getHp() <= 0) {
+                if (win.GetTimer() == sf::Time::Zero) {
+                    finish.pause();
+                    win.SetTimer(main_timer.getElapsedTime());
                 }
-                if (walls.base_enemy[0]->getHp() <= 0) {
-                    if (win_time == sf::Time::Zero) {
-                        finish.pause();
-                        sounds.play(WIN_S);
-                        win_time = main_timer.getElapsedTime();
-                    }
-                    if (main_timer.getElapsedTime().asSeconds() - win_time.asSeconds() < 5) {
-                        m_win.setPosition(m_window.getView().getCenter().x - 100, m_window.getView().getCenter().y - 51);
-                        m_window.draw(m_win);
-                    } else {
-                        return STOP_RUN;
-                    }
-                    for (int i = 0; i < all_bots.size(); i++) {
-                        all_bots[i]->setHp(0);
-                    }
-                    wictory = true;
+                if (win.update(m_window, m_cam.view, main_timer.getElapsedTime())) {
+                    return STOP_RUN;
                 }
+                for (int i = 0; i < all_bots.size(); i++) {
+                    all_bots[i]->setHp(0);
+                }
+                wictory = true;
             }
             m_window.display();
         }

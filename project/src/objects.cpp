@@ -817,14 +817,8 @@ Sound::Sound() {
     steel.loadFromFile(SPAWN_SOUND);
     steel_sound.setBuffer(steel);
 
-    wasted.loadFromFile(WASTED_SOUND);
-    wasted_sound.setBuffer(wasted);
-
     finish.loadFromFile(FINISH_SOUND);
     finish_sound.setBuffer(finish);
-
-    win.loadFromFile(WIN_SOUND);
-    win_sound.setBuffer(win);
 }
 void Sound::play(sound_action action) {
     switch(action) {
@@ -862,19 +856,9 @@ void Sound::play(sound_action action) {
                 this->steel_sound.play();
             }
             break;
-        case WASTED_S:
-            if (this->wasted_sound.getStatus() != sf::Sound::Playing) {
-                this->wasted_sound.play();
-            }
-            break;
         case FINISH:
             if (this->finish_sound.getStatus() != sf::Sound::Playing) {
                 this->finish_sound.play();
-            }
-            break;
-        case WIN_S:
-            if (this->win_sound.getStatus() != sf::Sound::Playing) {
-                this->win_sound.play();
             }
             break;
     }
