@@ -19,11 +19,14 @@ Statistic::Statistic(sf::RenderWindow& window) {
     text[0].setFont(font);
     text[0].setColor(sf::Color::Red);
     text[0].setString("Time: ");
+    text[0].setOutlineThickness(1.5);
     text[0].setCharacterSize(12);
 
     text[1].setFont(font);
     text[1].setColor(sf::Color::Red);
     text[1].setCharacterSize(12);
+    text[1].setOutlineThickness(1.5);
+
 }
 
 void Statistic::update(sf::RenderWindow& window, int hp, double time) {

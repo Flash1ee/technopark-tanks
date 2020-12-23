@@ -16,7 +16,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
                          std::string server_ip, int server_port)
     :
-      m_window(sf::VideoMode(1920, 1080), window_title),
+      m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen),
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player1");
@@ -42,12 +42,36 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
         //     exit(-1);
         // }
     }
+    if (!this->font.loadFromFile(FONT)) {
+        throw std::exception();
+    };
+    bots_left.setColor(sf::Color::Red);
+    bots_left.setFont(font);
+
+    m_left_bots.setColor(sf::Color::Red);
+    m_left_bots.setFont(font);
+
     if (!dead.loadFromFile(WASTED)) {
         throw std::exception();
     };
     m_dead.setTexture(dead);
     m_dead.setTextureRect(sf::IntRect( 3, 150, 390, 104));
     m_dead.setScale(0.5, 0.5);
+
+    if (!win.loadFromFile(WIN)) {
+        throw std::exception();
+    };
+    m_win.setTexture(win);
+    m_win.setTextureRect(sf::IntRect(124, 76, 698, 103));
+    m_win.setScale(0.3, 0.3);
+
+    player_base_hp.setColor(sf::Color::Red);
+    player_base_hp.setFont(font);
+
+    bots_base_hp.setColor(sf::Color::Red);
+    bots_base_hp.setFont(font);
+
+    finish.openFromFile(MORTAL_PATH);
 }
 
 GameSession::~GameSession() {};
@@ -93,11 +117,23 @@ int GameSession::Run() {
         walls_objs.push_back(i);
     }
 
+    bool wictory = false;
+
     std::vector<MapObject> brick_objs = m_level.GetAllObjects("brick");
     std::vector<MapObject> player_obj = m_level.GetAllObjects("player_base");
     std::vector<MapObject> enemy_obj = m_level.GetAllObjects("enemy_base");
+    std::vector<MapObject> grass_obj = m_level.GetAllObjects("grass");
+
 
     DestructibleWalls walls;
+
+
+    for (auto i: grass_obj) {
+        sf::Vector2f grass_pos = {i.rect.left, i.rect.top - i.rect.width};
+        std::shared_ptr<Object> grass = std::make_shared<Object>(OBJECT_IMAGE,
+        sf::IntRect(272, 32, 16, 16), grass_pos, 0, Direction::UP);
+        walls.grass.push_back(grass);
+    }
 
     for (auto i: walls_objs) {
         sf::Vector2f wall_pos = {i.rect.left, i.rect.top - i.rect.width};
@@ -124,7 +160,7 @@ int GameSession::Run() {
         sf::Vector2f base_enemy_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::shared_ptr<BaseEnemy> baseEnemy = std::make_shared<BaseEnemy>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_enemy_pos, 0,
-                200, Direction::UP);
+                100, Direction::UP);
         walls.base_enemy.push_back(baseEnemy);
     }
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
@@ -161,11 +197,13 @@ int GameSession::Run() {
     sf::Time pause_time;
     sf::Time win_time;
     sf::Time kill_time;
+    sf::Time destroy_time;
     sf::Time start_pause_time;
     pause_time.Zero;
     last_pl_bull.Zero;
     win_time.Zero;
     kill_time.Zero;
+    destroy_time.Zero;
 
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
@@ -177,7 +215,7 @@ int GameSession::Run() {
         time /= 800;      //скорость игры
 
 
-        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 4) {
+        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 4 && !wictory) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
@@ -496,7 +534,7 @@ int GameSession::Run() {
                 }
                 if (walls.base_player[i]->getHp() <= 0) {
                     walls.base_player.erase(walls.base_player.begin() + i);
-                    exit(0);
+                    this_player->setHp(0);
                 }
             }
             for (int i = 0; i < walls.base_enemy.size(); i++) {
@@ -505,7 +543,6 @@ int GameSession::Run() {
                 }
                 if (walls.base_enemy[i]->getHp() <= 0) {
                     walls.base_enemy.erase(walls.base_enemy.begin() + i);
-                    exit(0);
                 }
             }
             for (int i = 0; i < all_bots.size(); i++) {
@@ -518,6 +555,9 @@ int GameSession::Run() {
                     sounds.play(KILL);
                     count_bots--;
                 }
+            }
+            for (int i = 0; i < walls.grass.size(); i++) {
+                        m_window.draw(walls.grass[i]->getSprite());
             }
             if (this_player->getHp() <= 0) {
                 if (kill_time == sf::Time::Zero) {
@@ -533,11 +573,61 @@ int GameSession::Run() {
                 }
                 m_dead.setPosition(m_window.getView().getCenter().x - 90, m_window.getView().getCenter().y - 26);
                 m_window.draw(m_dead);
-            } else {
+            } else if (walls.base_enemy[0]->getHp() > 0){
             stats.update(m_window, this_player->getHp(), 
                         main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
             }
             stats.draw(m_window);
+            if (main_timer.getElapsedTime().asSeconds() < 4) {
+                bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
+                bots_left.setOutlineThickness(2);
+                std::ostringstream str_str;
+                str_str << "KILL " << this_player->getCount() << " BOTS!!!";
+                bots_left.setString(str_str.str());
+                m_window.draw(bots_left);
+            }
+            if (this_player->getCount() > 0) {
+                std::ostringstream bots_count;
+                bots_count << this_player->getCount();
+                m_left_bots.setString(bots_count.str());
+                m_left_bots.setCharacterSize(15);
+                m_left_bots.setPosition(walls.base_player[0]->coords.x + 3, 0);
+                m_window.draw(m_left_bots);
+            } else {
+                std::ostringstream bots_hp;
+                bots_hp << walls.base_enemy[0]->getBulletsToDeath() << " HP";
+                bots_base_hp.setString(bots_hp.str());
+                bots_base_hp.setPosition(walls.base_player[0]->coords.x - 6, 0);
+                bots_base_hp.setCharacterSize(15);
+                m_window.draw(bots_base_hp);
+                if (destroy_time == sf::Time::Zero) {
+                    destroy_time = main_timer.getElapsedTime();
+                    sounds.play(FINISH);
+                    finish.play();
+                }
+                if (main_timer.getElapsedTime().asSeconds() - destroy_time.asSeconds() < 4) {
+                    bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
+                    bots_left.setString("DESTROY BASE!!!");
+                    m_window.draw(bots_left);
+                }
+                if (walls.base_enemy[0]->getHp() <= 0) {
+                    if (win_time == sf::Time::Zero) {
+                        finish.pause();
+                        sounds.play(WIN_S);
+                        win_time = main_timer.getElapsedTime();
+                    }
+                    if (main_timer.getElapsedTime().asSeconds() - win_time.asSeconds() < 5) {
+                        m_win.setPosition(m_window.getView().getCenter().x - 100, m_window.getView().getCenter().y - 51);
+                        m_window.draw(m_win);
+                    } else {
+                        return STOP_RUN;
+                    }
+                    for (int i = 0; i < all_bots.size(); i++) {
+                        all_bots[i]->setHp(0);
+                    }
+                    wictory = true;
+                }
+            }
             m_window.display();
         }
     }
