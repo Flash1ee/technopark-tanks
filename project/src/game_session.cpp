@@ -337,6 +337,7 @@ int GameSession::Run() {
 
         if (m_is_multiplayer) {
             PlayerActionVector action_vector;
+
             auto curr_player_pos = this_player->getPos();
             auto curr_player_dir = this_player->getDir();
 
@@ -500,6 +501,13 @@ int GameSession::Run() {
                     sounds.play(BRICK);
                 }
             }
+
+            for(auto& other_player : players)
+            {
+                m_window.draw(other_player.second->getSprite());
+            }
+
+
             for (int i = 0; i < bots_bullets.size(); i++) {
                 
                 if (bots_bullets[i]->getLife()) {
