@@ -53,7 +53,7 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
     buttons[selectedIndex].setColor(sf::Color::Red);
 }
 
-int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::string player_skin, std::string server_ip) {
+int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::string player_skin) {
     switch (this->show(window))
         {
             case SINGLE: {
@@ -66,8 +66,7 @@ int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::stri
             }
 
             case MULTI: {
-                GameSession game_session("Tanks", map_skin, player_skin, true,
-                   server_ip, PORT);
+                GameSession game_session("Tanks", map_skin, player_skin, true);
                 if (game_session.Run() == STOP_RUN) {
                     return STOP_RUN;
                 };

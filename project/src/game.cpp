@@ -17,14 +17,15 @@ int main(int argc, char* argv[]) {
 
         std::string player_skin(OBJECT_IMAGE);
         std::string map_skin(MAP_ONE);
-        // std::string server_ip = sf::IpAddress::getLocalAddress().toString();
-        std::string server_ip = "25.63.213.59";
+        std::string server_ip = sf::IpAddress::getLocalAddress().toString();
+        //std::string server_ip = "25.63.213.59";
         sf::RenderWindow window(sf::VideoMode(1920, 1080), std::string("Tanks"));
 
         // GameSession game_session(window_title, map_skin, player_skin, true,
         // server_ip, PORT);
+        //std::cout << "server ip in main " << server_ip << std::endl;
         Menu mainMenu(0, window);
-        gamePlaying = mainMenu.menuSwitcher(window, map_skin, player_skin, server_ip);
+        gamePlaying = mainMenu.menuSwitcher(window, map_skin, player_skin);
     }
 
     return 0;

@@ -8,8 +8,7 @@ class GameSession {
    public:
     GameSession() = delete;
     explicit GameSession(std::string window_title, std::string& map_path,
-                         std::string& player_skin, bool is_multiplayer,
-                         std::string server_ip = "", int server_port = -1);
+                         std::string& player_skin, bool is_multiplayer);
 
     ~GameSession();
 
