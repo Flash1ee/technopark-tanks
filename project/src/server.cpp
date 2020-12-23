@@ -93,7 +93,7 @@ bool Server::send_to_all(const sf::Packet& packet, int exclude_id = -1)
             continue;
         }
         sf::Packet tmp_packet = packet;
-        while(curr_client.second.socket->send(tmp_packet) == sf::Socket::Partial) {}
+        while(curr_client.second.socket->send(tmp_packet) != sf::Socket::Done) {}
     }
 
     return true;
@@ -109,6 +109,7 @@ bool Server::runGame() {
 
     send_to_all(packet);
 
+    std::cout << "Game is running" << std::endl;
     while (true)
     {
         if(m_selector.wait())
@@ -125,7 +126,6 @@ bool Server::runGame() {
                 }
             }
         }
-        
     }
 }
 
