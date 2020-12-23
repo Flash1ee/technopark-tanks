@@ -363,6 +363,7 @@ int GameSession::Run() {
 
                         bullet_action = { -1, bullet_pos, bullet_dir, PlayerActionType::NewBullet }; // bullets have no id
                         action_vector.push(bullet_action);
+                        std::cout << "DIR SEND "<<(int)bullet_action.direction << std::endl;
                     }
 
                     new_bullets.clear();
@@ -422,6 +423,8 @@ int GameSession::Run() {
                                 }
                                 auto new_dir = action.direction;
                                 auto new_pos = action.position;
+                                std::cout << "NEW DIR RECEIVED is "<< (int)new_dir << std::endl;
+
 
                                 auto player_iter = players.find(id);
 
