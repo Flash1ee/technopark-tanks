@@ -22,10 +22,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     MapObject player = m_level.GetFirstObject("player1");
 
     sf::FloatRect p_pos = player.rect;
-<<<<<<< HEAD
-=======
     
->>>>>>> 33fe8e81ad716f90e658710c939d3773922c4cd8
     if (!this->font.loadFromFile(FONT)) {
         throw std::exception();
     };
