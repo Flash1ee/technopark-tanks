@@ -17,9 +17,8 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     :
       m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen), m_game_client(SERVER_IP, PORT),
       m_is_multiplayer(is_multiplayer) {
-          m_game_client.m_ip_adress = SERVER_IP;
-          m_game_client.m_port = PORT;
 
+    std::cout << SERVER_IP << " " << PORT << std::endl;
     m_level.LoadFromFile("../maps/map1.tmx");
     MapObject player = m_level.GetFirstObject("player1");
 
