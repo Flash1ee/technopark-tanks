@@ -66,7 +66,7 @@ class Menu {
         Menu(int selector, sf::RenderWindow& window);
         void moveUp();
         void moveDown();
-        int menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::string player_skin, std::string server_ip);
+        int menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::string player_skin);
         int show(sf::RenderWindow& window);
         void draw(sf::RenderWindow& window);
 };

@@ -17,6 +17,7 @@ Client::Client(std::string str_ip, int port) {
 
 bool Client::connectToServer() {
    m_socket = std::make_shared<sf::TcpSocket>();
+    std::cout << m_ip_adress.toString() << " " << m_port << std::endl;
 
     if (m_socket->connect(m_ip_adress, m_port) == sf::Socket::Done)
     {
