@@ -101,9 +101,9 @@ int GameSession::Run() {
                 std::cout << "cannot get client id from server" << std::endl;
                 exit(-1);
             }
-        }
 
-        WaitForOtherPlayers();
+            WaitForOtherPlayers();  
+        }
 
     }
     std::cout << "here" << std::endl;
