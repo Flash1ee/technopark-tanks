@@ -27,20 +27,6 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     if (m_is_multiplayer) {
         m_player_pos = m_game_client.connectToServer(server_ip, server_port);
 
-        // sf::Packet packet;
-
-        // if(m_game_client.RecieveFromServer(packet))
-        // {
-        //     int id;
-        //     packet >> id;
-
-        //     std::cout << "Client id on server = " << id << std::endl;
-        // }
-        // else
-        // {
-        //     std::cout << "cannot get client id from server" << std::endl;
-        //     exit(-1);
-        // }
     }
     if (!this->font.loadFromFile(FONT)) {
         throw std::exception();
@@ -97,15 +83,9 @@ void GameSession::WaitForOtherPlayers() {
 int GameSession::Run() {
     if (m_is_multiplayer) {
         WaitForOtherPlayers();
-        // RunOnlineGame()
+        
     }
-    // else
-    // {
-    //     RunOfflineGame();
-    // }
-
-    // TmxObject Player_obj = m_level.GetFirstObject("player"); //TODO: make
-    // const name
+    std::cout << "START GAME" << std::endl;
     Statistic stats(m_window);
     Sound sounds;
     sounds.play(GAME_START);

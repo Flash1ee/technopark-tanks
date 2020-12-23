@@ -83,7 +83,7 @@ int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::stri
 
 
 int Menu::show(sf::RenderWindow& window) {
-    this->music.play();
+    // this->music.play();
     while (window.isOpen()) {
         this->draw(window);
         window.display();
