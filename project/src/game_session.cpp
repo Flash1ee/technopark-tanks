@@ -93,8 +93,6 @@ void GameSession::Run() {
                                                                    this_player_pos, 0.07, 100,
                                                                    Direction::UP);
 
-    auto old_player_pos = this_player->getPos();
-    
     std::vector<std::shared_ptr<Bot>> all_bots;
 
     for (int i = 0; i < m_bot_count; ++i) {
@@ -159,27 +157,24 @@ void GameSession::Run() {
         if (m_is_multiplayer) {
 
             PlayerActionVector action_vector;
-            sf::Vector2f player_pos = this_player->getPos();
-            Direction player_dir = this_player->getDir();
+            sf::Vector2f curr_player_pos = this_player->getPos();
+            Direction curr_player_dir = this_player->getDir();
 
             if(is_new_user)
             {
-                PlayerAction create_new_player = { m_user_id, player_pos, player_dir, PlayerActionType::NewPlayer};
+                PlayerAction create_new_player = { m_user_id, curr_player_pos, curr_player_dir, PlayerActionType::NewPlayer};
                 action_vector.push(create_new_player);
                 is_new_user = false;
                 std::cout << "I notified server about me" << std::endl;
             }
+            else
+            {
+                PlayerAction action = { m_user_id, curr_player_pos, curr_player_dir, PlayerActionType::UpdatePlayer};
+                action_vector.push(action);
+            }
+            
 
             {  // Gathering info for sending to server
-
-                if(old_player_pos != this_player->getPos())
-                {
-                    std::cout << "DIR   I will send player postion is" << static_cast<int>(player_dir) << std::endl;
-                    PlayerAction action = { m_user_id, player_pos, player_dir, PlayerActionType::UpdatePlayer};
-                    action_vector.push(action);
-
-                    old_player_pos = this_player->getPos();
-                }
                 
 
                 if (new_bullets.size() > 0) {
@@ -202,8 +197,7 @@ void GameSession::Run() {
                 sf::Packet packet_to_server;
                 packet_to_server << action_vector;
                 m_game_client.SendToServer(packet_to_server);
-                std::cout << "I send all actions. Amount is " << action_vector.get_size() << std::endl;
-
+                //std::cout << "I send all actions. Amount is " << action_vector.get_size() << std::endl;
             }
 
             {  // getting info from server and applying it to current session
@@ -214,11 +208,10 @@ void GameSession::Run() {
                 m_game_client.RecieveFromServer(packet_from_server);
 
                 packet_from_server >> others_actions;
-                std::cout << "RECEIVE PACKET: " << others_actions.get_size() << std::endl;
                 
                 if(others_actions.get_size() > 0)
                 {
-                    std::cout << "I recieved " << others_actions.get_size() << " actions" << std::endl;
+                    //std::cout << "I recieved " << others_actions.get_size() << " actions" << std::endl;
                     while(others_actions.get_size() > 0)
                     {
                         PlayerAction action = others_actions.pop();
@@ -245,7 +238,7 @@ void GameSession::Run() {
 
                             case PlayerActionType::UpdatePlayer:
                             {
-                                std::cout << "Other player should be updated" << std::endl;
+                                //std::cout << "Other player should be updated" << std::endl;
                                 int id = action.player_id;
                                 if(id == m_user_id)
                                 {
@@ -254,8 +247,6 @@ void GameSession::Run() {
                                 auto new_dir = action.direction;
                                 auto new_pos = action.position;
 
-                                std::cout << "DIR   I recieve player postion is" << static_cast<int>(player_dir) << std::endl;
-                                
                                 auto player_iter = other_players.find(id);
 
                                 if(player_iter == other_players.end())
@@ -268,6 +259,9 @@ void GameSession::Run() {
                                     other_players[id]->setDir(new_dir);
                                     other_players[id]->setPos(new_pos);
                                 }
+
+                                std::cout << "Other player new pos is " << new_pos.x << " " << new_pos.y << std::endl;
+
                             } break;
 
                             case PlayerActionType::NewBullet: {

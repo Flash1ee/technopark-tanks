@@ -87,101 +87,30 @@ bool Client::RecieveFromServer(sf::Packet& packet)
 {
     sf::Socket::Status status;// = sf::Socket::Done;
 
-    // while (m_socket->receive(packet) != sf::Socket::Done) 
-    // {
-    //     std::cout << "HER\n";
-    // }
+    while (m_socket->receive(packet) != sf::Socket::Done) {}
+
+    return true;
 
     //while ((status = m_socket->receive(packet)) && (status != sf::Socket::Done)) { }
 
-    do
-    {
-        if(status == sf::Socket::Partial)
-        {
-            std::cout << "RecieveFromServer: Partial" << std::endl;
-        }
-        // std::cout << "HER\n";
-        status = m_socket->receive(packet);
-    } while (status == sf::Socket::Partial /*|| status == sf::Socket::NotReady*/);
+    // do
+    // {
+    //     if(status == sf::Socket::Partial)
+    //     {
+    //         std::cout << "RecieveFromServer: Partial" << std::endl;
+    //     }
+    //     // std::cout << "HER\n";
+    //     status = m_socket->receive(packet);
+    // } while (status == sf::Socket::Partial || status == sf::Socket::NotReady);
 
     // if(status == sf::Socket::NotReady)
     // {
     //     std::cout << "ERROR" << std::endl;
     // }
 
-    if (status == sf::Socket::Done)
-        return true;
+    // if (status == sf::Socket::Done)
+    //     return true;
 
-    else
-        return false;
+    // else
+    //     return false;
 }
-
-// int main()
-// {
-// sf::IpAddress ip = sf::IpAddress::getLocalAddress();
-// std::cout << "Current IP" << ip << std::endl;
-
-// int MyID;
-
-// sf::TcpSocket *socket = new sf::TcpSocket;
-// sf::SocketSelector selector;
-// sf::Packet packet;
-
-// if(socket->connect(ip, 2003) == sf::Socket::Done)
-// {
-//     std::cout << "connected!" << std::endl;
-//     socket->setBlocking(false);
-
-//     while (socket->receive(packet) != sf::Socket::Done) {}
-//     if(packet.getDataSize() > 0)
-//     {
-//         packet >> MyID;
-//         std::cout << "My ID is " << MyID << std::endl;
-//     }
-//     else
-//     {
-//         std::cout << "Cant get my ID" << std::endl;
-//         return -1;
-//     }
-
-//     selector.add(*socket);
-
-// }
-// else
-// {
-//     std::cout << "can not connect!" << std::endl;
-//     return -1;
-// }
-
-// std::cout << "Now you may send data to server" << std::endl;
-// while(true)
-// {
-//     //if(selector.isReady(*socket))
-//     //{
-//         if(socket->receive(packet) == sf::Socket::Done)
-//         {
-//             int other_ID;
-//             std::string text;
-//             packet >> other_ID >> text;
-//             std::cout << "Message from user with ID " << other_ID << ": " <<
-//             text << std::endl;
-//         }
-//         // else
-//         // {
-//         //     std::cout << "Can't recieve message!" << std::endl;
-//         // }
-//     //}
-
-//     std::cout << "Enter text: ";
-//     std::string text;
-//     std::cin >> text;
-
-//
-// }
-
-//     Client client(sf::IpAddress::getLocalAddress(), 2000);
-
-//     client.RunClient();
-
-//     return 0;
-// }
