@@ -21,7 +21,7 @@ class GameSession {
     Level m_level;
     Client m_game_client;
     Cam m_cam;
-    sf::Vector2f m_player_pos;
+    int m_user_id;
     sf::Texture dead;
     sf::Sprite m_dead;
     sf::Texture win;
