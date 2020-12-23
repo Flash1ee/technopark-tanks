@@ -88,4 +88,6 @@ bool Client::SendToServer(sf::Packet& packet) {
 bool Client::RecieveFromServer(sf::Packet& packet) {
 
     while (m_socket->receive(packet) != sf::Socket::Done) {}
+
+    return true;
 }
