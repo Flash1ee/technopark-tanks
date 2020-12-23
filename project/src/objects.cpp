@@ -910,5 +910,17 @@ void Bullet::play() {
             this->ricochet_sound.play();
     }
 }
+void Player::play_visability() {
+        if (this->visability_sound.getStatus() != sf::Sound::Playing) {
+            this->visability_sound.play();
+    }
+}
 
+void Player::set_visability(bool action) {
+    this->m_visability = action;
+}
+
+bool Player::get_visability() {
+    return this->m_visability;
+}
 
