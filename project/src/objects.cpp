@@ -12,8 +12,9 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
     : coords(pos), rect(rect), dx(0), dy(0), speed(speed), dir(dir){
     this->image.loadFromFile(textureFile);
     this->image.createMaskFromColor(sf::Color(0, 0, 1));
-    // this->image.createMaskFromColor(sf::Color(256, 256, 256));
-    this->image.createMaskFromColor(sf::Color(255, 255, 255));
+    if (rect.left == 209 && rect.top == 128) {
+        this->image.createMaskFromColor(sf::Color(255, 255, 255));
+    }
 
     this->texture.loadFromImage(this->image);
     this->sprite.setTexture(this->texture);
