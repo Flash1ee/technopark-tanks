@@ -219,9 +219,9 @@ public:
         m_objects = mapObj.GetAllObjects("solid");
         };
     void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other);
-    void moveBots(float time, Player& p, DestructibleWalls* walls);
+    void moveBots(float time, Player& p, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other);
     void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls);
-    void checkCollisionsObject(Player& p, DestructibleWalls* walls);
+    void checkCollisionsObject(Player& p, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other);
     void checkCollisionsObject(DestructibleWalls* walls, Player& p);
     void checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other);
     // void sound();

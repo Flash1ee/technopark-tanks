@@ -57,7 +57,7 @@ void Tank::move(float time, DestructibleWalls* walls) {
     setPos();
 }
 
-void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
+void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -81,7 +81,7 @@ void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
             break;
     }
 
-    this->checkCollisionsObject(p, walls);
+    this->checkCollisionsObject(p, walls, other);
     this->checkCollisionsObject(walls, p);
     if (m_life == 1) {
         coords.x += dx * time;
@@ -349,7 +349,7 @@ void BasePlayer::setHp(int hp) {
     this->m_hp = hp;
 }
 
-void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
+void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other) {
     for (auto &i : m_objects) {
         if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
             m_life = 0;
@@ -361,9 +361,11 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
             m_life = 0;
         }
     }
-    if (getRect().intersects(p.getRect())) {
-        p.setHp(p.getHp() - 19);
-        m_life = 0;
+    for (auto &i : other ) {
+        if ((getRect().intersects(i.second->getRect()) && m_id == i.first)) {
+            i.second->setHp(i.second->getHp() - 19);
+            m_life = 0;
+        }
     }
 }
 

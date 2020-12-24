@@ -490,7 +490,7 @@ int GameSession::Run() {
             }
 
             for (auto& curr_bullet : bots_bullets) {
-                curr_bullet->moveBots(time, *this_player, &walls);
+                curr_bullet->moveBots(time, *this_player, &walls, players);
             }
 
             m_cam.changeViewCoords(this_player->getPos(), m_level.GetTilemapWidth(), m_level.GetTilemapHeight());
@@ -605,6 +605,26 @@ int GameSession::Run() {
             } else if (walls.base_enemy[0]->getHp() > 0){
             stats.update(m_window, this_player->getHp(), 
                         main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
+            }
+            for (auto &i : players) {
+                if ((i.second->getHp() <= 0) && m_user_id == i.first) {
+                    if (kill_time == sf::Time::Zero) {
+                        kill_time = main_timer.getElapsedTime();
+                        sounds.play(WASTED_S);
+                        stats.update(m_window, this_player->getHp(),
+                                     main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
+                    }
+                    m_cam.view.zoom(1.0001);
+                    if (main_timer.getElapsedTime().asSeconds() -
+                        kill_time.asSeconds() > 7) {
+                        return STOP_RUN;
+                    }
+                    m_dead.setPosition(m_window.getView().getCenter().x - 90, m_window.getView().getCenter().y - 26);
+                    m_window.draw(m_dead);
+                } else if (walls.base_enemy[0]->getHp() > 0) {
+                    stats.update(m_window, this_player->getHp(),
+                                 main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
+                }
             }
             stats.draw(m_window);
 //            if (main_timer.getElapsedTime().asSeconds() < 4) {
