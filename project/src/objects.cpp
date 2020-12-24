@@ -368,11 +368,12 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
 }
 
 void Bullet::checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other) {
-    for (auto &[i, players] : other) {
-        if (getRect().intersects(players->getRect())) {
-            m_life = 0;
-        }
-    }
+//    for (auto &[i, players] : other) {
+//        if (getRect().intersects(players->getRect())) {
+//           // players->setHp(players->getHp() - 19);
+//            m_life = 0;
+//        }
+//    }
 }
 
 void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
@@ -552,25 +553,23 @@ int Bullet::getLife() const {
 }
 
 void Player::checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other) {
-    for (auto &i : m_objects) {
-        for (auto &[it, players] : other) {
-            if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(players->getRect())) {
-                if (dy > 0) {
-                    coords.y = players->getPos().y - rect.height;
-                    this->dy = 0;
-                }
-                if (dy < 0) {
-                    coords.y = players->getPos().y + rect.height;
-                    this->dy = 0;
-                }
-                if (dx > 0) {
-                    coords.x = players->getPos().x - rect.width;
-                    this->dx = 0;
-                }
-                if (dx < 0) {
-                    coords.x = players->getPos().x + rect.width;
-                    this->dx = 0;
-                }
+    for (auto &[it, players] : other) {
+        if (getRect().intersects(players->getRect())) {
+            if (dy > 0) {
+                coords.y = players->getPos().y - rect.height;
+                this->dy = 0;
+            }
+            if (dy < 0) {
+                coords.y = players->getPos().y + rect.height;
+                this->dy = 0;
+            }
+            if (dx > 0) {
+                coords.x = players->getPos().x - rect.width;
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                coords.x = players->getPos().x + rect.width;
+                this->dx = 0;
             }
         }
     }
@@ -600,6 +599,7 @@ void Player::checkCollisionsBots(std::vector<Bots*> b) {
         }
     }
 }
+
 sf::IntRect Object::getRect() {
     return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }

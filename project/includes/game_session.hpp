@@ -6,6 +6,7 @@
 
 class GameSession {
    public:
+    int m_user_id;
     GameSession() = delete;
     explicit GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer);
@@ -20,7 +21,6 @@ class GameSession {
     Level m_level;
     Client m_game_client;
     Cam m_cam;
-    int m_user_id;
     sf::Texture dead;
     sf::Sprite m_dead;
     sf::Texture win;
