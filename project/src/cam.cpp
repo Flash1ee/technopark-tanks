@@ -1,23 +1,26 @@
 #include "cam.h"
 
 void Cam::changeViewCoords(
-    const sf::Vector2f& coords) {  //функция для считывания координат игрока
+    const sf::Vector2f& coords, double map_width, double map_height) {  //функция для считывания координат игрока
     float tempX = coords.x;
     float tempY = coords.y;
 
-    if (coords.x < 190) tempX = 190;  //убираем из вида левую сторону
-    if (coords.x > 192) tempX = 192;  //убираем из вида правую сторону
-    if (coords.y < 92) tempY = 92;    //верхнюю сторону
-    if (coords.y > 292) tempY = 292;  //нижнюю сторону
+    double viewX = view.getSize().x / 2;
+    double viewY = view.getSize().y / 2;
+
+    if (coords.x < viewX) tempX = viewX;  //убираем из вида левую сторону
+    if (coords.x > map_width - viewX) tempX = map_width - viewX;  //убираем из вида правую сторону
+    if (coords.y < viewY) tempY = viewY;    //верхнюю сторону
+    if (coords.y > map_height - viewY) tempY = map_height - viewY; 
 
     view.setCenter(tempX,
                    tempY);  //следим за игроком, передавая его координаты.
 }
 
 Cam::Cam() {
-    view.reset(sf::FloatRect(0, 0, 1024, 760));
-    view.setSize(1024, 512);
-    view.zoom(0.39);
+    view.reset(sf::FloatRect(0, 0, 1920, 1080));
+    view.setSize(1920, 1080);
+    view.zoom(0.15); //change ZOOM example 0.15 - 15% from curr view
 }
 
 // void Cam::moveMap(float time, float speed) { //функция для перемещения камеры
