@@ -58,7 +58,11 @@ void Tank::move(float time, DestructibleWalls* walls) {
     setPos();
 }
 
-void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
+int Bullet::getNumber() const {
+    return this->bots_number;
+}
+
+void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls, std::vector<BotBoss*> boss, std::vector<Bots*> b) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -82,7 +86,7 @@ void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
             break;
     }
 
-    this->checkCollisionsObject(p, walls);
+    this->checkCollisionsObjectBots(p, walls, boss, b);
     this->checkCollisionsObject(walls, p);
     if (m_life == 1) {
         coords.x += dx * time;
@@ -325,7 +329,7 @@ void BasePlayer::setHp(int hp) {
     this->m_hp = hp;
 }
 
-void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
+void Bullet::checkCollisionsObjectBots(Player& p, DestructibleWalls* walls, std::vector<BotBoss*> boss, std::vector<Bots*> b) {
     for (auto &i : m_objects) {
         if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
             m_life = 0;
@@ -340,6 +344,16 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
     if (getRect().intersects(p.getRect())) {
         p.setHp(p.getHp() - 19);
         m_life = 0;
+    }
+    for (int i = 0;i < boss.size(); i++) {
+        if (getRect().intersects(boss[i]->getRect()) && (bots_number != 5)) {
+            m_life = 0;
+        }
+    }
+    for (int i = 0;i < b.size(); i++) {
+        if (getRect().intersects(b[i]->getRect()) && (bots_number != i)) {
+            m_life = 0;
+        }
     }
 }
 
@@ -1211,16 +1225,16 @@ void Sound::play(sound_action action) {
         case BLOOD:
             if (this->blood_sound.getStatus() != sf::Sound::Playing) {
                 this->blood_sound.play();
-                case VISABILITY:
-                    if (this->visability_sound.getStatus() != sf::Sound::Playing) {
-                        this->visability_sound.play();
-                    }
-                break;
-                case RICOCHET:
-                    if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
-                        this->ricochet_sound.play();
-                    }
-                break;
+            }
+            break;
+        case VISABILITY:
+            if (this->visability_sound.getStatus() != sf::Sound::Playing) {
+                this->visability_sound.play();
+            }
+            break;
+        case RICOCHET:
+            if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+                this->ricochet_sound.play();
             }
     }
 }
@@ -1263,4 +1277,13 @@ void Player::set_visability(bool action) {
 bool Player::get_visability() {
     return this->m_visability;
 }
+
+void Bots::SetShootTime(float time) {
+    this->shoot_time = time;
+}
+    
+float Bots::GetShootTime() {
+    return shoot_time;
+}
+
 

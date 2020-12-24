@@ -154,12 +154,12 @@ void Statistic::update(sf::RenderWindow& window, int player_hp,
 }
 
 void Statistic::draw(sf::RenderWindow& window) {
+    window.draw(pl_base_hp);
+    window.draw(en_base_hp);
     for (int i = 0; i < text.size(); i++) {
         window.draw(text[i]);
     }
     for (int i = 0; i < health.size(); i++) {
         window.draw(health[i]);
     }
-    window.draw(pl_base_hp);
-    window.draw(en_base_hp);
 }

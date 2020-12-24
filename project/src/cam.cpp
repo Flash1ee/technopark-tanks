@@ -23,25 +23,6 @@ Cam::Cam() {
     view.zoom(0.15); //change ZOOM example 0.15 - 15% from curr view
 }
 
-// void Cam::moveMap(float time, float speed) { //функция для перемещения камеры
-// по карте. принимает время sfml 	if
-// (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) { 		view.move(time*speed,
-// 0);//скроллим карту вправо (см урок, когда мы двигали героя - всё тоже самое)
-// 	}
-// 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-// 		view.move(0,time*speed);//скроллим карту вниз (см урок, когда мы
-// двигали героя - всё тоже самое)
-// 	}
-// 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-// 		view.move(time*speed, 0);//скроллим карту влево (см урок, когда мы
-// двигали героя - всё тоже самое)
-// 	}
-// 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-// 		view.move(0, time*speed);//скроллим карту вправо (см урок, когда мы
-// двигали героя - всё тоже самое)
-// 	}
-// }
-
 void Cam::changeView() {  // compare function
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
         view.zoom(0.96);  //масштабируем, увеличение

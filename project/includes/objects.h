@@ -22,7 +22,6 @@
 #define RICOSCHET_SOUND "../sounds/ricochet.ogg"
 
 
-
 enum class SoundType {
     BULLET,
     COUNT,
@@ -224,23 +223,25 @@ class Brick : public Object {
 class Bullet : public Object {
 public:
     Bullet(Level& mapObj, sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
-           float speed, Direction dir, int life, bool bot)
-        : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot) {
+           float speed, Direction dir, int life, bool bot, int number)
+        : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot), bots_number(number) {
         m_objects = mapObj.GetAllObjects("solid");
 
         ricochet.loadFromFile(RICOSCHET_SOUND);
         ricochet_sound.setBuffer(ricochet);
         };
     void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<BotBoss*> boss);
-    void moveBots(float time, Player& p, DestructibleWalls* walls);
+    void moveBots(float time, Player& p, DestructibleWalls* walls, std::vector<BotBoss*> boss, std::vector<Bots*> b);
     void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<BotBoss*> boss);
-    void checkCollisionsObject(Player& p, DestructibleWalls* walls);
+    void checkCollisionsObjectBots(Player& p, DestructibleWalls* walls, std::vector<BotBoss*> boss, std::vector<Bots*> b);
     void checkCollisionsObject(DestructibleWalls* walls, Player& p);
     void play();
     // void sound();
     int getLife() const;
     Direction getDir() const;
+    int getNumber() const;
 private:
+    int bots_number;
     int m_life;
     int m_is_bot;
     sf::SoundBuffer ricochet;
@@ -297,12 +298,17 @@ class Player : public Tank {  //класс игрока
 
 };
 
-class Bots : public Tank {  //класс игрока
+class Bots : public Tank {//класс игрока
+private:
+    float shoot_time;
 public:
+    void SetShootTime(float time);
+    float GetShootTime();
     Bots(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
             : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {
                 m_objects = mapObj.GetAllObjects();
+                shoot_time = 0;
             }
     void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
                                 std::vector<Bots*> b, std::vector<BotBoss*> boss);
