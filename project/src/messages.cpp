@@ -31,8 +31,8 @@ sf::Packet& operator>>(sf::Packet& packet, PlayerAction& message) {
     int int_dir;
 
     packet >> message.player_id >> message.position;
-    packet >> int_msg_type;
     packet >> int_dir;
+    packet >> int_msg_type;
 
     message.msg_type = static_cast<PlayerActionType>(int_msg_type);
     message.direction = static_cast<Direction>(int_dir);
