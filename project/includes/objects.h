@@ -227,8 +227,8 @@ public:
     // void sound();
     int getLife() const;
     Direction getDir() const;
-private:
     int m_id;
+private:
     int m_life;
     int m_is_bot;
     // int m_damage;

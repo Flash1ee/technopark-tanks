@@ -365,8 +365,9 @@ int GameSession::Run() {
                     {
                         auto bullet_pos = curr_bullet->getPos();
                         auto bullet_dir = curr_bullet->getDir();
+                        auto bullet_id = curr_bullet->m_id;
 
-                        bullet_action = { -1, bullet_pos, bullet_dir, PlayerActionType::NewBullet }; // bullets have no id
+                        bullet_action = { -1, bullet_pos, bullet_dir, bullet_id, PlayerActionType::NewBullet }; // bullets have no id
                         action_vector.push(bullet_action);
                         std::cout << "DIR SEND "<<(int)bullet_action.direction << std::endl;
                     }
@@ -453,9 +454,10 @@ int GameSession::Run() {
                                 std::cout << "Other player shooted" << std::endl;
                                 sf::Vector2f pos = action.position;
                                 Direction dir = action.direction;
+                                int receive_id = action.player_id;
                                 std::shared_ptr<Bullet> new_b(new Bullet(m_level,
                                                           OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
-                                                          pos, 0.3, dir, 1, false, m_user_id));
+                                                          pos, 0.3, dir, 1, false, receive_id));
 
                                 all_bullets.push_back(new_b);
 
