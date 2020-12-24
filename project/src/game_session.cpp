@@ -77,7 +77,7 @@ void GameSession::WaitForOtherPlayers() {
 }
 
 int GameSession::Run() {
-    sf::Vector2f this_player_pos;
+    sf::Vector2f this_player_pos = {100, 100};
 
     if (m_is_multiplayer) {
         if(m_game_client.connectToServer())
