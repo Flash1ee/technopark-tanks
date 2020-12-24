@@ -20,7 +20,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     :
       m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen),
       m_is_multiplayer(is_multiplayer) {
-    m_level.LoadFromFile(MAP_TWO);
+    m_level.LoadFromFile(MAP_ONE);
     MapObject player = m_level.GetFirstObject("player1");
     
 
@@ -296,6 +296,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
         if ((this_player->getCount() < 2) && (botBoss.size() == 0)) {
             botBoss.push_back(new BotBoss(m_level, OBJECT_IMAGE, sf::IntRect(178, 129, 13, 13), boss_position, 0.03,
                                           200, Direction::UP));
+            sounds.play(BOSS);
         }
         // std::cout << timer.asSeconds() << std::endl;
 
@@ -492,7 +493,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 curr_bullet->move(time, *this_player, all_bots, &walls, botBoss);
             }
 
-            if (timer_visible.asSeconds() > 3 && !(this_player->get_visability())) {
+            if (timer_visible.asSeconds() > 5 && !(this_player->get_visability())) {
                 m_cam.view.zoom(2);
                 this_player->set_visability(true);
             }
@@ -503,7 +504,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                   if (this_player->getHp() != pre_hp) {
                     std::cout << pre_hp << " new" << this_player->getHp() << std::endl;
                     auto probability = rand() % 100;
-                    if (probability < 50 && this_player->get_visability()) {
+                    if (probability < 30 && this_player->get_visability()) {
                         m_cam.view.zoom(0.5);
                         this_player->set_visability(false);
                         this_player->play_visability();
@@ -601,7 +602,9 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     }
                     this_player->setCount(this_player->getCount() - 1);
                     all_bots.erase(all_bots.begin() + i);
-                    sounds.play(KILL);
+                    if (!first) {
+                        sounds.play(KILL);
+                    }
                     count_bots--;
                 }
             }

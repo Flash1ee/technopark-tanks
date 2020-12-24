@@ -15,11 +15,14 @@
 #define FIRE_SOUND "../sounds/fire.ogg"
 #define SPAWN_SOUND "../sounds/bonus.ogg"
 #define BRICK_SOUND "../sounds/brick.ogg"
-#define KILL_SOUND "../sounds/explosion.ogg"
+// #define KILL_SOUND "../sounds/explosion.ogg"
+#define KILL_SOUND "../sounds/kill.ogg"
 #define FINISH_SOUND "../sounds/finish.ogg"
 #define BLOOD_SOUND "../sounds/first_blood.ogg"
 #define VISABILITY_SOUND "../sounds/visibility.ogg"
 #define RICOSCHET_SOUND "../sounds/ricochet.ogg"
+#define BOSS_SOUND "../sounds/boss.ogg"
+
 
 
 enum class SoundType {
@@ -54,6 +57,7 @@ typedef enum {
     BLOOD,
     VISABILITY,
     RICOCHET,
+    BOSS,
     COUNT
 } sound_action;
 class Sound {
@@ -93,6 +97,12 @@ class Sound {
 
     sf::SoundBuffer ricochet;
     sf::Sound ricochet_sound;
+
+    sf::SoundBuffer tank_kill;
+    sf::Sound tank_kill_sound;
+
+    sf::SoundBuffer boss;
+    sf::Sound boss_sound;
 
     public:
     void play(sound_action action);
@@ -284,7 +294,7 @@ class Player : public Tank {  //класс игрока
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(2), m_visability(true)  {
+        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(4), m_visability(true)  {
             visability.loadFromFile(VISABILITY_SOUND);
             visability_sound.setBuffer(visability);
         };
