@@ -20,7 +20,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     :
       m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen),
       m_is_multiplayer(is_multiplayer) {
-    m_level.LoadFromFile("../maps/map1.tmx");
+    m_level.LoadFromFile(MAP_TWO);
     MapObject player = m_level.GetFirstObject("player1");
     
 
@@ -441,13 +441,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
             for (auto& curr_bullet : all_bullets) {
                 curr_bullet->move(time, *this_player, all_bots, &walls);
             }
-                // for (auto &wall : walls.walls) {
-                //     if (wall->getCrash()) {
-                //         std::cout << "CRASHING" << std::endl;
-                //         m_window.draw(wall->getCrashSprite());
-                //         wall->updateCrash();
-                //     }
-                // }
+
             if (timer_visible.asSeconds() > 3 && !(this_player->get_visability())) {
                 m_cam.view.zoom(2);
                 this_player->set_visability(true);
@@ -457,6 +451,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 curr_bullet->moveBots(time, *this_player, &walls);
 
                   if (this_player->getHp() != pre_hp) {
+                    std::cout << pre_hp << " new" << this_player->getHp() << std::endl;
                     auto probability = rand() % 100;
                     if (probability < 50 && this_player->get_visability()) {
                         m_cam.view.zoom(0.5);

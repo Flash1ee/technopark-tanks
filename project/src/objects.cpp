@@ -878,6 +878,7 @@ void Sound::play(sound_action action) {
         case BLOOD:
             if (this->blood_sound.getStatus() != sf::Sound::Playing) {
                 this->blood_sound.play();
+            break;
         case VISABILITY:
             if (this->visability_sound.getStatus() != sf::Sound::Playing) {
                 this->visability_sound.play();
