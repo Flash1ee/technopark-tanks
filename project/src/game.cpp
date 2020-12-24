@@ -12,8 +12,6 @@
 int main(int argc, char* argv[]) {
     int gamePlaying = 1;
     while (gamePlaying) {
-    // std::string window_title = std::string("Tanks") + std::string(argv[1]);
-        // std::string window_title = std::string("Tanks");
 
         std::string player_skin(OBJECT_IMAGE);
         std::string map_skin(MAP_ONE);

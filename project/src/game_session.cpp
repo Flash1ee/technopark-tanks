@@ -29,20 +29,6 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     if (m_is_multiplayer) {
         m_player_pos = m_game_client.connectToServer(server_ip, server_port);
 
-        // sf::Packet packet;
-
-        // if(m_game_client.RecieveFromServer(packet))
-        // {
-        //     int id;
-        //     packet >> id;
-
-        //     std::cout << "Client id on server = " << id << std::endl;
-        // }
-        // else
-        // {
-        //     std::cout << "cannot get client id from server" << std::endl;
-        //     exit(-1);
-        // }
     }
 
     finish.openFromFile(MORTAL_PATH);
@@ -74,13 +60,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
         WaitForOtherPlayers();
         // RunOnlineGame()
     }
-    // else
-    // {
-    //     RunOfflineGame();
-    // }
-
-    // TmxObject Player_obj = m_level.GetFirstObject("player"); //TODO: make
-    // const name
+    
     bool was_count = false;
     bool first = true;
     Statistic stats(m_window);
@@ -171,7 +151,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
     std::vector<std::shared_ptr<Bullet>> bots_bullets;
     sf::Clock clock, boss_timer_shoots;
     sf::Clock main_timer, timer_bots;
-    // , timer_shoots;
     sf::Clock time_player_visability;
     bool is_new_user = true;
 
@@ -199,7 +178,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
         sf::Time boss_timer = boss_timer_shoots.getElapsedTime();
 
-        // sf::Time timer = timer_shoots.getElapsedTime();
         sf::Time timer_visible = time_player_visability.getElapsedTime();
 
 
@@ -218,7 +196,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 sf::Vector2f m_bot_pos = {spawn[ind].rect.left + spawn[ind].rect.width / 2,
                                           spawn[ind].rect.top - spawn[ind].rect.width / 2};
 
-                // sf::Vector2f m_bot_pos = {static_cast<float>(50 * (i + 1)), static_cast<float>(50 * (i + 1))};
                 all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.05,
                                             100, Direction::UP));
                 stop += 1;
@@ -241,8 +218,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     }
                     start_pause_time = main_timer.getElapsedTime();
 
-                    // sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
-                    //                             sf::Style::None);
 
                     Menu gameMenu(1, m_window);
                     m_window.setView(m_window.getDefaultView());  //"оживляем" камеру в окне sfml
@@ -264,7 +239,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
             if (this_player->getShot() && this_player->getHp() > 0) {
                 this_player->setShot(false);
-                // sf::Vector2f coords = this_player.getPos();
                 auto bullet_dir = this_player->getDir();
                 sf::Vector2f bullet_pos;
                 if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
@@ -280,15 +254,10 @@ int GameSession::Run(sf::IntRect pl_rect) {
                                                       bullet_pos, 0.3,
                                                       bullet_dir, 1, is_bot, -1);
 
-                // sf::Packet packet;
-                // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
-                // PlayerActionType::NewBullet};
-                // action_vector.actions.push_back(new_bullet_action);
-
+               
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
                 sounds.play(FIRE);
-                // sounds[static_cast<int>(SoundType::BULLET)].play();
             }
 
 
@@ -298,13 +267,11 @@ int GameSession::Run(sf::IntRect pl_rect) {
                                           200, Direction::UP));
             sounds.play(BOSS);
         }
-        // std::cout << timer.asSeconds() << std::endl;
 
         for (int i = 0; i < all_bots.size(); i ++) {
             if (all_bots[i]->getShot() && (main_timer.getElapsedTime().asSeconds() - all_bots[i]->GetShootTime() > 1)) {
                 all_bots[i]->setShot(false);
                 all_bots[i]->SetShootTime(main_timer.getElapsedTime().asSeconds());
-                // sf::Vector2f coords = this_player.getPos();
                 auto bullet_dir = all_bots[i]->getDir();
                 sf::Vector2f bullet_pos;
                 if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
@@ -348,14 +315,8 @@ int GameSession::Run(sf::IntRect pl_rect) {
                         new_bullets.push_back(new_b);
                     }
 
-                    // sf::Packet packet;
-                    // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
-                    // PlayerActionType::NewBullet};
-                    // action_vector.actions.push_back(new_bullet_action);
-
 
                     sounds.play(FIRE);
-                    // sounds[static_cast<int>(SoundType::BULLET)].play();
                 }
                 boss_timer_shoots.restart();
             }
@@ -555,11 +516,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
             for (int i = 0; i < walls.walls.size(); i++) {
                 if (walls.walls[i]->getHp() > 0) {
                         m_window.draw(walls.walls[i]->getSprite());
-                    //     if (walls.walls[i]->getCrash()) {
-                    
-                    //     m_window.draw(walls.walls[i]->getCrashSprite());
-                    //     // walls.walls[i]->updateCrash();
-                    // }
                 }
                 if (walls.walls[i]->getHp() <= 0) {
                     walls.walls.erase(walls.walls.begin() + i);
@@ -568,11 +524,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
             for (int i = 0; i < walls.bricks.size(); i++) {
                 if (walls.bricks[i]->getHp() > 0) {
                         m_window.draw(walls.bricks[i]->getSprite());
-                    //     if (walls.walls[i]->getCrash()) {
-                    
-                    //     m_window.draw(walls.walls[i]->getCrashSprite());
-                    //     // walls.walls[i]->updateCrash();
-                    // }
                 }
                 if (walls.bricks[i]->getHp() <= 0) {
                     walls.bricks.erase(walls.bricks.begin() + i);
