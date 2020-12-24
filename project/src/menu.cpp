@@ -67,57 +67,118 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
             break;
         }
 
+        case 3: {
+            if (!bg.loadFromFile(DEVYATKA_PATH)) {
+                throw std::exception();
+            };
+            this->background.setTexture(bg);
+            background.setPosition(0, 0);
+            // if (!music.openFromFile(CHOOSE_MUSIC_PATH)) {
+            //     throw std::exception();
+            // };
+            this->buttons.resize(MAP_COUNT);
+            auto height = window.getSize().y / this->buttons.size();
+            for (int i = 0; i < this->buttons.size(); i++) {
+                buttons[i].setColor(mapMenu[i].color);
+                buttons[i].setFont(font);
+                buttons[i].setString(mapMenu[i].text);
+                buttons[i].setPosition(window.getSize().x / 2 - 100, 200 + height * (i));
+            }
+            break;
+        }
+
         default:
             throw MenuSelector::ERROR;
     }
     buttons[selectedIndex].setColor(sf::Color::Red);
 }
 
-int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::string player_skin, std::string server_ip) {
+int Menu::menuSwitcher(sf::RenderWindow& window, std::string player_skin, std::string server_ip) {
     switch (this->show(window))
         {
-            case FIRST: {
-                GameSession game_session("Tanks", map_skin, player_skin, false);
+            case T_D: {
+                std::string map = MAP_ONE;
+                GameSession game_session("Tanks", map, player_skin, false);
                 music.pause();
                 if (game_session.Run(pl_rects[0]) == STOP_RUN) {
-                    // std::cout <<"Returned stop run" <<'\n';
                     return STOP_RUN;
                 };
                 break;
             }
 
-            case SECOND: {
-                GameSession game_session("Tanks", map_skin, player_skin, false);
+            case T_G: {
+                std::string map = MAP_TWO;
+                GameSession game_session("Tanks", map, player_skin, false);
+                music.pause();
+                if (game_session.Run(pl_rects[0]) == STOP_RUN) {
+                    return STOP_RUN;
+                };
+                break;
+            }
+
+            case I_D: {
+                std::string map = MAP_ONE;
+                GameSession game_session("Tanks", map, player_skin, false);
                 music.pause();
                 if (game_session.Run(pl_rects[1]) == STOP_RUN) {
-                    // std::cout <<"Returned stop run" <<'\n';
                     return STOP_RUN;
                 };
                 break;
             }
 
-            case THIRD: {
-                GameSession game_session("Tanks", map_skin, player_skin, false);
+            case I_G: {
+                std::string map = MAP_TWO;
+                GameSession game_session("Tanks", map, player_skin, false);
+                music.pause();
+                if (game_session.Run(pl_rects[1]) == STOP_RUN) {
+                    return STOP_RUN;
+                };
+                break;
+            }
+
+            case K_D: {
+                std::string map = MAP_ONE;
+                GameSession game_session("Tanks", map, player_skin, false);
                 music.pause();
                 if (game_session.Run(pl_rects[2]) == STOP_RUN) {
-                    // std::cout <<"Returned stop run" <<'\n';
                     return STOP_RUN;
                 };
                 break;
             }
 
-            case FORTH: {
-                GameSession game_session("Tanks", map_skin, player_skin, false);
+            case K_G: {
+                std::string map = MAP_TWO;
+                GameSession game_session("Tanks", map, player_skin, false);
+                music.pause();
+                if (game_session.Run(pl_rects[2]) == STOP_RUN) {
+                    return STOP_RUN;
+                };
+                break;
+            }
+
+            case C_D: {
+                std::string map = MAP_ONE;
+                GameSession game_session("Tanks", map, player_skin, false);
                 music.pause();
                 if (game_session.Run(pl_rects[3]) == STOP_RUN) {
-                    // std::cout <<"Returned stop run" <<'\n';
+                    return STOP_RUN;
+                };
+                break;
+            }
+
+            case C_G: {
+                std::string map = MAP_TWO;
+                GameSession game_session("Tanks", map, player_skin, false);
+                music.pause();
+                if (game_session.Run(pl_rects[3]) == STOP_RUN) {
                     return STOP_RUN;
                 };
                 break;
             }
 
             case MULTI: {
-                GameSession game_session("Tanks", map_skin, player_skin, true,
+                std::string map = MAP_ONE;
+                GameSession game_session("Tanks", map, player_skin, true,
                    server_ip, PORT);
                 if (game_session.Run(pl_rects[1]) == STOP_RUN) {
                     return STOP_RUN;
@@ -134,6 +195,9 @@ int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::stri
 
 
 int Menu::show(sf::RenderWindow& window) {
+    if (this->buttons[0].getString() != "Le Tank") {
+        music.setVolume(30);
+    }
     this->music.play();
     while (window.isOpen()) {
         this->draw(window);
@@ -165,7 +229,7 @@ int Menu::show(sf::RenderWindow& window) {
                         }
                         if (currbutton == "Single play") {
                             Menu tanks(2, window);
-                            tanks.music.play();
+                            tanks.music.setVolume(200);
                             return tanks.show(window);
                         }
                         if (currbutton == "Multiplayer") {
@@ -185,20 +249,28 @@ int Menu::show(sf::RenderWindow& window) {
                             return 0;
                         }
                         if (currbutton == "Le Tank") {
-                            window.close();
-                            return FIRST;
+                            Menu maps(3, window);
+                            return maps.show(window) + TANK;
                         }
                         if (currbutton == "Kolobok Ivanich") {
-                            window.close();
-                            return SECOND;
+                            Menu maps(3, window);
+                            return maps.show(window) + IVAN;
                         }
                         if (currbutton == "Green bombass") {
-                            window.close();
-                            return THIRD;
+                            Menu maps(3, window);
+                            return maps.show(window) + KRIP;
                         }
                         if (currbutton == "EL PROBLEMA") {
+                            Menu maps(3, window);
+                            return maps.show(window) + CAR;
+                        }
+                        if (currbutton == "Standart") {
                             window.close();
-                            return FORTH;
+                            return DEFAULT;
+                        }
+                        if (currbutton == "Grass") {
+                            window.close();
+                            return GRASS;
                         }
                         break;
                     }

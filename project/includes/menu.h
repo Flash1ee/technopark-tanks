@@ -8,18 +8,29 @@
 #include <SFML/Audio.hpp>
 #include "game_session.hpp"
 #include "client_server_config.h"
+#include "game.h"
 
-#define SINGLE 100
-#define FIRST 1000
-#define SECOND 2000
-#define THIRD 3000
-#define FORTH 4000
+#define TANK 100
+#define IVAN 2023
+#define KRIP 3056
+#define CAR 40
+#define DEFAULT 55
+#define GRASS 777
+#define T_D 155
+#define T_G 877
+#define I_D 2078
+#define I_G 2800
+#define K_D 3111
+#define K_G 3833
+#define C_D 95
+#define C_G 817
 #define MULTI 200
 #define CONTINUE 300
 #define MENU_ERROR -1000
 #define STOP_RUN -245
 #define MAIN_COUNT 4
 #define GAME_COUNT 3
+#define MAP_COUNT 2
 #define CHARACTER_COUNT 4
 #define FONT_PATH "../resources/20085.ttf"
 #define BACKGROUND_PATH "../resources/background.jpg"
@@ -71,6 +82,11 @@ const inline Button charMenu[CHARACTER_COUNT] {
     {.text = "EL PROBLEMA", .color = sf::Color::White}
 };
 
+const inline Button mapMenu[MAP_COUNT] {
+    {.text = "Standart", .color = sf::Color::White},
+    {.text = "Grass", .color = sf::Color::White},
+};
+
 class Menu {
     private:
         int selectedIndex;
@@ -86,7 +102,7 @@ class Menu {
         Menu(int selector, sf::RenderWindow& window);
         void moveUp();
         void moveDown();
-        int menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::string player_skin, std::string server_ip);
+        int menuSwitcher(sf::RenderWindow& window, std::string player_skin, std::string server_ip);
         int show(sf::RenderWindow& window);
         void draw(sf::RenderWindow& window);
 };

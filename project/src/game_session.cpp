@@ -20,7 +20,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     :
       m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen),
       m_is_multiplayer(is_multiplayer) {
-    m_level.LoadFromFile(MAP_ONE);
+    m_level.LoadFromFile(map_path);
     MapObject player = m_level.GetFirstObject("player1");
     
 
@@ -28,21 +28,6 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     m_player_pos = {p_pos.left + p_pos.width / 2, p_pos.top - p_pos.width / 2};
     if (m_is_multiplayer) {
         m_player_pos = m_game_client.connectToServer(server_ip, server_port);
-
-        // sf::Packet packet;
-
-        // if(m_game_client.RecieveFromServer(packet))
-        // {
-        //     int id;
-        //     packet >> id;
-
-        //     std::cout << "Client id on server = " << id << std::endl;
-        // }
-        // else
-        // {
-        //     std::cout << "cannot get client id from server" << std::endl;
-        //     exit(-1);
-        // }
     }
 
     finish.openFromFile(MORTAL_PATH);
@@ -171,7 +156,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
     std::vector<std::shared_ptr<Bullet>> bots_bullets;
     sf::Clock clock, boss_timer_shoots;
     sf::Clock main_timer, timer_bots;
-    // , timer_shoots;
     sf::Clock time_player_visability;
     bool is_new_user = true;
 
@@ -187,6 +171,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
     TextEvent bots_count(BOT_KILL, this_player->getCount());
     TextEvent destroy(DESTROY, this_player->getCount());
+    TextEvent boss_text(BOSS_APPEAR, this_player->getCount());
 
     sf::Time last_pl_bull;
     sf::Time pause_time;
@@ -241,9 +226,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     }
                     start_pause_time = main_timer.getElapsedTime();
 
-                    // sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
-                    //                             sf::Style::None);
-
                     Menu gameMenu(1, m_window);
                     m_window.setView(m_window.getDefaultView());  //"оживляем" камеру в окне sfml
                     if (gameMenu.show(m_window) == STOP_RUN) {
@@ -280,10 +262,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
                                                       bullet_pos, 0.3,
                                                       bullet_dir, 1, is_bot, -1);
 
-                // sf::Packet packet;
-                // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
-                // PlayerActionType::NewBullet};
-                // action_vector.actions.push_back(new_bullet_action);
 
                 all_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
@@ -297,8 +275,8 @@ int GameSession::Run(sf::IntRect pl_rect) {
             botBoss.push_back(new BotBoss(m_level, OBJECT_IMAGE, sf::IntRect(178, 129, 13, 13), boss_position, 0.03,
                                           200, Direction::UP));
             sounds.play(BOSS);
+            boss_text.SetTimer(main_timer.getElapsedTime());
         }
-        // std::cout << timer.asSeconds() << std::endl;
 
         for (int i = 0; i < all_bots.size(); i ++) {
             if (all_bots[i]->getShot() && (main_timer.getElapsedTime().asSeconds() - all_bots[i]->GetShootTime() > 1)) {
@@ -347,12 +325,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
                         bots_bullets.push_back(new_b);  // Copying is too expensive
                         new_bullets.push_back(new_b);
                     }
-
-                    // sf::Packet packet;
-                    // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
-                    // PlayerActionType::NewBullet};
-                    // action_vector.actions.push_back(new_bullet_action);
-
 
                     sounds.play(FIRE);
                     // sounds[static_cast<int>(SoundType::BULLET)].play();
@@ -514,7 +486,6 @@ int GameSession::Run(sf::IntRect pl_rect) {
             }
 
             m_cam.changeViewCoords(new_pos, m_level.GetTilemapWidth(), m_level.GetTilemapHeight());
-            // m_cam.changeView();
 
             m_window.setView(m_cam.view);  //"оживляем" камеру в окне sfml
             m_window.clear();
@@ -634,6 +605,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
             stats.draw(m_window);
             bots_count.update(m_window, main_timer.getElapsedTime());
+            boss_text.update(m_window, main_timer.getElapsedTime());
 
             if (this_player->getCount() <= 0) {
                 if (!was_count) {

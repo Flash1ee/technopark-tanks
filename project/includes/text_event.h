@@ -13,6 +13,7 @@ constexpr int PL = 0;
 enum textEvents {
     BOT_KILL,
     DESTROY,
+    BOSS_APPEAR,
     T_COUNT,
     T_END
 };
@@ -22,7 +23,6 @@ class TextEvent {
         textEvents type;
         sf::Time timer;
         sf::Font font;
-        sf::Music music;
         sf::Text text;
         std::ostringstream string;
         TextEvent();
