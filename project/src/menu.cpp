@@ -270,7 +270,7 @@ int Menu::show(sf::RenderWindow& window) {
                         }
                         if (currbutton == "Grass") {
                             window.close();
-                            return GRASS;
+                            return GRAS;
                         }
                         break;
                     }

@@ -15,7 +15,7 @@
 #define KRIP 3056
 #define CAR 40
 #define DEFAULT 55
-#define GRASS 777
+#define GRAS 777
 #define T_D 155
 #define T_G 877
 #define I_D 2078
