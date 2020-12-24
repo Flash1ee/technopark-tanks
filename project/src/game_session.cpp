@@ -20,7 +20,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     :
       m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen),
       m_is_multiplayer(is_multiplayer) {
-    m_level.LoadFromFile(MAP_TWO);
+    m_level.LoadFromFile(MAP_ONE);
     MapObject player = m_level.GetFirstObject("player1");
     
 

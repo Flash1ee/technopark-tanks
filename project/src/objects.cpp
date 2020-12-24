@@ -1190,15 +1190,16 @@ void Sound::play(sound_action action) {
     switch (action) {
         case BACKGROUND:
             if (this->background_sound.getStatus() != sf::Sound::Playing) {
+                this->background_sound.setVolume(20);
                 this->background_sound.play();
-                this->background_sound.setVolume(60);
                 this->background_sound.setPitch(0.8f);
             }
             break;
         case BRICK:
             if (this->brick_sound.getStatus() != sf::Sound::Playing) {
+                this->brick_sound.setVolume(100);
+
                 this->brick_sound.play();
-                this->fire_sound.setVolume(100);
             }
             break;
         case KILL:
@@ -1208,16 +1209,18 @@ void Sound::play(sound_action action) {
             break;
         case FIRE:
             if (this->fire_sound.getStatus() != sf::Sound::Playing) {
-                this->fire_sound.play();
                 this->fire_sound.setVolume(60);
+                this->fire_sound.play();
             }
             break;
         case GAME_OVER:
+            this->gameover_sound.setVolume(60);
             this->gameover_sound.play();
+
             break;
         case GAME_START:
+            this->gamestart_sound.setVolume(10.f);
             this->gamestart_sound.play();
-            this->gamestart_sound.setVolume(20);
             break;
         case SPAWN:
             if (this->steel_sound.getStatus() != sf::Sound::Playing) {
@@ -1226,6 +1229,7 @@ void Sound::play(sound_action action) {
             break;
         case FINISH:
             if (this->finish_sound.getStatus() != sf::Sound::Playing) {
+                this->finish_sound.setVolume(60);
                 this->finish_sound.play();
             }
             break;
@@ -1235,16 +1239,19 @@ void Sound::play(sound_action action) {
             break;
         case VISABILITY:
             if (this->visability_sound.getStatus() != sf::Sound::Playing) {
+                this->visability_sound.setVolume(20);
                 this->visability_sound.play();
             }
             break;
         case RICOCHET:
             if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+                this->ricochet_sound.setVolume(40);
                 this->ricochet_sound.play();
             }
             break;
         case BOSS:
             if (this->boss_sound.getStatus() != sf::Sound::Playing) {
+                this->boss_sound.setVolume(40);
                 this->boss_sound.play();
             }
             break;
