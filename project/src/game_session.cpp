@@ -293,7 +293,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
 
         }
-        if ((this_player->getCount() < 2) && (botBoss.size() == 0)) {
+        if ((this_player->getCount() < 3) && (botBoss.size() == 0)) {
             botBoss.push_back(new BotBoss(m_level, OBJECT_IMAGE, sf::IntRect(178, 129, 13, 13), boss_position, 0.03,
                                           200, Direction::UP));
         }
