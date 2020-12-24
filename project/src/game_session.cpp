@@ -77,7 +77,9 @@ void GameSession::WaitForOtherPlayers() {
 }
 
 int GameSession::Run() {
-    sf::Vector2f this_player_pos = {100, 100};
+
+    auto player_pos_raw = m_level.GetFirstObject("player1");
+    sf::Vector2f this_player_pos = {player_pos_raw.rect.left, player_pos_raw.rect.top - player_pos_raw.rect.width};
 
     if (m_is_multiplayer) {
         if(m_game_client.connectToServer())
@@ -334,6 +336,7 @@ int GameSession::Run() {
             }
         }
         this_player->checkCollisionsBots(all_bots);
+        this_player->checkCollisionsPlayers(players);
 
         if (m_is_multiplayer) {
             PlayerActionVector action_vector;
@@ -478,7 +481,7 @@ int GameSession::Run() {
         {  // Drawing is here
 
             for (auto& curr_bullet : all_bullets) {
-                curr_bullet->move(time, *this_player, all_bots, &walls);
+                curr_bullet->move(time, *this_player, all_bots, &walls, players);
                 // for (auto &wall : walls.walls) {
                 //     if (wall->getCrash()) {
                 //         std::cout << "CRASHING" << std::endl;

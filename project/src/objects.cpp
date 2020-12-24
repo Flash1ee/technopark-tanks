@@ -90,7 +90,7 @@ void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
     setPos();
 }
 
-void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls* walls) {
+void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -114,6 +114,7 @@ void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls*
             break;
     }
 
+    this->checkCollisionsPlayers(other);
     this->checkCollisionsObject(time, p, b, walls);
     this->checkCollisionsObject(walls, p);
     if (m_life == 1) {
@@ -366,6 +367,14 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
     }
 }
 
+void Bullet::checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other) {
+    for (auto &[i, players] : other) {
+        if (getRect().intersects(players->getRect())) {
+            m_life = 0;
+        }
+    }
+}
+
 void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
     auto damage = WALL_DAMAGE / 2.0;
     auto shift = BLOCK_SIZE * (damage / (double)WALL_INIT);
@@ -540,6 +549,31 @@ void Brick ::setHp(int hp) {
 
 int Bullet::getLife() const {
     return this->m_life;
+}
+
+void Player::checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other) {
+    for (auto &i : m_objects) {
+        for (auto &[it, players] : other) {
+            if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(players->getRect())) {
+                if (dy > 0) {
+                    coords.y = players->getPos().y - rect.height;
+                    this->dy = 0;
+                }
+                if (dy < 0) {
+                    coords.y = players->getPos().y + rect.height;
+                    this->dy = 0;
+                }
+                if (dx > 0) {
+                    coords.x = players->getPos().x - rect.width;
+                    this->dx = 0;
+                }
+                if (dx < 0) {
+                    coords.x = players->getPos().x + rect.width;
+                    this->dx = 0;
+                }
+            }
+        }
+    }
 }
 
 void Player::checkCollisionsBots(std::vector<Bots*> b) {
