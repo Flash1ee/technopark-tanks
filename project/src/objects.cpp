@@ -1245,6 +1245,22 @@ bool Sound::MainSoundStopped() {
     }
     return false;
 }
+
+void Sound::stop_all() {
+    ricochet_sound.stop();
+    sound.stop();
+    background_sound.stop();
+    brick_sound.stop();
+    explosion_sound.stop();
+    fire_sound.stop();
+    gameover_sound.stop();
+    gamestart_sound.stop();
+    steel_sound.stop();
+    finish_sound.stop();
+    visability_sound.stop();
+    ricochet_sound.stop();
+}
+
 int Wall::getHp() const {
     return this->m_hp;
 }

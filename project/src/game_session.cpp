@@ -610,7 +610,9 @@ int GameSession::Run(sf::IntRect pl_rect) {
             }
 
             if (this_player->getHp() <= 0) {
+                sounds.stop_all();
                 if (wasted.GetTimer() == sf::Time::Zero) {
+                    sounds.MainSoundStopped();
                     wasted.SetTimer(main_timer.getElapsedTime());
                     stats.update(m_window, this_player->getHp(), 
                         walls, main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());

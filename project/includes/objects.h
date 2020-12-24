@@ -98,6 +98,7 @@ class Sound {
     void play(sound_action action);
     // void play();
     //   Sound(std::string path);
+    void stop_all();
     Sound();
     bool MainSoundStopped();
 };
