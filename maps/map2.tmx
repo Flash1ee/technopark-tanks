@@ -678,7 +678,6 @@
   <object id="208" name="brick" gid="17" x="208" y="288" width="16" height="16"/>
   <object id="209" name="brick" gid="17" x="208" y="304" width="16" height="16"/>
   <object id="210" name="brick" gid="17" x="208" y="320" width="16" height="16"/>
-  <object id="211" name="brick" gid="17" x="208" y="336" width="16" height="16"/>
   <object id="213" name="brick" gid="17" x="176" y="96" width="16" height="16"/>
   <object id="214" name="brick" gid="17" x="176" y="112" width="16" height="16"/>
   <object id="217" name="brick" gid="17" x="208" y="96" width="16" height="16"/>
@@ -883,9 +882,9 @@
   <object id="500" name="grase" gid="68" x="368" y="176" width="16" height="16"/>
   <object id="501" name="grase" gid="68" x="352" y="224" width="16" height="16"/>
   <object id="502" name="grase" gid="68" x="368" y="144" width="16" height="16"/>
-  <object id="503" name="grase" gid="68" x="352" y="128" width="16" height="16"/>
-  <object id="504" name="grase" gid="68" x="368" y="112" width="16" height="16"/>
-  <object id="505" name="grase" gid="68" x="352" y="32" width="16" height="16"/>
+  <object id="503" name="grass" gid="68" x="352" y="128" width="16" height="16"/>
+  <object id="504" name="grass" gid="68" x="368" y="112" width="16" height="16"/>
+  <object id="505" name="grass" gid="68" x="352" y="32" width="16" height="16"/>
   <object id="506" name="grass" gid="68" x="368" y="80" width="16" height="16"/>
   <object id="507" name="grase" gid="68" x="368" y="48" width="16" height="16"/>
   <object id="508" name="grass" gid="68" x="16" y="208" width="16" height="16"/>
