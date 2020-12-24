@@ -448,7 +448,8 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 //         wall->updateCrash();
                 //     }
                 // }
-            if (timer_visible.asSeconds() > 15 && !(this_player->get_visability())) {
+            if (timer_visible.asSeconds() > 3 && !(this_player->get_visability())) {
+                m_cam.view.zoom(2);
                 this_player->set_visability(true);
             }
             for (auto& curr_bullet : bots_bullets) {
@@ -458,6 +459,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                   if (this_player->getHp() != pre_hp) {
                     auto probability = rand() % 100;
                     if (probability < 50 && this_player->get_visability()) {
+                        m_cam.view.zoom(0.5);
                         this_player->set_visability(false);
                         this_player->play_visability();
                         time_player_visability.restart();

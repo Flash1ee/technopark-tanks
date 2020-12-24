@@ -888,8 +888,8 @@ void Sound::play(sound_action action) {
                 this->ricochet_sound.play();
             }
             break;
+        }
     }
-}
 }
 bool Sound::MainSoundStopped() {
     if (this->gamestart_sound.getStatus() != sf::Sound::Playing) {

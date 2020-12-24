@@ -76,17 +76,9 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
 int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::string player_skin, std::string server_ip) {
     switch (this->show(window))
         {
-            // case SINGLE: {
-            //     GameSession game_session("Tanks", map_skin, player_skin, false);
-            //     if (game_session.Run() == STOP_RUN) {
-            //         // std::cout <<"Returned stop run" <<'\n';
-            //         return STOP_RUN;
-            //     };
-            //     break;
-            // }
-
             case FIRST: {
                 GameSession game_session("Tanks", map_skin, player_skin, false);
+                music.pause();
                 if (game_session.Run(pl_rects[0]) == STOP_RUN) {
                     // std::cout <<"Returned stop run" <<'\n';
                     return STOP_RUN;
