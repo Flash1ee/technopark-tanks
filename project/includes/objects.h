@@ -99,6 +99,7 @@ class Sound {
 enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };
 class Bots;
 class Player;
+class BotBoss;
 
 class Object {
    public:
@@ -118,6 +119,7 @@ class Object {
     sf::Sprite& getSprite();
     sf::IntRect getRect();
     int comparisonPos(Player &p, std::vector<Bots*> b);
+    bool comparisonPos(Player &p, BotBoss& boss);
 
 
    protected:
@@ -288,5 +290,24 @@ public:
     void checkCollisionsWalls(float x_old, float y_old, float x, float y,
                               DestructibleWalls* walls);
     int checkCollisionsBase(std::vector<Bots*> b, DestructibleWalls* walls);
+
+};
+
+class BotBoss : public Tank {  //класс игрока
+public:
+    BotBoss(Level& mapObj, sf::String textureFile, sf::IntRect rect,
+         sf::Vector2f pos, float speed, int hp, Direction dir)
+            : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {
+        m_objects = mapObj.GetAllObjects();
+    }
+    void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
+                                std::vector<Bots*> b);
+    void move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls,
+              std::vector<std::shared_ptr<Bullet>> all_bullets, BotBoss& boss);
+    void checkCollisionsBullet(float x_old, float y_old, float x, float y,
+                               std::vector<std::shared_ptr<Bullet>> bullet, Player& p);
+    void checkCollisionsWalls(float x_old, float y_old, float x, float y,
+                              DestructibleWalls* walls);
+    bool checkCollisionsBase(BotBoss& boss, DestructibleWalls* walls);
 
 };

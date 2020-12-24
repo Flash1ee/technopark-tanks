@@ -445,30 +445,31 @@ void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
             if (static_cast<Direction>(getDir()) == Direction::UP && !m_is_bot) {
                 i->rect.height -= shift;
                 i->getSprite().setTextureRect(i->rect);
-
+                i->setHp(i->getHp() - WALL_DAMAGE);
             }
             if (static_cast<Direction>(getDir()) == Direction::DOWN && !m_is_bot) {
                 i->rect.height -= shift;
                 i->coords.y += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2, i->coords.y + i->rect_texture.height / 2 + 1);
                 i->getSprite().setTextureRect(i->rect);
-
+                i->setHp(i->getHp() - WALL_DAMAGE);
             }
             if (static_cast<Direction>(getDir()) == Direction::LEFT && !m_is_bot) {
                 i->rect.width -= shift;
                 i->getSprite().setTextureRect(i->rect);
 
-
+                i->setHp(i->getHp() - WALL_DAMAGE);
             }
             if (static_cast<Direction>(getDir()) == Direction::RIGHT && !m_is_bot) {
                 i->rect.width -= shift;
                 i->coords.x += shift;
                 i->getSprite().setPosition(i->coords.x + i->rect_texture.width / 2 + 1, i->coords.y + i->rect_texture.width / 2);
                 i->getSprite().setTextureRect(i->rect);
+                i->setHp(i->getHp() - WALL_DAMAGE);
 
             }
 
-            i->setHp(i->getHp() - WALL_DAMAGE);
+
             
 
             m_life = 0;
@@ -547,6 +548,17 @@ int Object::comparisonPos(Player &p, std::vector<Bots*> b) {
     return b.size();
 }
 
+bool Object::comparisonPos(Player &p, BotBoss& boss) {
+    if (abs(p.coords.x - boss.coords.x) < 50) {
+        return true;
+    }
+    if (abs(p.coords.y - boss.coords.y) < 3) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
     // std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
     for (int i = 0; i < b.size(); i++) {
@@ -561,7 +573,50 @@ int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
     return b.size();
 }
 
+bool BotBoss::checkCollisionsBase(BotBoss& boss, DestructibleWalls *walls) {
+    // std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
+
+    if (abs(walls->base_player[0]->coords.y - boss.coords.y) < 10) {
+        return true;
+    }
+    if (abs(walls->base_player[0]->coords.x - boss.coords.x) < 6) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void Bots::checkCollisionsBullet(float x_old, float y_old, float x, float y,
+                                 std::vector<std::shared_ptr<Bullet>> bullet, Player& p) {
+
+    for (auto &it : bullet) {
+        if (getRect().intersects(static_cast<sf::IntRect>(it->getRect()))) {
+            if (static_cast<Direction>(p.getDir()) == Direction::UP) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = Direction::DOWN;
+            }
+            if (static_cast<Direction>(p.getDir()) == Direction::DOWN) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = Direction::UP;
+            }
+            if (static_cast<Direction>(p.getDir()) == Direction::LEFT) {
+                coords.x = x_old;
+                dir = Direction::RIGHT;
+                this->dx = 0;
+            }
+            if (static_cast<Direction>(p.getDir()) == Direction::RIGHT) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = Direction::LEFT;
+            }
+        }
+    }
+
+}
+
+void BotBoss::checkCollisionsBullet(float x_old, float y_old, float x, float y,
                                  std::vector<std::shared_ptr<Bullet>> bullet, Player& p) {
 
     for (auto &it : bullet) {
@@ -694,6 +749,109 @@ void Bots::checkCollisionsWalls(float x_old, float y_old, float x, float y,
 
 }
 
+void BotBoss::checkCollisionsWalls(float x_old, float y_old, float x, float y,
+                                DestructibleWalls* walls) {
+    std::random_device rd;
+    std::uniform_int_distribution<int> uid(0, 3);
+    for (auto &it : walls->walls) {
+        if (getRect().intersects(static_cast<sf::IntRect>(it->getRect()))) {
+            if (dy > 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dy < 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx > 0) {
+                coords.x = x_old;
+                dir = static_cast<Direction>(uid(rd));
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+        }
+    }
+    for (auto &it : walls->bricks) {
+        if (getRect().intersects(static_cast<sf::IntRect>(it->getRect()))) {
+            if (dy > 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dy < 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx > 0) {
+                coords.x = x_old;
+                dir = static_cast<Direction>(uid(rd));
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+        }
+    }
+    for (auto &it : walls->base_enemy) {
+        if (getRect().intersects(static_cast<sf::IntRect>(it->getRect()))) {
+            if (dy > 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dy < 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx > 0) {
+                coords.x = x_old;
+                dir = static_cast<Direction>(uid(rd));
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+        }
+    }
+    for (auto &it : walls->base_player) {
+        if (getRect().intersects(static_cast<sf::IntRect>(it->getRect()))) {
+            if (dy > 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dy < 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx > 0) {
+                coords.x = x_old;
+                dir = static_cast<Direction>(uid(rd));
+                this->dx = 0;
+            }
+            if (dx < 0) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+        }
+    }
+
+}
+
 void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
                               Player &p, std::vector<Bots*> b) {
     std::random_device rd;
@@ -748,7 +906,130 @@ void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
     }
 }
 
+void BotBoss::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
+                                  Player &p, std::vector<Bots*> b) {
+    std::random_device rd;
+    std::uniform_int_distribution<int> uid(0, 3);
+    for (auto &i : m_objects) {
+        if ((getRect().intersects(static_cast<sf::IntRect>(i.rect)) &&
+             i.name == "solid")) {
+            if (dy > 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dy < 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx > 0) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx < 0) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+        } else if (getRect().intersects(static_cast<sf::IntRect>(p.getRect()))) {
+            if (dy > 0) {
+                coords.y = p.getPos().y - rect.height;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dy < 0) {
+                coords.y = p.getPos().y + rect.height;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx > 0) {
+                coords.x = p.getPos().x - rect.width;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx < 0) {
+                coords.x = p.getPos().x + rect.width;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+        }
+    }
+    for (auto &i : b) {
+        if (getRect().intersects(i->getRect())) {
+            if (dy > 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dy < 0) {
+                coords.y = y_old;
+                this->dy = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx > 0) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+            if (dx < 0) {
+                coords.x = x_old;
+                this->dx = 0;
+                dir = static_cast<Direction>(uid(rd));
+            }
+        }
+    }
+}
+
 void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<std::shared_ptr<Bullet>> all_bullets) {
+    switch (dir) {
+        case Direction::RIGHT:
+            this->sprite.setRotation(90);
+            dx = speed;
+            dy = 0;
+            break;
+        case Direction::LEFT:
+            this->sprite.setRotation(-90);
+            dx = -speed;
+            dy = 0;
+            break;
+        case Direction::DOWN:
+            this->sprite.setRotation(180);
+            dx = 0;
+            dy = speed;
+            break;
+        case Direction::UP:
+            this->sprite.setRotation(0);
+            dx = 0;
+            dy = -speed;
+            break;
+    }
+
+    auto x_old = coords.x;
+    auto y_old = coords.y;
+    coords.x += dx * time;
+    coords.y += dy * time;
+   this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b);
+
+    for (int i = 0; i < b.size(); i++) {
+        if (comparisonPos(p, b) == i) {
+            b[i]->setShot(true);
+        }
+    }
+    for (int i = 0; i < b.size(); i++) {
+        if (checkCollisionsBase(b, walls) == i) {
+            b[i]->setShot(true);
+        }
+    }
+
+    this->checkCollisionsWalls(x_old, y_old, dx, dy, walls);
+    this->checkCollisionsBullet(x_old, y_old, dx, dy, all_bullets, p);
+    setPos();
+
+}
+
+void BotBoss::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<std::shared_ptr<Bullet>> all_bullets,  BotBoss& boss) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -779,14 +1060,12 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* 
     this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b);
 
     for (int i = 0; i < b.size(); i++) {
-        if (comparisonPos(p, b) == i) {
-            b[i]->setShot(true);
+        if (comparisonPos(p, boss)) {
+            boss.setShot(true);
         }
     }
-    for (int i = 0; i < b.size(); i++) {
-        if (checkCollisionsBase(b, walls) == i) {
-            b[i]->setShot(true);
-        }
+    if (checkCollisionsBase(boss, walls)) {
+        boss.setShot(true);
     }
 
     this->checkCollisionsWalls(x_old, y_old, dx, dy, walls);
