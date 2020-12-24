@@ -878,6 +878,8 @@ void Sound::play(sound_action action) {
         case BLOOD:
             if (this->blood_sound.getStatus() != sf::Sound::Playing) {
                 this->blood_sound.play();
+            }
+            break;
         case VISABILITY:
             if (this->visability_sound.getStatus() != sf::Sound::Playing) {
                 this->visability_sound.play();
@@ -888,7 +890,6 @@ void Sound::play(sound_action action) {
                 this->ricochet_sound.play();
             }
             break;
-        }
     }
 }
 bool Sound::MainSoundStopped() {
@@ -930,4 +931,13 @@ void Player::set_visability(bool action) {
 bool Player::get_visability() {
     return this->m_visability;
 }
+
+void Bots::SetShootTime(float time) {
+    this->shoot_time = time;
+}
+    
+float Bots::GetShootTime() {
+    return shoot_time;
+}
+
 

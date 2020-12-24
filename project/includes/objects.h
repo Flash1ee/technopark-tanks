@@ -293,12 +293,17 @@ class Player : public Tank {  //класс игрока
 
 };
 
-class Bots : public Tank {  //класс игрока
+class Bots : public Tank {//класс игрока
+private:
+    float shoot_time;
 public:
+    void SetShootTime(float time);
+    float GetShootTime();
     Bots(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
             : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {
                 m_objects = mapObj.GetAllObjects();
+                shoot_time = 0;
             }
     void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
                                 std::vector<Bots*> b);
