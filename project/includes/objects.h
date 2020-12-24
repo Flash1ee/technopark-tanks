@@ -17,12 +17,9 @@
 #define BRICK_SOUND "../sounds/brick.ogg"
 #define KILL_SOUND "../sounds/explosion.ogg"
 #define FINISH_SOUND "../sounds/finish.ogg"
-<<<<<<< HEAD
 #define BLOOD_SOUND "../sounds/first_blood.ogg"
-=======
 #define VISABILITY_SOUND "../sounds/visibility.ogg"
 #define RICOSCHET_SOUND "../sounds/ricochet.ogg"
->>>>>>> 0d382d333b191b7c8809fd34b0acdea35af9da97
 
 
 enum class SoundType {
@@ -54,12 +51,9 @@ typedef enum {
     GAME_START,
     SPAWN,
     FINISH,
-<<<<<<< HEAD
     BLOOD,
-=======
     VISABILITY,
     RICOCHET,
->>>>>>> 0d382d333b191b7c8809fd34b0acdea35af9da97
     COUNT
 } sound_action;
 class Sound {
@@ -91,16 +85,13 @@ class Sound {
     sf::SoundBuffer finish;
     sf::Sound finish_sound;
 
-<<<<<<< HEAD
     sf::SoundBuffer blood;
     sf::Sound blood_sound;
-=======
     sf::SoundBuffer visability;
     sf::Sound visability_sound;
 
     sf::SoundBuffer ricochet;
     sf::Sound ricochet_sound;
->>>>>>> 0d382d333b191b7c8809fd34b0acdea35af9da97
 
     public:
     void play(sound_action action);
