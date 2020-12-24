@@ -351,6 +351,8 @@ int GameSession::Run() {
             {
                 PlayerAction action = { m_user_id, curr_player_pos, curr_player_dir, PlayerActionType::UpdatePlayer};
                 action_vector.push(action);
+                std::cout << "DIR SEND direction "<<(int)curr_player_dir << std::endl;
+
             }
 
             {  // Gathering info for sending to server
