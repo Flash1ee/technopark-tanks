@@ -418,6 +418,7 @@ int GameSession::Run() {
                             }
                             break;
 
+
                             case PlayerActionType::UpdatePlayer:
                             {
                                 //std::cout << "Other player should be updated" << std::endl;
@@ -511,9 +512,10 @@ int GameSession::Run() {
                 }
             }
 
-            for(auto& other_player : players)
-            {
-                m_window.draw(other_player.second->getSprite());
+            for(auto& other_player : players) {
+                if (other_player.second->getHp() > 0 ) {
+                    m_window.draw(other_player.second->getSprite());
+                }
             }
 
 
