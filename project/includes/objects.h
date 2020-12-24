@@ -87,6 +87,7 @@ class Sound {
 
     sf::SoundBuffer blood;
     sf::Sound blood_sound;
+
     sf::SoundBuffer visability;
     sf::Sound visability_sound;
 
@@ -104,6 +105,7 @@ class Sound {
 enum class Direction { UP = 0, DOWN, RIGHT, LEFT, COUNT, ERROR };
 class Bots;
 class Player;
+class BotBoss;
 
 class Object {
    public:
@@ -123,6 +125,7 @@ class Object {
     sf::Sprite& getSprite();
     sf::IntRect getRect();
     int comparisonPos(Player &p, std::vector<Bots*> b);
+    bool comparisonPos(Player &p, std::vector<BotBoss*> boss);
 
 
    protected:
@@ -220,23 +223,25 @@ class Brick : public Object {
 class Bullet : public Object {
 public:
     Bullet(Level& mapObj, sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
-           float speed, Direction dir, int life, bool bot)
-        : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot) {
+           float speed, Direction dir, int life, bool bot, int number)
+        : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot), bots_number(number) {
         m_objects = mapObj.GetAllObjects("solid");
 
         ricochet.loadFromFile(RICOSCHET_SOUND);
         ricochet_sound.setBuffer(ricochet);
         };
-    void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls);
-    void moveBots(float time, Player& p, DestructibleWalls* walls);
-    void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls);
-    void checkCollisionsObject(Player& p, DestructibleWalls* walls);
+    void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<BotBoss*> boss);
+    void moveBots(float time, Player& p, DestructibleWalls* walls, std::vector<BotBoss*> boss, std::vector<Bots*> b);
+    void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<BotBoss*> boss);
+    void checkCollisionsObjectBots(Player& p, DestructibleWalls* walls, std::vector<BotBoss*> boss, std::vector<Bots*> b);
     void checkCollisionsObject(DestructibleWalls* walls, Player& p);
     void play();
     // void sound();
     int getLife() const;
     Direction getDir() const;
+    int getNumber() const;
 private:
+    int bots_number;
     int m_life;
     int m_is_bot;
     sf::SoundBuffer ricochet;
@@ -283,7 +288,7 @@ class Player : public Tank {  //класс игрока
             visability.loadFromFile(VISABILITY_SOUND);
             visability_sound.setBuffer(visability);
         };
-    void checkCollisionsBots(std::vector<Bots*> b);
+    void checkCollisionsBots(std::vector<Bots*> b, std::vector<BotBoss*> boss);
     int getCount() const;
     void setCount(int count);
     void play_visability();
@@ -306,13 +311,32 @@ public:
                 shoot_time = 0;
             }
     void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
-                                std::vector<Bots*> b);
+                                std::vector<Bots*> b, std::vector<BotBoss*> boss);
     void move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls,
-              std::vector<std::shared_ptr<Bullet>> all_bullets);
+              std::vector<std::shared_ptr<Bullet>> all_bullets, std::vector<BotBoss*> boss);
     void checkCollisionsBullet(float x_old, float y_old, float x, float y,
                                std::vector<std::shared_ptr<Bullet>> bullet, Player& p);
     void checkCollisionsWalls(float x_old, float y_old, float x, float y,
                               DestructibleWalls* walls);
     int checkCollisionsBase(std::vector<Bots*> b, DestructibleWalls* walls);
+
+};
+
+class BotBoss : public Tank {  //класс игрока
+public:
+    BotBoss(Level& mapObj, sf::String textureFile, sf::IntRect rect,
+         sf::Vector2f pos, float speed, int hp, Direction dir)
+            : Tank(mapObj, textureFile, rect, pos, speed, hp, dir) {
+        m_objects = mapObj.GetAllObjects();
+    }
+    void checkCollisionsObjects(float x_old, float y_old, float x, float y, Player &p,
+                                std::vector<Bots*> b);
+    void move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls,
+              std::vector<std::shared_ptr<Bullet>> all_bullets, std::vector<BotBoss*> boss);
+    void checkCollisionsBullet(float x_old, float y_old, float x, float y,
+                               std::vector<std::shared_ptr<Bullet>> bullet, Player& p);
+    void checkCollisionsWalls(float x_old, float y_old, float x, float y,
+                              DestructibleWalls* walls);
+    bool checkCollisionsBase(std::vector<BotBoss*> boss, DestructibleWalls* walls);
 
 };

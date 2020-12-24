@@ -69,6 +69,7 @@ void GameSession::WaitForOtherPlayers() {
 }
 
 int GameSession::Run(sf::IntRect pl_rect) {
+
     if (m_is_multiplayer) {
         WaitForOtherPlayers();
         // RunOnlineGame()
@@ -143,10 +144,20 @@ int GameSession::Run(sf::IntRect pl_rect) {
         m_level, OBJECT_IMAGE, pl_rect, m_player_pos, 0.05,
         100, Direction::UP);
 
+
     std::vector<Bots*> all_bots;
     std::vector<MapObject> spawn;
+    std::vector<MapObject> boss_spawn;
     spawn.push_back(m_level.GetFirstObject("spawn1"));
     spawn.push_back(m_level.GetFirstObject("spawn2"));
+
+    MapObject boss = m_level.GetFirstObject("boss");
+    sf::FloatRect boss_pos = boss.rect;
+    sf::Vector2f boss_position = {boss_pos.left + boss_pos.width / 2, boss_pos.top - boss_pos.width / 2};
+
+    std::vector<BotBoss*> botBoss;
+
+
 
 
     sf::Vector2f old_pos = this_player->getPos();
@@ -158,11 +169,10 @@ int GameSession::Run(sf::IntRect pl_rect) {
     std::vector<std::shared_ptr<Bullet>> new_bullets;
     std::vector<std::shared_ptr<Bullet>> all_bullets;
     std::vector<std::shared_ptr<Bullet>> bots_bullets;
-    sf::Clock clock;
+    sf::Clock clock, boss_timer_shoots;
     sf::Clock main_timer, timer_bots;
     // , timer_shoots;
     sf::Clock time_player_visability;
-
     bool is_new_user = true;
 
     size_t count_bots = 0;
@@ -186,6 +196,9 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
+
+        sf::Time boss_timer = boss_timer_shoots.getElapsedTime();
+
         // sf::Time timer = timer_shoots.getElapsedTime();
         sf::Time timer_visible = time_player_visability.getElapsedTime();
 
@@ -226,7 +239,8 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     if (finish.getStatus() == sf::SoundSource::Playing) {
                         finish.pause();
                     }
-                    start_pause_time = main_timer.getElapsedTime(); 
+                    start_pause_time = main_timer.getElapsedTime();
+
                     // sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
                     //                             sf::Style::None);
 
@@ -242,8 +256,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     }
                 }
                 if (event.key.code == sf::Keyboard::Space
-                    && (main_timer.getElapsedTime().asSeconds() - last_pl_bull.asSeconds() > 0.2) )
-                    {
+                    && (main_timer.getElapsedTime().asSeconds() - last_pl_bull.asSeconds() > 0.2)) {
                     this_player->setShot(true);
                     last_pl_bull = main_timer.getElapsedTime();
                 }
@@ -265,7 +278,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 auto new_b = std::make_shared<Bullet>(m_level,
                                                       OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
                                                       bullet_pos, 0.3,
-                                                      bullet_dir, 1, is_bot);
+                                                      bullet_dir, 1, is_bot, -1);
 
                 // sf::Packet packet;
                 // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -280,36 +293,79 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
 
         }
-
+        if ((this_player->getCount() < 2) && (botBoss.size() == 0)) {
+            botBoss.push_back(new BotBoss(m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), boss_position, 0.03,
+                                          200, Direction::UP));
+        }
         // std::cout << timer.asSeconds() << std::endl;
 
-        for (auto &i : all_bots) {
-            if (i->getShot() && (main_timer.getElapsedTime().asSeconds() - i->GetShootTime() > 1)) {
-                i->setShot(false);
-                i->SetShootTime(main_timer.getElapsedTime().asSeconds());
+        for (int i = 0; i < all_bots.size(); i ++) {
+            if (all_bots[i]->getShot() && (main_timer.getElapsedTime().asSeconds() - all_bots[i]->GetShootTime() > 1)) {
+                all_bots[i]->setShot(false);
+                all_bots[i]->SetShootTime(main_timer.getElapsedTime().asSeconds());
                 // sf::Vector2f coords = this_player.getPos();
-                auto bullet_dir = i->getDir();
+                auto bullet_dir = all_bots[i]->getDir();
                 sf::Vector2f bullet_pos;
                 if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
-                    bullet_pos.x = i->getPos().x + 4.5;
-                    bullet_pos.y = i->getPos().y + 4.5;
+                    bullet_pos.x = all_bots[i]->getPos().x + 4.5;
+                    bullet_pos.y = all_bots[i]->getPos().y + 4.5;
                 } else {
-                    bullet_pos.x = i->getPos().x + 3.5;
-                    bullet_pos.y = i->getPos().y + 3.5;
+                    bullet_pos.x = all_bots[i]->getPos().x + 3.5;
+                    bullet_pos.y = all_bots[i]->getPos().y + 3.5;
                 }
                 auto is_bot = true;
                 auto new_b = std::make_shared<Bullet>(m_level,
                                                       OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
                                                       bullet_pos, 0.3,
-                                                      bullet_dir, 1, is_bot);
+                                                      bullet_dir, 1, is_bot, i);
                 bots_bullets.push_back(new_b);  // Copying is too expensive
                 new_bullets.push_back(new_b);
                 sounds.play(FIRE);
             }
         }
+        for (auto &i : botBoss) {
+            if (boss_timer.asSeconds() > 0.5) {
+
+                if (i->getShot()) {
+                    i->setShot(false);
+                    auto bullet_dir = i->getDir();
+                    sf::Vector2f bullet_pos;
+                    if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
+                        bullet_pos.x = i->getPos().x + 4.5;
+                        bullet_pos.y = i->getPos().y + 4.5;
+                    } else {
+                        bullet_pos.x = i->getPos().x + 3.5;
+                        bullet_pos.y = i->getPos().y + 3.5;
+                    }
+                    auto is_bot = true;
+                    for (int it = 0; it < 4; it++) {
+                        auto new_b = std::make_shared<Bullet>(m_level,
+                                                              OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
+                                                              bullet_pos, 0.3,
+                                                              static_cast<Direction>(it), 1, is_bot, 5);
+                        bots_bullets.push_back(new_b);  // Copying is too expensive
+                        new_bullets.push_back(new_b);
+                    }
+
+                    // sf::Packet packet;
+                    // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
+                    // PlayerActionType::NewBullet};
+                    // action_vector.actions.push_back(new_bullet_action);
+
+
+                    sounds.play(FIRE);
+                    // sounds[static_cast<int>(SoundType::BULLET)].play();
+                }
+                boss_timer_shoots.restart();
+            }
+        }
+
 
         for (auto &i : all_bots) {
-            i->move(time, *this_player, all_bots, &walls, all_bullets);
+            i->move(time, *this_player, all_bots, &walls, all_bullets, botBoss);
+        }
+        for (auto &i : botBoss) {
+            i->move(time, *this_player, all_bots, &walls, all_bullets, botBoss);
         }
 
         if (this_player->getHp() > 0) {
@@ -317,7 +373,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 sounds.play(BACKGROUND);
             }
         }
-        this_player->checkCollisionsBots(all_bots);
+        this_player->checkCollisionsBots(all_bots, botBoss);
         old_pos = new_pos;
         new_pos = this_player->getPos();
 
@@ -409,7 +465,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                                 Direction dir = action.direction;
                                 std::shared_ptr<Bullet> new_b(new Bullet(m_level,
                                     OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(321, 100, 8, 8),
-                                    pos, 0.5, dir, 1, false));
+                                    pos, 0.5, dir, 1, false, -1));
                                 all_bullets.push_back(new_b);
                             } break;
 
@@ -433,7 +489,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
         {  // Drawing is here
            
             for (auto& curr_bullet : all_bullets) {
-                curr_bullet->move(time, *this_player, all_bots, &walls);
+                curr_bullet->move(time, *this_player, all_bots, &walls, botBoss);
             }
 
             if (timer_visible.asSeconds() > 3 && !(this_player->get_visability())) {
@@ -442,7 +498,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
             }
             for (auto& curr_bullet : bots_bullets) {
                 size_t pre_hp = this_player->getHp();
-                curr_bullet->moveBots(time, *this_player, &walls);
+                curr_bullet->moveBots(time, *this_player, &walls, botBoss, all_bots);
 
                   if (this_player->getHp() != pre_hp) {
                     std::cout << pre_hp << " new" << this_player->getHp() << std::endl;
@@ -486,6 +542,14 @@ int GameSession::Run(sf::IntRect pl_rect) {
             }
             if (this_player->getHp() > 0) {
                 m_window.draw(this_player->getSprite());
+            }
+            for (int i = 0; i < botBoss.size(); i ++) {
+                if (botBoss[i]->getHp() > 0) {
+                    m_window.draw(botBoss[i]->getSprite());
+                }
+                if (botBoss[i]->getHp() <= 0) {
+                    botBoss.erase(botBoss.begin() + i);
+                }
             }
             for (int i = 0; i < walls.walls.size(); i++) {
                 if (walls.walls[i]->getHp() > 0) {
