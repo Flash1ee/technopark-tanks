@@ -129,29 +129,12 @@ bool Server::waitPlayersConnection() {
 
         addNewClient();
 
-        // if (m_selector.wait())
-        //{
-        //     if (m_selector.isReady(m_listener))
-        //     {
-        //         std::cout << "ready to accept connection" << std::endl;
-        //         addNewClient();
-        //     }
-        //     else // Server will ignore messages from clients on this step.
-        //     {
-        //         std::cout << "ready to get data" << std::endl;
-        //         sf::Packet packet;
-        //         int id;
-        //         recieveFromClient(packet, id);
-        //     }
-        // }
-
         if (m_clients.size() == 2) {
             std::cout << "Ready to start game" << std::endl;
             return true;
         }
     }
 
-    // return true;
 }
 
 std::unique_ptr<Server> server_ptr;
