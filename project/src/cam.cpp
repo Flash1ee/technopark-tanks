@@ -13,8 +13,7 @@ void Cam::changeViewCoords(
     if (coords.y < viewY) tempY = viewY;    //верхнюю сторону
     if (coords.y > map_height - viewY) tempY = map_height - viewY; 
 
-    view.setCenter(tempX,
-                   tempY);  //следим за игроком, передавая его координаты.
+    view.setCenter(tempX, tempY);  //следим за игроком, передавая его координаты.
 }
 
 Cam::Cam() {

@@ -5,10 +5,8 @@
 #include <string>
 
 #include "messages.hpp"
-#include "cam.h"
 #include "menu.h"
 #include "game.h"
-#include "game_map.hpp"
 #include "game_session.hpp"
 #include "statistics.h"
 #include "end_event.h"
@@ -18,19 +16,17 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
                          std::string server_ip, int server_port)
     :
-      m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen),
+      m_window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), window_title, sf::Style::Fullscreen),
       m_is_multiplayer(is_multiplayer) {
     m_level.LoadFromFile(MAP_ONE);
-    MapObject player = m_level.GetFirstObject("player1");
+    MapObject player = m_level.GetFirstObject(PLAYER);
     
 
     sf::FloatRect p_pos = player.rect;
     m_player_pos = {p_pos.left + p_pos.width / 2, p_pos.top - p_pos.width / 2};
     if (m_is_multiplayer) {
         m_player_pos = m_game_client.connectToServer(server_ip, server_port);
-
     }
-
     finish.openFromFile(MORTAL_PATH);
 }
 
@@ -66,22 +62,24 @@ int GameSession::Run(sf::IntRect pl_rect) {
     Statistic stats(m_window);
     Sound sounds;
     sounds.play(GAME_START);
-    std::vector<MapObject> walls_objs = m_level.GetAllObjects("wall");
-    for (auto &i : m_level.GetAllObjects("wall_player")) {
+
+    std::vector<MapObject> walls_objs = m_level.GetAllObjects(WALL);
+    for (auto &i : m_level.GetAllObjects(WALL_PLAYER_BASE)) {
         walls_objs.push_back(i);
     }
-    for (auto &i : m_level.GetAllObjects("wall_enemy")) {
+    for (auto &i : m_level.GetAllObjects(WALL_ENEMY_BASE)) {
         walls_objs.push_back(i);
     }
 
     bool wictory = false;
 
-    std::vector<MapObject> brick_objs = m_level.GetAllObjects("brick");
-    std::vector<MapObject> player_obj = m_level.GetAllObjects("player_base");
-    std::vector<MapObject> enemy_obj = m_level.GetAllObjects("enemy_base");
-    std::vector<MapObject> grass_obj = m_level.GetAllObjects("grass");
+    std::vector<MapObject> brick_objs = m_level.GetAllObjects(BRICKS);
+    std::vector<MapObject> player_obj = m_level.GetAllObjects(MAIN_PLAYER_BASE);
+    std::vector<MapObject> enemy_obj = m_level.GetAllObjects(MAIN_ENEMY_BASE);
+    std::vector<MapObject> grass_obj = m_level.GetAllObjects(GRASS);
 
 
+    sf::IntRect grass_sprite = {};
     DestructibleWalls walls;
 
 
@@ -96,62 +94,63 @@ int GameSession::Run(sf::IntRect pl_rect) {
         sf::Vector2f wall_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::shared_ptr<Wall> wall = std::make_shared<Wall>(
         m_level, OBJECT_IMAGE, sf::IntRect(256, 16, 16, 16), wall_pos, 0,
-        100, Direction::UP, i.name);
+        HP, Direction::UP, i.name);
         walls.walls.push_back(wall);
     }
+
     for (auto i: brick_objs) {
         sf::Vector2f brick_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::shared_ptr<Brick> brick = std::make_shared<Brick>(
         m_level, OBJECT_IMAGE, sf::IntRect(256, 0, 16, 16), brick_pos, 0,
-        100, Direction::UP);
+        HP, Direction::UP);
         walls.bricks.push_back(brick);
     }
+
     for (auto i: player_obj) {
         sf::Vector2f base_player_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::shared_ptr<BasePlayer> basePlayer = std::make_shared<BasePlayer>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_player_pos, 0,
-                100, Direction::UP);
+                HP, Direction::UP);
         walls.base_player.push_back(basePlayer);
     }
     for (auto i: enemy_obj) {
         sf::Vector2f base_enemy_pos = {i.rect.left, i.rect.top - i.rect.width};
         std::shared_ptr<BaseEnemy> baseEnemy = std::make_shared<BaseEnemy>(
                 m_level, OBJECT_IMAGE, sf::IntRect(304, 32, 16, 16), base_enemy_pos, 0,
-                100, Direction::UP);
+                HP, Direction::UP);
         walls.base_enemy.push_back(baseEnemy);
     }
+
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
         m_level, OBJECT_IMAGE, pl_rect, m_player_pos, 0.05,
-        100, Direction::UP);
+        HP, Direction::UP);
 
 
     std::vector<Bots*> all_bots;
     std::vector<MapObject> spawn;
-    std::vector<MapObject> boss_spawn;
-    spawn.push_back(m_level.GetFirstObject("spawn1"));
-    spawn.push_back(m_level.GetFirstObject("spawn2"));
+    spawn.push_back(m_level.GetFirstObject(SPAWN_ONE));
+    spawn.push_back(m_level.GetFirstObject(SPAWN_TWO));
 
-    MapObject boss = m_level.GetFirstObject("boss");
+    MapObject boss = m_level.GetFirstObject(BOSS_NAME);
     sf::FloatRect boss_pos = boss.rect;
     sf::Vector2f boss_position = {boss_pos.left + boss_pos.width / 2, boss_pos.top - boss_pos.width / 2};
 
     std::vector<BotBoss*> botBoss;
 
 
-
-
     sf::Vector2f old_pos = this_player->getPos();
     sf::Vector2f new_pos = old_pos;
 
     std::map<int, std::shared_ptr<Player>> players;
-    std::map<std::vector<Bots*>, bool> shot;
 
     std::vector<std::shared_ptr<Bullet>> new_bullets;
     std::vector<std::shared_ptr<Bullet>> all_bullets;
     std::vector<std::shared_ptr<Bullet>> bots_bullets;
+
     sf::Clock clock, boss_timer_shoots;
     sf::Clock main_timer, timer_bots;
     sf::Clock time_player_visability;
+
     bool is_new_user = true;
 
     size_t count_bots = 0;
@@ -181,13 +180,13 @@ int GameSession::Run(sf::IntRect pl_rect) {
         sf::Time timer_visible = time_player_visability.getElapsedTime();
 
 
-        float time = clock.getElapsedTime().asMicroseconds();  //дать прошедшее время в микросекундах
+        float time = clock.getElapsedTime().asMicroseconds();
 
-        clock.restart();  //перезагружает время
-        time /= 800;      //скорость игры
+        clock.restart();
+        time /= TIME_AS_FPS;
 
 
-        if (times.asSeconds() > 7 && sounds.MainSoundStopped() && count_bots < 4 && !wictory) {
+        if (times.asSeconds() > SPAWN_BOT_TIME && sounds.MainSoundStopped() && count_bots < COUNT_BOTS_TO_KILL && !wictory) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
@@ -197,7 +196,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                                           spawn[ind].rect.top - spawn[ind].rect.width / 2};
 
                 all_bots.push_back(new Bots(m_level, OBJECT_IMAGE, sf::IntRect(128, 129, 13, 13), m_bot_pos, 0.05,
-                                            100, Direction::UP));
+                                            HP, Direction::UP));
                 stop += 1;
             }
             timer_bots.restart();
@@ -262,9 +261,9 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
 
         }
-        if ((this_player->getCount() < 2) && (botBoss.size() == 0)) {
+        if ((this_player->getCount() < LEFT_BOTS_TO_SPAWN_BOT) && (botBoss.size() == 0)) {
             botBoss.push_back(new BotBoss(m_level, OBJECT_IMAGE, sf::IntRect(178, 129, 13, 13), boss_position, 0.03,
-                                          200, Direction::UP));
+                                          HP * 2, Direction::UP));
             sounds.play(BOSS);
         }
 
@@ -272,8 +271,10 @@ int GameSession::Run(sf::IntRect pl_rect) {
             if (all_bots[i]->getShot() && (main_timer.getElapsedTime().asSeconds() - all_bots[i]->GetShootTime() > 1)) {
                 all_bots[i]->setShot(false);
                 all_bots[i]->SetShootTime(main_timer.getElapsedTime().asSeconds());
+
                 auto bullet_dir = all_bots[i]->getDir();
                 sf::Vector2f bullet_pos;
+
                 if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
                     bullet_pos.x = all_bots[i]->getPos().x + 4.5;
                     bullet_pos.y = all_bots[i]->getPos().y + 4.5;
@@ -281,6 +282,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     bullet_pos.x = all_bots[i]->getPos().x + 3.5;
                     bullet_pos.y = all_bots[i]->getPos().y + 3.5;
                 }
+
                 auto is_bot = true;
                 auto new_b = std::make_shared<Bullet>(m_level,
                                                       OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
@@ -409,7 +411,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                                     id, std::make_shared<Player>(
                                             m_level, OBJECT_IMAGE,
                                             sf::IntRect(1, 2, 13, 13), pos, 0.1,
-                                            100, dir)));
+                                            HP, dir)));
                             } break;
 
                             case PlayerActionType::UpdatePlayer: {
@@ -463,9 +465,8 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 curr_bullet->moveBots(time, *this_player, &walls, botBoss, all_bots);
 
                   if (this_player->getHp() != pre_hp) {
-                    std::cout << pre_hp << " new" << this_player->getHp() << std::endl;
                     auto probability = rand() % 100;
-                    if (probability < 30 && this_player->get_visability()) {
+                    if (probability < PROBABILITY_VIEW && this_player->get_visability()) {
                         m_cam.view.zoom(0.5);
                         this_player->set_visability(false);
                         this_player->play_visability();

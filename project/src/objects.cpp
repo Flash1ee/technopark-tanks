@@ -602,14 +602,13 @@ bool Object::comparisonPos(Player &p, std::vector<BotBoss*> boss) {
         }
         if (abs(p.coords.y - boss[i]->coords.y) < 3) {
             return true;
-        } else {
-            return false;
         }
     }
+    return false;
+
 }
 
 int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
-    // std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
     for (int i = 0; i < b.size(); i++) {
 
         if (abs(walls->base_player[0]->coords.y - b[i]->coords.y) < 10) {
@@ -623,17 +622,15 @@ int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
 }
 
 bool BotBoss::checkCollisionsBase(std::vector<BotBoss*> boss, DestructibleWalls *walls) {
-    // std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
     for (int i = 0; i < boss.size(); i++) {
         if (abs(walls->base_player[i]->coords.y - boss[i]->coords.y) < 10) {
             return true;
         }
         if (abs(walls->base_player[i]->coords.x - boss[i]->coords.x) < 6) {
             return true;
-        } else {
-            return false;
         }
     }
+    return false;
 }
 
 void Bots::checkCollisionsBullet(float x_old, float y_old, float x, float y,
