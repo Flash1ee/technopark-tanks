@@ -158,7 +158,9 @@ int GameSession::Run(sf::IntRect pl_rect) {
     std::vector<std::shared_ptr<Bullet>> new_bullets;
     std::vector<std::shared_ptr<Bullet>> all_bullets;
     std::vector<std::shared_ptr<Bullet>> bots_bullets;
-    sf::Clock clock, timer_bots, timer_shoots;
+    sf::Clock clock;
+    sf::Clock main_timer, timer_bots;
+    // , timer_shoots;
     sf::Clock time_player_visability;
 
     bool is_new_user = true;
@@ -176,18 +178,15 @@ int GameSession::Run(sf::IntRect pl_rect) {
     TextEvent bots_count(BOT_KILL, this_player->getCount());
     TextEvent destroy(DESTROY, this_player->getCount());
 
-    sf::Clock main_timer;
     sf::Time last_pl_bull;
     sf::Time pause_time;
-    sf::Time destroy_time;
     sf::Time start_pause_time;
     pause_time.Zero;
     last_pl_bull.Zero;
-    destroy_time.Zero;
 
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
-        sf::Time timer = timer_shoots.getElapsedTime();
+        // sf::Time timer = timer_shoots.getElapsedTime();
         sf::Time timer_visible = time_player_visability.getElapsedTime();
 
 
@@ -224,7 +223,9 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Escape) {
-                    finish.pause();
+                    if (finish.getStatus() == sf::SoundSource::Playing) {
+                        finish.pause();
+                    }
                     start_pause_time = main_timer.getElapsedTime(); 
                     // sf::RenderWindow menu_window(sf::VideoMode(1024, 768), std::string("Game menu"), 
                     //                             sf::Style::None);
@@ -236,7 +237,9 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     }
                     pause_time += main_timer.getElapsedTime() - start_pause_time;
                     clock.restart();
-                    finish.play();
+                    if (finish.getStatus() == sf::SoundSource::Paused) {
+                        finish.play();
+                    }
                 }
                 if (event.key.code == sf::Keyboard::Space
                     && (main_timer.getElapsedTime().asSeconds() - last_pl_bull.asSeconds() > 0.2) )
@@ -279,39 +282,30 @@ int GameSession::Run(sf::IntRect pl_rect) {
         }
 
         // std::cout << timer.asSeconds() << std::endl;
-        if ((timer.asSeconds() > 1) && (timer.asSeconds() < 1.07)) {
 
-            for (auto &i : all_bots) {
-                if (i->getShot()) {
-                    i->setShot(false);
-                    // sf::Vector2f coords = this_player.getPos();
-                    auto bullet_dir = i->getDir();
-                    sf::Vector2f bullet_pos;
-                    if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
-                        bullet_pos.x = i->getPos().x + 4.5;
-                        bullet_pos.y = i->getPos().y + 4.5;
-                    } else {
-                        bullet_pos.x = i->getPos().x + 3.5;
-                        bullet_pos.y = i->getPos().y + 3.5;
-                    }
-                    auto is_bot = true;
-                    auto new_b = std::make_shared<Bullet>(m_level,
-                                                          OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
-                                                          bullet_pos, 0.3,
-                                                          bullet_dir, 1, is_bot);
-
-                    // sf::Packet packet;
-                    // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
-                    // PlayerActionType::NewBullet};
-                    // action_vector.actions.push_back(new_bullet_action);
-
-                    bots_bullets.push_back(new_b);  // Copying is too expensive
-                    new_bullets.push_back(new_b);
-                    sounds.play(FIRE);
-                    // sounds[static_cast<int>(SoundType::BULLET)].play();
+        for (auto &i : all_bots) {
+            if (i->getShot() && (main_timer.getElapsedTime().asSeconds() - i->GetShootTime() > 1)) {
+                i->setShot(false);
+                i->SetShootTime(main_timer.getElapsedTime().asSeconds());
+                // sf::Vector2f coords = this_player.getPos();
+                auto bullet_dir = i->getDir();
+                sf::Vector2f bullet_pos;
+                if (bullet_dir == Direction::UP || bullet_dir == Direction::RIGHT) {
+                    bullet_pos.x = i->getPos().x + 4.5;
+                    bullet_pos.y = i->getPos().y + 4.5;
+                } else {
+                    bullet_pos.x = i->getPos().x + 3.5;
+                    bullet_pos.y = i->getPos().y + 3.5;
                 }
+                auto is_bot = true;
+                auto new_b = std::make_shared<Bullet>(m_level,
+                                                      OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
+                                                      bullet_pos, 0.3,
+                                                      bullet_dir, 1, is_bot);
+                bots_bullets.push_back(new_b);  // Copying is too expensive
+                new_bullets.push_back(new_b);
+                sounds.play(FIRE);
             }
-            timer_shoots.restart();
         }
 
         for (auto &i : all_bots) {
@@ -524,16 +518,12 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     m_window.draw(walls.base_player[i]->getSprite());
                 }
                 if (walls.base_player[i]->getHp() <= 0) {
-                    walls.base_player.erase(walls.base_player.begin() + i);
                     this_player->setHp(0);
                 }
             }
             for (int i = 0; i < walls.base_enemy.size(); i++) {
                 if (walls.base_enemy[i]->getHp() >= 0) {
                     m_window.draw(walls.base_enemy[i]->getSprite());
-                }
-                if (walls.base_enemy[i]->getHp() <= 0) {
-                    walls.base_enemy.erase(walls.base_enemy.begin() + i);
                 }
             }
             for (int i = 0; i < all_bots.size(); i++) {
