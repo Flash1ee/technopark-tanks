@@ -159,6 +159,8 @@ int GameSession::Run(sf::IntRect pl_rect) {
     std::vector<std::shared_ptr<Bullet>> all_bullets;
     std::vector<std::shared_ptr<Bullet>> bots_bullets;
     sf::Clock clock, timer_bots, timer_shoots;
+    sf::Clock time_player_visability;
+
     bool is_new_user = true;
 
     size_t count_bots = 0;
@@ -186,6 +188,8 @@ int GameSession::Run(sf::IntRect pl_rect) {
     while (m_window.isOpen()) {
         sf::Time times = timer_bots.getElapsedTime();
         sf::Time timer = timer_shoots.getElapsedTime();
+        sf::Time timer_visible = time_player_visability.getElapsedTime();
+
 
         float time = clock.getElapsedTime().asMicroseconds();  //дать прошедшее время в микросекундах
 
@@ -433,9 +437,10 @@ int GameSession::Run(sf::IntRect pl_rect) {
         }
 
         {  // Drawing is here
-
+           
             for (auto& curr_bullet : all_bullets) {
                 curr_bullet->move(time, *this_player, all_bots, &walls);
+            }
                 // for (auto &wall : walls.walls) {
                 //     if (wall->getCrash()) {
                 //         std::cout << "CRASHING" << std::endl;
@@ -443,10 +448,21 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 //         wall->updateCrash();
                 //     }
                 // }
+            if (timer_visible.asSeconds() > 15 && !(this_player->get_visability())) {
+                this_player->set_visability(true);
             }
-
             for (auto& curr_bullet : bots_bullets) {
+                size_t pre_hp = this_player->getHp();
                 curr_bullet->moveBots(time, *this_player, &walls);
+
+                  if (this_player->getHp() != pre_hp) {
+                    auto probability = rand() % 100;
+                    if (probability < 50 && this_player->get_visability()) {
+                        this_player->set_visability(false);
+                        this_player->play_visability();
+                        time_player_visability.restart();
+                    }
+                }   
             }
 
             m_cam.changeViewCoords(new_pos, m_level.GetTilemapWidth(), m_level.GetTilemapHeight());

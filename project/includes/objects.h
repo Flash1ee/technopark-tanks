@@ -17,7 +17,12 @@
 #define BRICK_SOUND "../sounds/brick.ogg"
 #define KILL_SOUND "../sounds/explosion.ogg"
 #define FINISH_SOUND "../sounds/finish.ogg"
+<<<<<<< HEAD
 #define BLOOD_SOUND "../sounds/first_blood.ogg"
+=======
+#define VISABILITY_SOUND "../sounds/visibility.ogg"
+#define RICOSCHET_SOUND "../sounds/ricochet.ogg"
+>>>>>>> 0d382d333b191b7c8809fd34b0acdea35af9da97
 
 
 enum class SoundType {
@@ -49,7 +54,12 @@ typedef enum {
     GAME_START,
     SPAWN,
     FINISH,
+<<<<<<< HEAD
     BLOOD,
+=======
+    VISABILITY,
+    RICOCHET,
+>>>>>>> 0d382d333b191b7c8809fd34b0acdea35af9da97
     COUNT
 } sound_action;
 class Sound {
@@ -81,8 +91,16 @@ class Sound {
     sf::SoundBuffer finish;
     sf::Sound finish_sound;
 
+<<<<<<< HEAD
     sf::SoundBuffer blood;
     sf::Sound blood_sound;
+=======
+    sf::SoundBuffer visability;
+    sf::Sound visability_sound;
+
+    sf::SoundBuffer ricochet;
+    sf::Sound ricochet_sound;
+>>>>>>> 0d382d333b191b7c8809fd34b0acdea35af9da97
 
     public:
     void play(sound_action action);
@@ -214,18 +232,24 @@ public:
            float speed, Direction dir, int life, bool bot)
         : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot) {
         m_objects = mapObj.GetAllObjects("solid");
+
+        ricochet.loadFromFile(RICOSCHET_SOUND);
+        ricochet_sound.setBuffer(ricochet);
         };
     void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls);
     void moveBots(float time, Player& p, DestructibleWalls* walls);
     void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls);
     void checkCollisionsObject(Player& p, DestructibleWalls* walls);
     void checkCollisionsObject(DestructibleWalls* walls, Player& p);
+    void play();
     // void sound();
     int getLife() const;
     Direction getDir() const;
 private:
     int m_life;
     int m_is_bot;
+    sf::SoundBuffer ricochet;
+    sf::Sound ricochet_sound;
     // int m_damage;
 };
 
@@ -256,16 +280,26 @@ class Tank : public Object {  //класс любого танка
     void setShot(bool shot);
 };
 class Player : public Tank {  //класс игрока
+   private:
+    int m_count_for_kills;
+    bool m_visability;
+    sf::SoundBuffer visability;
+    sf::Sound visability_sound;
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(1) {}
+        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(1), m_visability(true)  {
+            visability.loadFromFile(VISABILITY_SOUND);
+            visability_sound.setBuffer(visability);
+        };
     void checkCollisionsBots(std::vector<Bots*> b);
     int getCount() const;
     void setCount(int count);
-private:
-    int m_count_for_kills;
-    
+    void play_visability();
+    void set_visability(bool action);
+    bool get_visability();
+
+
 };
 
 class Bots : public Tank {  //класс игрока

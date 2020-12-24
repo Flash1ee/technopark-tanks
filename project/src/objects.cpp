@@ -286,10 +286,15 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
                 m_life = 0;
             }
         }
-
     for (int i = 0; i < b.size(); i++) {
         if (getRect().intersects(b[i]->getRect())) {
-            b[i]->setHp(b[i]->getHp() - 20);
+            auto probability = rand() % 100;
+            if (probability < 50) {
+                this->play();
+            }
+            else {
+                b[i]->setHp(b[i]->getHp() - 20);
+            }
             m_life = 0;
         }
     }
@@ -823,6 +828,11 @@ Sound::Sound() {
 
     blood.loadFromFile(BLOOD_SOUND);
     blood_sound.setBuffer(blood);
+    visability.loadFromFile(VISABILITY_SOUND);
+    visability_sound.setBuffer(visability);
+
+    ricochet.loadFromFile(RICOSCHET_SOUND);
+    ricochet_sound.setBuffer(ricochet);
 }
 void Sound::play(sound_action action) {
     switch(action) {
@@ -868,6 +878,14 @@ void Sound::play(sound_action action) {
         case BLOOD:
             if (this->blood_sound.getStatus() != sf::Sound::Playing) {
                 this->blood_sound.play();
+        case VISABILITY:
+            if (this->visability_sound.getStatus() != sf::Sound::Playing) {
+                this->visability_sound.play();
+            }
+            break;
+        case RICOCHET:
+            if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+                this->ricochet_sound.play();
             }
             break;
     }
@@ -893,5 +911,22 @@ int BasePlayer::getBulletsToDeath() {
 int BaseEnemy::getBulletsToDeath() {
     return m_hp / 10;
 }
+void Bullet::play() {
+    if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+            this->ricochet_sound.play();
+    }
+}
+void Player::play_visability() {
+        if (this->visability_sound.getStatus() != sf::Sound::Playing) {
+            this->visability_sound.play();
+    }
+}
 
+void Player::set_visability(bool action) {
+    this->m_visability = action;
+}
+
+bool Player::get_visability() {
+    return this->m_visability;
+}
 
