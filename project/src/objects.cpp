@@ -368,8 +368,8 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
 }
 
 void Bullet::checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other) {
-    for (auto &[i, players] : other) {
-        if (getRect().intersects(players->getRect())) {
+    for (auto &i : other) {
+        if (getRect().intersects(i.second->getRect())) {
             m_life = 0;
         }
     }
@@ -553,22 +553,22 @@ int Bullet::getLife() const {
 
 void Player::checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other) {
     for (auto &i : m_objects) {
-        for (auto &[it, players] : other) {
-            if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(players->getRect())) {
+        for (auto &i : other) {
+            if (getRect().intersects(static_cast<sf::IntRect>(i.second->rect)) || getRect().intersects(i.second->getRect())) {
                 if (dy > 0) {
-                    coords.y = players->getPos().y - rect.height;
+                    coords.y = i.second->getPos().y - rect.height;
                     this->dy = 0;
                 }
                 if (dy < 0) {
-                    coords.y = players->getPos().y + rect.height;
+                    coords.y = i.second->getPos().y + rect.height;
                     this->dy = 0;
                 }
                 if (dx > 0) {
-                    coords.x = players->getPos().x - rect.width;
+                    coords.x = i.second->getPos().x - rect.width;
                     this->dx = 0;
                 }
                 if (dx < 0) {
-                    coords.x = players->getPos().x + rect.width;
+                    coords.x = i.second->getPos().x + rect.width;
                     this->dx = 0;
                 }
             }
