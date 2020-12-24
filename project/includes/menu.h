@@ -24,6 +24,7 @@
 #define FONT_PATH "../resources/20085.ttf"
 #define BACKGROUND_PATH "../resources/background.jpg"
 #define BACKGROUND1_PATH "../resources/background1.jpg"
+#define DEVYATKA_PATH "../resources/devyat.jpg"
 #define MUSIC_PATH "../resources/menu_music.ogg"
 #define PAUSE_MUSIC_PATH "../resources/pause_music.ogg"
 #define MORTAL_PATH "../resources/mortal.ogg"
@@ -66,7 +67,7 @@ const inline Button gameMenu[GAME_COUNT] {
 const inline Button charMenu[CHARACTER_COUNT] {
     {.text = "Le Tank", .color = sf::Color::White},
     {.text = "Kolobok Ivanich", .color = sf::Color::White},
-    {.text = "Green bomba*s", .color = sf::Color::White},
+    {.text = "Green bombass", .color = sf::Color::White},
     {.text = "EL PROBLEMA", .color = sf::Color::White}
 };
 
