@@ -264,14 +264,13 @@ class Player : public Tank {  //класс игрока
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(1) {}
+        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(0) {}
     void checkCollisionsBots(std::vector<Bots*> b);
     void checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other);
     int getCount() const;
     void setCount(int count);
 private:
     int m_count_for_kills;
-    
 };
 
 class Bots : public Tank {  //класс игрока

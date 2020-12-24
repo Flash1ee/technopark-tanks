@@ -472,10 +472,7 @@ int GameSession::Run() {
                                 break;
                         }
                     }
-
                 }
-
-            
             }
         }
 
@@ -517,7 +514,6 @@ int GameSession::Run() {
                     m_window.draw(other_player.second->getSprite());
                 }
             }
-
 
             for (int i = 0; i < bots_bullets.size(); i++) {
                 
@@ -611,14 +607,14 @@ int GameSession::Run() {
                         main_timer.getElapsedTime().asSeconds() - pause_time.asSeconds());
             }
             stats.draw(m_window);
-            if (main_timer.getElapsedTime().asSeconds() < 4) {
-                bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
-                bots_left.setOutlineThickness(2);
-                std::ostringstream str_str;
-                str_str << "KILL " << this_player->getCount() << " BOTS!!!";
-                bots_left.setString(str_str.str());
-                m_window.draw(bots_left);
-            }
+//            if (main_timer.getElapsedTime().asSeconds() < 4) {
+//                bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
+//                bots_left.setOutlineThickness(2);
+//                std::ostringstream str_str;
+//                str_str << "KILL " << this_player->getCount() << " BOTS!!!";
+//                bots_left.setString(str_str.str());
+//                m_window.draw(bots_left);
+//            }
             if (this_player->getCount() > 0) {
                 std::ostringstream bots_count;
                 bots_count << this_player->getCount();
