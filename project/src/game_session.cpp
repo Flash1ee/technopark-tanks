@@ -77,7 +77,9 @@ void GameSession::WaitForOtherPlayers() {
 }
 
 int GameSession::Run() {
-    sf::Vector2f this_player_pos;
+
+    auto player_pos_raw = m_level.GetFirstObject("player1");
+    sf::Vector2f this_player_pos = {player_pos_raw.rect.left, player_pos_raw.rect.top - player_pos_raw.rect.width};
 
     if (m_is_multiplayer) {
         if(m_game_client.connectToServer())
