@@ -17,6 +17,7 @@
 #define BRICK_SOUND "../sounds/brick.ogg"
 #define KILL_SOUND "../sounds/explosion.ogg"
 #define FINISH_SOUND "../sounds/finish.ogg"
+#define BLOOD_SOUND "../sounds/first_blood.ogg"
 
 
 enum class SoundType {
@@ -48,6 +49,7 @@ typedef enum {
     GAME_START,
     SPAWN,
     FINISH,
+    BLOOD,
     COUNT
 } sound_action;
 class Sound {
@@ -78,6 +80,9 @@ class Sound {
 
     sf::SoundBuffer finish;
     sf::Sound finish_sound;
+
+    sf::SoundBuffer blood;
+    sf::Sound blood_sound;
 
     public:
     void play(sound_action action);

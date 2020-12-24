@@ -10,12 +10,16 @@
 #include "client_server_config.h"
 
 #define SINGLE 100
+#define FIRST 1000
+#define SECOND 2000
+#define THIRD 3000
 #define MULTI 200
 #define CONTINUE 300
 #define MENU_ERROR -1000
 #define STOP_RUN -245
 #define MAIN_COUNT 4
 #define GAME_COUNT 3
+#define CHARACTER_COUNT 3
 #define FONT_PATH "../resources/20085.ttf"
 #define BACKGROUND_PATH "../resources/background.jpg"
 #define BACKGROUND1_PATH "../resources/background1.jpg"
@@ -23,10 +27,16 @@
 #define PAUSE_MUSIC_PATH "../resources/pause_music.ogg"
 #define MORTAL_PATH "../resources/mortal.ogg"
 
+const inline sf::IntRect pl_rects [3] {
+    {1, 2, 13, 13},
+    {209, 128, 13, 13},
+    {193, 129, 13, 13}
+};
 
 enum class MenuSelector {
     MAIN,
     GAME,
+    CHARACTER,
     COUNT,
     ERROR
 };
@@ -50,11 +60,18 @@ const inline Button gameMenu[GAME_COUNT] {
     {.text = "Back to main menu", .color = sf::Color::White}
 };
 
+const inline Button charMenu[CHARACTER_COUNT] {
+    {.text = "Le Tank", .color = sf::Color::White},
+    {.text = "Kolobok Ivanich", .color = sf::Color::White},
+    {.text = "Green bomba*s", .color = sf::Color::White}
+};
+
 class Menu {
     private:
         int selectedIndex;
         sf::Font font;
         std::vector <sf::Text> buttons;
+        std::vector <sf::Sprite> buttons_img;
         sf::Sprite background;
         sf::Texture bg;
         sf::Music music;

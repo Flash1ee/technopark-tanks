@@ -14,7 +14,7 @@ class GameSession {
     ~GameSession();
 
     void WaitForOtherPlayers();
-    int Run();
+    int Run(sf::IntRect pl_rect);
     // void RunGame();
 
    private:

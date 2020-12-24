@@ -68,7 +68,7 @@ void GameSession::WaitForOtherPlayers() {
     }
 }
 
-int GameSession::Run() {
+int GameSession::Run(sf::IntRect pl_rect) {
     if (m_is_multiplayer) {
         WaitForOtherPlayers();
         // RunOnlineGame()
@@ -81,6 +81,7 @@ int GameSession::Run() {
     // TmxObject Player_obj = m_level.GetFirstObject("player"); //TODO: make
     // const name
     bool was_count = false;
+    bool first = true;
     Statistic stats(m_window);
     Sound sounds;
     sounds.play(GAME_START);
@@ -139,7 +140,7 @@ int GameSession::Run() {
         walls.base_enemy.push_back(baseEnemy);
     }
     std::shared_ptr<Player> this_player = std::make_shared<Player>(
-        m_level, OBJECT_IMAGE, sf::IntRect(1, 2, 13, 13), m_player_pos, 0.05,
+        m_level, OBJECT_IMAGE, pl_rect, m_player_pos, 0.05,
         100, Direction::UP);
 
     std::vector<Bots*> all_bots;
@@ -527,6 +528,10 @@ int GameSession::Run() {
                     m_window.draw(all_bots[i]->getSprite());
                 }
                 if (all_bots[i]->getHp() == 0) {
+                    if (first) {
+                        first = false;
+                        sounds.play(BLOOD);
+                    }
                     this_player->setCount(this_player->getCount() - 1);
                     all_bots.erase(all_bots.begin() + i);
                     sounds.play(KILL);

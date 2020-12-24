@@ -12,7 +12,8 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
     : coords(pos), rect(rect), dx(0), dy(0), speed(speed), dir(dir){
     this->image.loadFromFile(textureFile);
     this->image.createMaskFromColor(sf::Color(0, 0, 1));
-    this->image.createMaskFromColor(sf::Color(0, 0, 0));
+    // this->image.createMaskFromColor(sf::Color(256, 256, 256));
+    this->image.createMaskFromColor(sf::Color(255, 255, 255));
 
     this->texture.loadFromImage(this->image);
     this->sprite.setTexture(this->texture);
@@ -819,6 +820,9 @@ Sound::Sound() {
 
     finish.loadFromFile(FINISH_SOUND);
     finish_sound.setBuffer(finish);
+
+    blood.loadFromFile(BLOOD_SOUND);
+    blood_sound.setBuffer(blood);
 }
 void Sound::play(sound_action action) {
     switch(action) {
@@ -859,6 +863,11 @@ void Sound::play(sound_action action) {
         case FINISH:
             if (this->finish_sound.getStatus() != sf::Sound::Playing) {
                 this->finish_sound.play();
+            }
+            break;
+        case BLOOD:
+            if (this->blood_sound.getStatus() != sf::Sound::Playing) {
+                this->blood_sound.play();
             }
             break;
     }
