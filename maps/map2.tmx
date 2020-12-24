@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="431">
+ <tileset firstgid="1" name="textures_sprites" tilewidth="16" tileheight="16" tilecount="400" columns="25">
+  <image source="../resources/sprites.png" width="400" height="256"/>
+ </tileset>
+ <layer id="1" name="Map1" width="25" height="25">
+  <data>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="23"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="95"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="23"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="47"/>
+   <tile gid="73"/>
+   <tile gid="47"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="47"/>
+   <tile gid="73"/>
+   <tile gid="47"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="47"/>
+   <tile gid="73"/>
+   <tile gid="47"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="23"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="69"/>
+   <tile gid="69"/>
+   <tile gid="69"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="23"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="23"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="69"/>
+   <tile gid="69"/>
+   <tile gid="71"/>
+   <tile gid="69"/>
+   <tile gid="69"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="69"/>
+   <tile gid="69"/>
+   <tile gid="69"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="96"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="23"/>
+   <tile gid="94"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="23"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="23"/>
+   <tile gid="73"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="23"/>
+   <tile gid="73"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="94"/>
+   <tile gid="94"/>
+   <tile gid="94"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="23"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="95"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="22"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="95"/>
+   <tile gid="22"/>
+   <tile gid="95"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="73"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+  </data>
+ </layer>
+ <objectgroup id="5" name="collision">
+  <object id="121" name="spawn1" x="118.727" y="24.909" width="16" height="16"/>
+  <object id="122" name="spawn2" x="296.455" y="25.4546" width="16" height="16"/>
+  <object id="124" name="player1" gid="1" x="250.636" y="379.818" width="16" height="16"/>
+  <object id="125" name="player3" gid="1" x="132.818" y="381.273" width="16" height="16"/>
+  <object id="126" name="player3" gid="5" x="248.727" y="41.0909" width="16" height="16"/>
+  <object id="127" name="player4" gid="5" x="142" y="40.3636" width="16" height="16"/>
+  <object id="129" name="wall_enemy" gid="42" x="208" y="32" width="16" height="16"/>
+  <object id="130" name="wall_enemy" gid="42" x="208" y="48" width="16" height="16"/>
+  <object id="131" name="wall_enemy" gid="42" x="192" y="48" width="16" height="16"/>
+  <object id="132" name="wall_enemy" gid="42" x="176" y="32" width="16" height="16"/>
+  <object id="133" name="wall_enemy" gid="42" x="176" y="48" width="16" height="16"/>
+  <object id="134" name="wall_player" gid="42" x="208" y="384" width="16" height="16"/>
+  <object id="135" name="wall_player" gid="42" x="208" y="368" width="16" height="16"/>
+  <object id="136" name="wall_player" gid="42" x="192" y="368" width="16" height="16"/>
+  <object id="137" name="wall_player" gid="42" x="176" y="368" width="16" height="16"/>
+  <object id="138" name="wall_player" gid="42" x="176" y="384" width="16" height="16"/>
+  <object id="140" name="wall" gid="42" x="336" y="224" width="16" height="16"/>
+  <object id="141" name="wall" gid="42" x="48" y="224" width="16" height="16"/>
+  <object id="144" name="wall" gid="42" x="320" y="80" width="16" height="16"/>
+  <object id="145" name="wall" gid="42" x="48" y="192" width="16" height="16"/>
+  <object id="146" name="wall" gid="42" x="192" y="320" width="16" height="16"/>
+  <object id="147" name="wall" gid="42" x="192" y="288" width="16" height="16"/>
+  <object id="148" name="wall" gid="42" x="192" y="304" width="16" height="16"/>
+  <object id="149" name="wall" gid="42" x="192" y="336" width="16" height="16"/>
+  <object id="150" name="wall_enemy" gid="42" x="224" y="32" width="16" height="16"/>
+  <object id="151" name="wall_enemy" gid="42" x="224" y="48" width="16" height="16"/>
+  <object id="152" name="wall_enemy" gid="42" x="192" y="64" width="16" height="16"/>
+  <object id="153" name="wall_enemy" gid="42" x="160" y="32" width="16" height="16"/>
+  <object id="154" name="wall_enemy" gid="42" x="160" y="48" width="16" height="16"/>
+  <object id="157" name="player_base" gid="70" x="192" y="384" width="16" height="16"/>
+  <object id="158" name="enemy_base" gid="70" x="192" y="32" width="16" height="16"/>
+  <object id="171" name="brick" gid="17" x="48" y="288" width="16" height="16"/>
+  <object id="172" name="brick" gid="17" x="48" y="272" width="16" height="16"/>
+  <object id="173" name="brick" gid="17" x="48" y="256" width="16" height="16"/>
+  <object id="174" name="brick" gid="17" x="48" y="240" width="16" height="16"/>
+  <object id="175" name="brick" gid="17" x="48" y="208" width="16" height="16"/>
+  <object id="176" name="brick" gid="17" x="48" y="176" width="16" height="16"/>
+  <object id="177" name="brick" gid="17" x="48" y="160" width="16" height="16"/>
+  <object id="178" name="brick" gid="17" x="48" y="144" width="16" height="16"/>
+  <object id="179" name="brick" gid="17" x="48" y="128" width="16" height="16"/>
+  <object id="180" name="brick" gid="17" x="48" y="112" width="16" height="16"/>
+  <object id="187" name="brick" gid="17" x="48" y="96" width="16" height="16"/>
+  <object id="190" name="brick" gid="17" x="96" y="80" width="16" height="16"/>
+  <object id="192" name="brick" gid="17" x="96" y="208" width="16" height="16"/>
+  <object id="202" name="brick" gid="17" x="128" y="80" width="16" height="16"/>
+  <object id="203" name="brick" gid="17" x="128" y="96" width="16" height="16"/>
+  <object id="208" name="brick" gid="17" x="208" y="288" width="16" height="16"/>
+  <object id="209" name="brick" gid="17" x="208" y="304" width="16" height="16"/>
+  <object id="210" name="brick" gid="17" x="208" y="320" width="16" height="16"/>
+  <object id="211" name="brick" gid="17" x="208" y="336" width="16" height="16"/>
+  <object id="213" name="brick" gid="17" x="176" y="96" width="16" height="16"/>
+  <object id="214" name="brick" gid="17" x="176" y="112" width="16" height="16"/>
+  <object id="217" name="brick" gid="17" x="208" y="96" width="16" height="16"/>
+  <object id="218" name="brick" gid="17" x="208" y="112" width="16" height="16"/>
+  <object id="220" name="brick" gid="17" x="192" y="112" width="16" height="16"/>
+  <object id="225" name="brick" gid="17" x="128" y="144" width="16" height="16"/>
+  <object id="227" name="brick" gid="17" x="128" y="272" width="16" height="16"/>
+  <object id="228" name="brick" gid="17" x="144" y="272" width="16" height="16"/>
+  <object id="233" name="brick" gid="17" x="144" y="320" width="16" height="16"/>
+  <object id="234" name="brick" gid="17" x="144" y="336" width="16" height="16"/>
+  <object id="235" name="brick" gid="17" x="144" y="352" width="16" height="16"/>
+  <object id="236" name="brick" gid="17" x="176" y="160" width="16" height="16"/>
+  <object id="237" name="brick" gid="17" x="208" y="160" width="16" height="16"/>
+  <object id="240" name="brick" gid="17" x="240" y="320" width="16" height="16"/>
+  <object id="241" name="brick" gid="17" x="240" y="336" width="16" height="16"/>
+  <object id="242" name="brick" gid="17" x="240" y="352" width="16" height="16"/>
+  <object id="247" name="brick" gid="17" x="272" y="320" width="16" height="16"/>
+  <object id="248" name="brick" gid="17" x="272" y="336" width="16" height="16"/>
+  <object id="249" name="brick" gid="17" x="272" y="352" width="16" height="16"/>
+  <object id="250" name="brick" gid="17" x="240" y="272" width="16" height="16"/>
+  <object id="251" name="brick" gid="17" x="240" y="272" width="16" height="16"/>
+  <object id="252" name="brick" gid="17" x="256" y="272" width="16" height="16"/>
+  <object id="253" name="brick" gid="17" x="256" y="208" width="16" height="16"/>
+  <object id="254" name="brick" gid="17" x="256" y="224" width="16" height="16"/>
+  <object id="255" name="brick" gid="17" x="256" y="192" width="16" height="16"/>
+  <object id="256" name="brick" gid="17" x="240" y="144" width="16" height="16"/>
+  <object id="257" name="brick" gid="17" x="240" y="160" width="16" height="16"/>
+  <object id="259" name="brick" gid="17" x="288" y="176" width="16" height="16"/>
+  <object id="260" name="brick" gid="17" x="304" y="176" width="16" height="16"/>
+  <object id="263" name="brick" gid="17" x="240" y="96" width="16" height="16"/>
+  <object id="265" name="brick" gid="17" x="272" y="80" width="16" height="16"/>
+  <object id="266" name="brick" gid="17" x="272" y="96" width="16" height="16"/>
+  <object id="274" name="brick" gid="17" x="320" y="304" width="16" height="16"/>
+  <object id="275" name="brick" gid="17" x="320" y="288" width="16" height="16"/>
+  <object id="276" name="brick" gid="17" x="320" y="272" width="16" height="16"/>
+  <object id="283" name="brick" gid="17" x="336" y="208" width="16" height="16"/>
+  <object id="284" name="brick" gid="17" x="336" y="192" width="16" height="16"/>
+  <object id="285" name="brick" gid="17" x="336" y="176" width="16" height="16"/>
+  <object id="288" name="brick" gid="17" x="336" y="128" width="16" height="16"/>
+  <object id="289" name="brick" gid="17" x="336" y="112" width="16" height="16"/>
+  <object id="290" name="brick" gid="17" x="320" y="112" width="16" height="16"/>
+  <object id="291" name="brick" gid="17" x="320" y="96" width="16" height="16"/>
+  <object id="296" name="brick" gid="17" x="352" y="64" width="16" height="16"/>
+  <object id="298" name="solid" x="0" y="0" width="16" height="400"/>
+  <object id="299" name="solid" x="384" y="0" width="16" height="400"/>
+  <object id="304" name="solid" x="16" y="384" width="368" height="16"/>
+  <object id="305" name="solid" x="16" y="0" width="368" height="16"/>
+  <object id="306" name="solid" x="160" y="192" width="32.25" height="16"/>
+  <object id="307" name="solid" x="208" y="192" width="32" height="16"/>
+  <object id="308" name="solid" x="176" y="208" width="48" height="16"/>
+  <object id="309" name="solid" x="176" y="176" width="48" height="16"/>
+  <object id="316" name="grase" gid="68" x="368" y="208" width="16" height="16"/>
+  <object id="317" name="grass" gid="68" x="304" y="160" width="16" height="16"/>
+  <object id="318" name="grass" gid="68" x="304" y="144" width="16" height="16"/>
+  <object id="319" name="grass" gid="68" x="16" y="208" width="16" height="16"/>
+  <object id="320" name="grass" gid="68" x="80" y="272" width="16" height="16"/>
+  <object id="321" name="grass" gid="68" x="80" y="256" width="16" height="16"/>
+  <object id="322" name="grass" gid="68" x="80" y="240" width="16" height="16"/>
+  <object id="323" name="grass" gid="68" x="80" y="144" width="16" height="16"/>
+  <object id="324" name="grass" gid="68" x="80" y="160" width="16" height="16"/>
+  <object id="325" name="grass" gid="68" x="80" y="176" width="16" height="16"/>
+  <object id="326" name="boss" x="152.5" y="56.25" width="17.5" height="19.5"/>
+  <object id="341" name="grass" gid="68" x="160" y="384" width="16" height="16"/>
+  <object id="342" name="grass" gid="68" x="16" y="384" width="16" height="16"/>
+  <object id="343" name="grass" gid="68" x="16" y="304" width="16" height="16"/>
+  <object id="344" name="grass" gid="68" x="16" y="352" width="16" height="16"/>
+  <object id="346" name="grass" gid="68" x="48" y="368" width="16" height="16"/>
+  <object id="347" name="grass" gid="68" x="64" y="368" width="16" height="16"/>
+  <object id="348" name="grass" gid="68" x="32" y="384" width="16" height="16"/>
+  <object id="349" name="grass" gid="68" x="48" y="384" width="16" height="16"/>
+  <object id="350" name="grass" gid="68" x="64" y="384" width="16" height="16"/>
+  <object id="351" name="grass" gid="68" x="32" y="336" width="16" height="16"/>
+  <object id="352" name="grass" gid="68" x="48" y="336" width="16" height="16"/>
+  <object id="353" name="grass" gid="68" x="64" y="336" width="16" height="16"/>
+  <object id="354" name="grass" gid="68" x="32" y="352" width="16" height="16"/>
+  <object id="355" name="grass" gid="68" x="48" y="352" width="16" height="16"/>
+  <object id="356" name="grass" gid="68" x="64" y="352" width="16" height="16"/>
+  <object id="357" name="grass" gid="68" x="16" y="368" width="16" height="16"/>
+  <object id="358" name="grass" gid="68" x="29.75" y="303.75" width="16" height="16"/>
+  <object id="360" name="grass" gid="68" x="16" y="336" width="16" height="16"/>
+  <object id="361" name="grass" gid="68" x="112" y="304" width="16" height="16"/>
+  <object id="362" name="grass" gid="68" x="160" y="368" width="16" height="16"/>
+  <object id="363" name="grass" gid="68" x="320" y="384" width="16" height="16"/>
+  <object id="364" name="grass" gid="68" x="320" y="352" width="16" height="16"/>
+  <object id="365" name="grass" gid="68" x="352" y="368" width="16" height="16"/>
+  <object id="366" name="grass" gid="68" x="368" y="368" width="16" height="16"/>
+  <object id="367" name="grass" gid="68" x="336" y="384" width="16" height="16"/>
+  <object id="368" name="grass" gid="68" x="352" y="384" width="16" height="16"/>
+  <object id="369" name="grass" gid="68" x="368" y="384" width="16" height="16"/>
+  <object id="370" name="grass" gid="68" x="336" y="336" width="16" height="16"/>
+  <object id="371" name="grass" gid="68" x="352" y="336" width="16" height="16"/>
+  <object id="372" name="grass" gid="68" x="368" y="336" width="16" height="16"/>
+  <object id="373" name="grass" gid="68" x="336" y="352" width="16" height="16"/>
+  <object id="374" name="grass" gid="68" x="352" y="352" width="16" height="16"/>
+  <object id="375" name="grass" gid="68" x="368" y="352" width="16" height="16"/>
+  <object id="376" name="grass" gid="68" x="320" y="368" width="16" height="16"/>
+  <object id="377" name="grass" gid="68" x="320" y="336" width="16" height="16"/>
+  <object id="378" name="grass" gid="68" x="80" y="336" width="16" height="16"/>
+  <object id="379" name="grass" gid="68" x="96" y="336" width="16" height="16"/>
+  <object id="380" name="grass" gid="68" x="80" y="352" width="16" height="16"/>
+  <object id="381" name="grass" gid="68" x="96" y="320" width="16" height="16"/>
+  <object id="382" name="grass" gid="68" x="96" y="304" width="16" height="16"/>
+  <object id="383" name="grass" gid="68" x="128" y="288" width="16" height="16"/>
+  <object id="384" name="grass" gid="68" x="112" y="288" width="16" height="16"/>
+  <object id="385" name="grass" gid="68" x="320" y="320" width="16" height="16"/>
+  <object id="386" name="grass" gid="68" x="304" y="320" width="16" height="16"/>
+  <object id="387" name="grass" gid="68" x="288" y="320" width="16" height="16"/>
+  <object id="388" name="grass" gid="68" x="288" y="304" width="16" height="16"/>
+  <object id="389" name="grass" gid="68" x="304" y="338" width="16" height="16"/>
+  <object id="390" name="grass" gid="68" x="224" y="384" width="16" height="16"/>
+  <object id="391" name="grass" gid="68" x="224" y="368" width="16" height="16"/>
+  <object id="392" name="grass" gid="68" x="184" y="352" width="16" height="16"/>
+  <object id="393" name="grass" gid="68" x="200" y="352" width="16" height="16"/>
+  <object id="394" name="grass" gid="68" x="216" y="352" width="16" height="16"/>
+  <object id="395" name="grass" gid="68" x="168" y="352" width="16" height="16"/>
+  <object id="396" name="grass" gid="68" x="128" y="336" width="16" height="16"/>
+  <object id="397" name="grass" gid="68" x="128" y="320" width="16" height="16"/>
+  <object id="398" name="grass" gid="68" x="112" y="336" width="16" height="16"/>
+  <object id="399" name="grass" gid="68" x="112" y="320" width="16" height="16"/>
+  <object id="400" name="grass" gid="68" x="80" y="368" width="16" height="16"/>
+  <object id="401" name="grass" gid="68" x="112" y="352" width="16" height="16"/>
+  <object id="402" name="grass" gid="68" x="96" y="352" width="16" height="16"/>
+  <object id="403" name="grass" gid="68" x="80" y="32" width="16" height="16"/>
+  <object id="404" name="grass" gid="68" x="96" y="32" width="16" height="16"/>
+  <object id="405" name="grass" gid="68" x="80" y="48" width="16" height="16"/>
+  <object id="406" name="grass" gid="68" x="96" y="48" width="16" height="16"/>
+  <object id="407" name="grass" gid="68" x="64" y="32" width="16" height="16"/>
+  <object id="408" name="grass" gid="68" x="111.75" y="32" width="16" height="16"/>
+  <object id="409" name="grass" gid="68" x="127.75" y="32" width="16" height="16"/>
+  <object id="410" name="grass" gid="68" x="304" y="47.75" width="16" height="16"/>
+  <object id="411" name="grass" gid="68" x="320" y="31.75" width="16" height="16"/>
+  <object id="412" name="grass" gid="68" x="320" y="47.75" width="16" height="16"/>
+  <object id="413" name="grass" gid="68" x="304" y="31.75" width="16" height="16"/>
+  <object id="414" name="grass" gid="68" x="64" y="48" width="16" height="16"/>
+  <object id="415" name="grass" gid="68" x="48.25" y="47.75" width="16" height="16"/>
+  <object id="416" name="grass" gid="68" x="48" y="64" width="16" height="16"/>
+  <object id="417" name="grass" gid="68" x="32" y="64" width="16" height="16"/>
+  <object id="418" name="grass" gid="68" x="32" y="80" width="16" height="16"/>
+  <object id="419" name="grass" gid="68" x="16" y="80" width="16" height="16"/>
+  <object id="420" name="grass" gid="68" x="16" y="96" width="16" height="16"/>
+  <object id="421" name="wall" gid="42" x="16" y="32" width="16" height="16"/>
+  <object id="422" name="brick" gid="17" x="368" y="32" width="16" height="16"/>
+  <object id="423" name="grass" gid="68" x="336" y="64" width="16" height="16"/>
+  <object id="424" name="grass" gid="68" x="336" y="64" width="16" height="16"/>
+  <object id="425" name="grass" gid="68" x="336" y="48" width="16" height="16"/>
+  <object id="426" name="grass" gid="68" x="352" y="80" width="16" height="16"/>
+  <object id="427" name="grass" gid="68" x="336" y="80" width="16" height="16"/>
+  <object id="428" name="grass" gid="68" x="143.5" y="176.25" width="16" height="16"/>
+  <object id="429" name="grass" gid="68" x="143.5" y="192.25" width="16" height="16"/>
+  <object id="430" name="grass" gid="68" x="143.5" y="208.25" width="16" height="16"/>
+ </objectgroup>
+</map>

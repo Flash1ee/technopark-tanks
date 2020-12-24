@@ -879,7 +879,6 @@ void Sound::play(sound_action action) {
         case BLOOD:
             if (this->blood_sound.getStatus() != sf::Sound::Playing) {
                 this->blood_sound.play();
-            }
             break;
         case VISABILITY:
             if (this->visability_sound.getStatus() != sf::Sound::Playing) {
@@ -891,6 +890,7 @@ void Sound::play(sound_action action) {
                 this->ricochet_sound.play();
             }
             break;
+    }
     }
 }
 bool Sound::MainSoundStopped() {
