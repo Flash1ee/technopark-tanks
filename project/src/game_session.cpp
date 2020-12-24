@@ -512,6 +512,19 @@ int GameSession::Run() {
             for(auto& other_player : players) {
                 if (other_player.second->getHp() > 0 ) {
                     m_window.draw(other_player.second->getSprite());
+                } else {
+                    if (win_time == sf::Time::Zero) {
+                        finish.pause();
+                        sounds.play(WIN_S);
+                        win_time = main_timer.getElapsedTime();
+                    }
+                    if (main_timer.getElapsedTime().asSeconds() - win_time.asSeconds() < 5) {
+                        m_win.setPosition(m_window.getView().getCenter().x - 100, m_window.getView().getCenter().y - 51);
+                        m_window.draw(m_win);
+                    } else {
+                        return STOP_RUN;
+                    }
+
                 }
             }
 
