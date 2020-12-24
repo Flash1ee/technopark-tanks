@@ -890,6 +890,7 @@ void Sound::play(sound_action action) {
             }
             break;
     }
+    }
 }
 bool Sound::MainSoundStopped() {
     if (this->gamestart_sound.getStatus() != sf::Sound::Playing) {
