@@ -294,7 +294,7 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
     for (int i = 0; i < b.size(); i++) {
         if (getRect().intersects(b[i]->getRect())) {
             auto probability = rand() % 100;
-            if (probability < 50) {
+            if (probability < 30) {
                 this->play();
             }
             else {
@@ -1181,6 +1181,10 @@ Sound::Sound() {
 
     ricochet.loadFromFile(RICOSCHET_SOUND);
     ricochet_sound.setBuffer(ricochet);
+
+    boss.loadFromFile(BOSS_SOUND);
+    boss_sound.setBuffer(boss);
+
 }
 void Sound::play(sound_action action) {
     switch (action) {
@@ -1198,7 +1202,9 @@ void Sound::play(sound_action action) {
             }
             break;
         case KILL:
+        if (this->explosion_sound.getStatus() != sf::Sound::Playing) {
             this->explosion_sound.play();
+        }
             break;
         case FIRE:
             if (this->fire_sound.getStatus() != sf::Sound::Playing) {
@@ -1236,6 +1242,12 @@ void Sound::play(sound_action action) {
             if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
                 this->ricochet_sound.play();
             }
+            break;
+        case BOSS:
+            if (this->boss_sound.getStatus() != sf::Sound::Playing) {
+                this->boss_sound.play();
+            }
+            break;
     }
     }
 }
