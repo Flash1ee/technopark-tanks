@@ -13,24 +13,27 @@
 #define FIRST 1000
 #define SECOND 2000
 #define THIRD 3000
+#define FORTH 4000
 #define MULTI 200
 #define CONTINUE 300
 #define MENU_ERROR -1000
 #define STOP_RUN -245
 #define MAIN_COUNT 4
 #define GAME_COUNT 3
-#define CHARACTER_COUNT 3
+#define CHARACTER_COUNT 4
 #define FONT_PATH "../resources/20085.ttf"
 #define BACKGROUND_PATH "../resources/background.jpg"
 #define BACKGROUND1_PATH "../resources/background1.jpg"
 #define MUSIC_PATH "../resources/menu_music.ogg"
 #define PAUSE_MUSIC_PATH "../resources/pause_music.ogg"
 #define MORTAL_PATH "../resources/mortal.ogg"
+#define CHOOSE_MUSIC_PATH "../resources/character.ogg"
 
-const inline sf::IntRect pl_rects [3] {
+const inline sf::IntRect pl_rects [4] {
     {1, 2, 13, 13},
     {209, 128, 13, 13},
-    {193, 129, 13, 13}
+    {193, 129, 13, 13},
+    {224, 129, 13, 13},
 };
 
 enum class MenuSelector {
@@ -63,7 +66,8 @@ const inline Button gameMenu[GAME_COUNT] {
 const inline Button charMenu[CHARACTER_COUNT] {
     {.text = "Le Tank", .color = sf::Color::White},
     {.text = "Kolobok Ivanich", .color = sf::Color::White},
-    {.text = "Green bomba*s", .color = sf::Color::White}
+    {.text = "Green bomba*s", .color = sf::Color::White},
+    {.text = "EL PROBLEMA", .color = sf::Color::White}
 };
 
 class Menu {

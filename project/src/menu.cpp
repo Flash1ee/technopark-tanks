@@ -53,9 +53,9 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
             // };
             // this->background.setTexture(bg);
             // background.setPosition(0, 0);
-            // if (!music.openFromFile(PAUSE_MUSIC_PATH)) {
-            //     throw std::exception();
-            // };
+            if (!music.openFromFile(CHOOSE_MUSIC_PATH)) {
+                throw std::exception();
+            };
             this->buttons.resize(CHARACTER_COUNT);
             auto height = window.getSize().y / this->buttons.size();
             for (int i = 0; i < this->buttons.size(); i++) {
@@ -100,6 +100,16 @@ int Menu::menuSwitcher(sf::RenderWindow& window, std::string map_skin, std::stri
                 GameSession game_session("Tanks", map_skin, player_skin, false);
                 music.pause();
                 if (game_session.Run(pl_rects[2]) == STOP_RUN) {
+                    // std::cout <<"Returned stop run" <<'\n';
+                    return STOP_RUN;
+                };
+                break;
+            }
+
+            case FORTH: {
+                GameSession game_session("Tanks", map_skin, player_skin, false);
+                music.pause();
+                if (game_session.Run(pl_rects[3]) == STOP_RUN) {
                     // std::cout <<"Returned stop run" <<'\n';
                     return STOP_RUN;
                 };
@@ -155,6 +165,7 @@ int Menu::show(sf::RenderWindow& window) {
                         }
                         if (currbutton == "Single play") {
                             Menu tanks(2, window);
+                            tanks.music.play();
                             return tanks.show(window);
                         }
                         if (currbutton == "Multiplayer") {
@@ -184,6 +195,10 @@ int Menu::show(sf::RenderWindow& window) {
                         if (currbutton == "Green bomba*s") {
                             window.close();
                             return THIRD;
+                        }
+                        if (currbutton == "EL PROBLEMA") {
+                            window.close();
+                            return FORTH;
                         }
                         break;
                     }
