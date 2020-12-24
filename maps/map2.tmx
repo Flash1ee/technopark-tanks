@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="431">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="588">
  <tileset firstgid="1" name="textures_sprites" tilewidth="16" tileheight="16" tilecount="400" columns="25">
   <image source="../resources/sprites.png" width="400" height="256"/>
  </tileset>
@@ -315,11 +315,11 @@
    <tile gid="23"/>
    <tile gid="22"/>
    <tile gid="73"/>
-   <tile gid="69"/>
+   <tile gid="22"/>
    <tile gid="69"/>
    <tile gid="71"/>
    <tile gid="69"/>
-   <tile gid="69"/>
+   <tile gid="22"/>
    <tile gid="22"/>
    <tile gid="22"/>
    <tile gid="73"/>
@@ -659,21 +659,17 @@
   <object id="149" name="wall" gid="42" x="192" y="336" width="16" height="16"/>
   <object id="150" name="wall_enemy" gid="42" x="224" y="32" width="16" height="16"/>
   <object id="151" name="wall_enemy" gid="42" x="224" y="48" width="16" height="16"/>
-  <object id="152" name="wall_enemy" gid="42" x="192" y="64" width="16" height="16"/>
   <object id="153" name="wall_enemy" gid="42" x="160" y="32" width="16" height="16"/>
   <object id="154" name="wall_enemy" gid="42" x="160" y="48" width="16" height="16"/>
   <object id="157" name="player_base" gid="70" x="192" y="384" width="16" height="16"/>
   <object id="158" name="enemy_base" gid="70" x="192" y="32" width="16" height="16"/>
   <object id="171" name="brick" gid="17" x="48" y="288" width="16" height="16"/>
   <object id="172" name="brick" gid="17" x="48" y="272" width="16" height="16"/>
-  <object id="173" name="brick" gid="17" x="48" y="256" width="16" height="16"/>
-  <object id="174" name="brick" gid="17" x="48" y="240" width="16" height="16"/>
   <object id="175" name="brick" gid="17" x="48" y="208" width="16" height="16"/>
   <object id="176" name="brick" gid="17" x="48" y="176" width="16" height="16"/>
   <object id="177" name="brick" gid="17" x="48" y="160" width="16" height="16"/>
   <object id="178" name="brick" gid="17" x="48" y="144" width="16" height="16"/>
   <object id="179" name="brick" gid="17" x="48" y="128" width="16" height="16"/>
-  <object id="180" name="brick" gid="17" x="48" y="112" width="16" height="16"/>
   <object id="187" name="brick" gid="17" x="48" y="96" width="16" height="16"/>
   <object id="190" name="brick" gid="17" x="96" y="80" width="16" height="16"/>
   <object id="192" name="brick" gid="17" x="96" y="208" width="16" height="16"/>
@@ -695,12 +691,9 @@
   <object id="234" name="brick" gid="17" x="144" y="336" width="16" height="16"/>
   <object id="235" name="brick" gid="17" x="144" y="352" width="16" height="16"/>
   <object id="236" name="brick" gid="17" x="176" y="160" width="16" height="16"/>
-  <object id="237" name="brick" gid="17" x="208" y="160" width="16" height="16"/>
   <object id="240" name="brick" gid="17" x="240" y="320" width="16" height="16"/>
   <object id="241" name="brick" gid="17" x="240" y="336" width="16" height="16"/>
-  <object id="242" name="brick" gid="17" x="240" y="352" width="16" height="16"/>
   <object id="247" name="brick" gid="17" x="272" y="320" width="16" height="16"/>
-  <object id="248" name="brick" gid="17" x="272" y="336" width="16" height="16"/>
   <object id="249" name="brick" gid="17" x="272" y="352" width="16" height="16"/>
   <object id="250" name="brick" gid="17" x="240" y="272" width="16" height="16"/>
   <object id="251" name="brick" gid="17" x="240" y="272" width="16" height="16"/>
@@ -715,9 +708,7 @@
   <object id="263" name="brick" gid="17" x="240" y="96" width="16" height="16"/>
   <object id="265" name="brick" gid="17" x="272" y="80" width="16" height="16"/>
   <object id="266" name="brick" gid="17" x="272" y="96" width="16" height="16"/>
-  <object id="274" name="brick" gid="17" x="320" y="304" width="16" height="16"/>
   <object id="275" name="brick" gid="17" x="320" y="288" width="16" height="16"/>
-  <object id="276" name="brick" gid="17" x="320" y="272" width="16" height="16"/>
   <object id="283" name="brick" gid="17" x="336" y="208" width="16" height="16"/>
   <object id="284" name="brick" gid="17" x="336" y="192" width="16" height="16"/>
   <object id="285" name="brick" gid="17" x="336" y="176" width="16" height="16"/>
@@ -730,20 +721,19 @@
   <object id="299" name="solid" x="384" y="0" width="16" height="400"/>
   <object id="304" name="solid" x="16" y="384" width="368" height="16"/>
   <object id="305" name="solid" x="16" y="0" width="368" height="16"/>
-  <object id="306" name="solid" x="160" y="192" width="32.25" height="16"/>
-  <object id="307" name="solid" x="208" y="192" width="32" height="16"/>
+  <object id="307" name="solid" x="208" y="192" width="15.5" height="16"/>
   <object id="308" name="solid" x="176" y="208" width="48" height="16"/>
   <object id="309" name="solid" x="176" y="176" width="48" height="16"/>
   <object id="316" name="grase" gid="68" x="368" y="208" width="16" height="16"/>
   <object id="317" name="grass" gid="68" x="304" y="160" width="16" height="16"/>
   <object id="318" name="grass" gid="68" x="304" y="144" width="16" height="16"/>
-  <object id="319" name="grass" gid="68" x="16" y="208" width="16" height="16"/>
+  <object id="319" name="grass" gid="68" x="32" y="224" width="16" height="16"/>
   <object id="320" name="grass" gid="68" x="80" y="272" width="16" height="16"/>
   <object id="321" name="grass" gid="68" x="80" y="256" width="16" height="16"/>
   <object id="322" name="grass" gid="68" x="80" y="240" width="16" height="16"/>
   <object id="323" name="grass" gid="68" x="80" y="144" width="16" height="16"/>
   <object id="324" name="grass" gid="68" x="80" y="160" width="16" height="16"/>
-  <object id="325" name="grass" gid="68" x="80" y="176" width="16" height="16"/>
+  <object id="325" name="grass" gid="68" x="112" y="160" width="16" height="16"/>
   <object id="326" name="boss" x="152.5" y="56.25" width="17.5" height="19.5"/>
   <object id="341" name="grass" gid="68" x="160" y="384" width="16" height="16"/>
   <object id="342" name="grass" gid="68" x="16" y="384" width="16" height="16"/>
@@ -761,7 +751,7 @@
   <object id="355" name="grass" gid="68" x="48" y="352" width="16" height="16"/>
   <object id="356" name="grass" gid="68" x="64" y="352" width="16" height="16"/>
   <object id="357" name="grass" gid="68" x="16" y="368" width="16" height="16"/>
-  <object id="358" name="grass" gid="68" x="29.75" y="303.75" width="16" height="16"/>
+  <object id="358" name="grass" gid="68" x="32" y="320" width="16" height="16"/>
   <object id="360" name="grass" gid="68" x="16" y="336" width="16" height="16"/>
   <object id="361" name="grass" gid="68" x="112" y="304" width="16" height="16"/>
   <object id="362" name="grass" gid="68" x="160" y="368" width="16" height="16"/>
@@ -791,13 +781,9 @@
   <object id="386" name="grass" gid="68" x="304" y="320" width="16" height="16"/>
   <object id="387" name="grass" gid="68" x="288" y="320" width="16" height="16"/>
   <object id="388" name="grass" gid="68" x="288" y="304" width="16" height="16"/>
-  <object id="389" name="grass" gid="68" x="304" y="338" width="16" height="16"/>
+  <object id="389" name="grass" gid="68" x="304" y="352" width="16" height="16"/>
   <object id="390" name="grass" gid="68" x="224" y="384" width="16" height="16"/>
   <object id="391" name="grass" gid="68" x="224" y="368" width="16" height="16"/>
-  <object id="392" name="grass" gid="68" x="184" y="352" width="16" height="16"/>
-  <object id="393" name="grass" gid="68" x="200" y="352" width="16" height="16"/>
-  <object id="394" name="grass" gid="68" x="216" y="352" width="16" height="16"/>
-  <object id="395" name="grass" gid="68" x="168" y="352" width="16" height="16"/>
   <object id="396" name="grass" gid="68" x="128" y="336" width="16" height="16"/>
   <object id="397" name="grass" gid="68" x="128" y="320" width="16" height="16"/>
   <object id="398" name="grass" gid="68" x="112" y="336" width="16" height="16"/>
@@ -812,26 +798,168 @@
   <object id="407" name="grass" gid="68" x="64" y="32" width="16" height="16"/>
   <object id="408" name="grass" gid="68" x="111.75" y="32" width="16" height="16"/>
   <object id="409" name="grass" gid="68" x="127.75" y="32" width="16" height="16"/>
-  <object id="410" name="grass" gid="68" x="304" y="47.75" width="16" height="16"/>
-  <object id="411" name="grass" gid="68" x="320" y="31.75" width="16" height="16"/>
-  <object id="412" name="grass" gid="68" x="320" y="47.75" width="16" height="16"/>
-  <object id="413" name="grass" gid="68" x="304" y="31.75" width="16" height="16"/>
+  <object id="411" name="grass" gid="68" x="319.25" y="64" width="16" height="16"/>
+  <object id="413" name="grass" gid="68" x="304" y="48" width="16" height="16"/>
   <object id="414" name="grass" gid="68" x="64" y="48" width="16" height="16"/>
   <object id="415" name="grass" gid="68" x="48.25" y="47.75" width="16" height="16"/>
-  <object id="416" name="grass" gid="68" x="48" y="64" width="16" height="16"/>
+  <object id="416" name="grass" gid="68" x="48" y="80" width="16" height="16"/>
   <object id="417" name="grass" gid="68" x="32" y="64" width="16" height="16"/>
-  <object id="418" name="grass" gid="68" x="32" y="80" width="16" height="16"/>
   <object id="419" name="grass" gid="68" x="16" y="80" width="16" height="16"/>
-  <object id="420" name="grass" gid="68" x="16" y="96" width="16" height="16"/>
+  <object id="420" name="grass" gid="68" x="32" y="96" width="16" height="16"/>
   <object id="421" name="wall" gid="42" x="16" y="32" width="16" height="16"/>
   <object id="422" name="brick" gid="17" x="368" y="32" width="16" height="16"/>
-  <object id="423" name="grass" gid="68" x="336" y="64" width="16" height="16"/>
-  <object id="424" name="grass" gid="68" x="336" y="64" width="16" height="16"/>
+  <object id="424" name="grass" gid="68" x="320" y="32" width="16" height="16"/>
   <object id="425" name="grass" gid="68" x="336" y="48" width="16" height="16"/>
-  <object id="426" name="grass" gid="68" x="352" y="80" width="16" height="16"/>
+  <object id="426" name="grass" gid="68" x="352" y="96" width="16" height="16"/>
   <object id="427" name="grass" gid="68" x="336" y="80" width="16" height="16"/>
-  <object id="428" name="grass" gid="68" x="143.5" y="176.25" width="16" height="16"/>
-  <object id="429" name="grass" gid="68" x="143.5" y="192.25" width="16" height="16"/>
-  <object id="430" name="grass" gid="68" x="143.5" y="208.25" width="16" height="16"/>
+  <object id="428" name="grass" gid="68" x="144" y="176" width="16" height="16"/>
+  <object id="429" name="grass" gid="68" x="144" y="192" width="16" height="16"/>
+  <object id="430" name="grass" gid="68" x="144" y="208" width="16" height="16"/>
+  <object id="431" name="grass" gid="68" x="224" y="208" width="16" height="16"/>
+  <object id="432" name="grass" gid="68" x="224" y="224" width="16" height="16"/>
+  <object id="433" name="grass" gid="68" x="224" y="240" width="16" height="16"/>
+  <object id="434" name="grass" gid="68" x="336" y="240" width="16" height="16"/>
+  <object id="435" name="grass" gid="68" x="352" y="240" width="16" height="16"/>
+  <object id="436" name="grass" gid="68" x="368" y="240" width="16" height="16"/>
+  <object id="437" name="grass" gid="68" x="320" y="240" width="16" height="16"/>
+  <object id="438" name="grass" gid="68" x="272" y="240" width="16" height="16"/>
+  <object id="439" name="grass" gid="68" x="288" y="240" width="16" height="16"/>
+  <object id="440" name="grass" gid="68" x="304" y="240" width="16" height="16"/>
+  <object id="441" name="grass" gid="68" x="256" y="240" width="16" height="16"/>
+  <object id="442" name="grass" gid="68" x="240" y="240" width="16" height="16"/>
+  <object id="443" name="grass" gid="68" x="64" y="240" width="16" height="16"/>
+  <object id="444" name="grass" gid="68" x="176" y="240" width="16" height="16"/>
+  <object id="445" name="grass" gid="68" x="192" y="240" width="16" height="16"/>
+  <object id="446" name="grass" gid="68" x="208" y="240" width="16" height="16"/>
+  <object id="447" name="grass" gid="68" x="160" y="240" width="16" height="16"/>
+  <object id="448" name="grass" gid="68" x="112" y="240" width="16" height="16"/>
+  <object id="449" name="grass" gid="68" x="128" y="240" width="16" height="16"/>
+  <object id="450" name="grass" gid="68" x="144" y="240" width="16" height="16"/>
+  <object id="451" name="grass" gid="68" x="96" y="240" width="16" height="16"/>
+  <object id="453" name="grass" gid="68" x="48" y="240" width="16" height="16"/>
+  <object id="454" name="grass" gid="68" x="32" y="240" width="16" height="16"/>
+  <object id="455" name="grass" gid="68" x="16" y="240" width="16" height="16"/>
+  <object id="456" name="grass" gid="68" x="256" y="80" width="16" height="16"/>
+  <object id="457" name="grass" gid="68" x="256" y="96" width="16" height="16"/>
+  <object id="458" name="grass" gid="68" x="256" y="112.25" width="16" height="16"/>
+  <object id="459" name="grass" gid="68" x="144" y="288" width="16" height="16"/>
+  <object id="460" name="grass" gid="68" x="160" y="288" width="16" height="16"/>
+  <object id="461" name="grass" gid="68" x="160" y="272" width="16" height="16"/>
+  <object id="463" name="grass" gid="68" x="160" y="256" width="16" height="16"/>
+  <object id="464" name="grass" gid="68" x="272" y="288" width="16" height="16"/>
+  <object id="465" name="grass" gid="68" x="288" y="288" width="16" height="16"/>
+  <object id="467" name="grass" gid="68" x="272" y="272" width="16" height="16"/>
+  <object id="468" name="grass" gid="68" x="272" y="256" width="16" height="16"/>
+  <object id="469" name="grass" gid="68" x="144" y="224" width="16" height="16"/>
+  <object id="470" name="grass" gid="68" x="80" y="288" width="16" height="16"/>
+  <object id="471" name="grass" gid="68" x="80" y="304" width="16" height="16"/>
+  <object id="472" name="grass" gid="68" x="240" y="288" width="16" height="16"/>
+  <object id="473" name="grass" gid="68" x="256" y="288" width="16" height="16"/>
+  <object id="474" name="grass" gid="68" x="224" y="288" width="16" height="16"/>
+  <object id="475" name="grass" gid="68" x="224" y="272" width="16" height="16"/>
+  <object id="476" name="grass" gid="68" x="208" y="272" width="16" height="16"/>
+  <object id="477" name="grass" gid="68" x="208" y="256" width="16" height="16"/>
+  <object id="478" name="grass" gid="68" x="224" y="192" width="16" height="16"/>
+  <object id="479" name="grass" gid="68" x="112" y="368" width="16" height="16"/>
+  <object id="480" name="grass" gid="68" x="144" y="368" width="16" height="16"/>
+  <object id="481" name="grass" gid="68" x="128" y="368" width="16" height="16"/>
+  <object id="482" name="grass" gid="68" x="128" y="352" width="16" height="16"/>
+  <object id="483" name="grass" gid="68" x="224" y="177" width="16" height="16"/>
+  <object id="484" name="grass" gid="68" x="256" y="177" width="16" height="16"/>
+  <object id="485" name="grass" gid="68" x="240" y="177" width="16" height="16"/>
+  <object id="486" name="grass" gid="68" x="272" y="176" width="16" height="16"/>
+  <object id="487" name="grass" gid="68" x="272" y="160" width="16" height="16"/>
+  <object id="488" name="grass" gid="68" x="288" y="160" width="16" height="16"/>
+  <object id="490" name="grass" gid="68" x="270" y="128" width="16" height="16"/>
+  <object id="491" name="grass" gid="68" x="286" y="128" width="16" height="16"/>
+  <object id="492" name="grass" gid="68" x="254" y="128.25" width="16" height="16"/>
+  <object id="493" name="grass" gid="68" x="288" y="144" width="16" height="16"/>
+  <object id="494" name="grass" gid="68" x="320" y="144" width="16" height="16"/>
+  <object id="495" name="grass" gid="68" x="336" y="144" width="16" height="16"/>
+  <object id="496" name="grass" gid="68" x="336" y="144" width="16" height="16"/>
+  <object id="497" name="grass" gid="68" x="336" y="160" width="16" height="16"/>
+  <object id="498" name="grase" gid="68" x="352" y="160" width="16" height="16"/>
+  <object id="499" name="grase" gid="68" x="352" y="192" width="16" height="16"/>
+  <object id="500" name="grase" gid="68" x="368" y="176" width="16" height="16"/>
+  <object id="501" name="grase" gid="68" x="352" y="224" width="16" height="16"/>
+  <object id="502" name="grase" gid="68" x="368" y="144" width="16" height="16"/>
+  <object id="503" name="grase" gid="68" x="352" y="128" width="16" height="16"/>
+  <object id="504" name="grase" gid="68" x="368" y="112" width="16" height="16"/>
+  <object id="505" name="grase" gid="68" x="352" y="32" width="16" height="16"/>
+  <object id="506" name="grass" gid="68" x="368" y="80" width="16" height="16"/>
+  <object id="507" name="grase" gid="68" x="368" y="48" width="16" height="16"/>
+  <object id="508" name="grass" gid="68" x="16" y="208" width="16" height="16"/>
+  <object id="509" name="grass" gid="68" x="32" y="192" width="16" height="16"/>
+  <object id="510" name="grass" gid="68" x="16" y="178" width="16" height="16"/>
+  <object id="511" name="grass" gid="68" x="16" y="142" width="16" height="16"/>
+  <object id="512" name="grass" gid="68" x="16" y="112" width="16" height="16"/>
+  <object id="513" name="grass" gid="68" x="32" y="160" width="16" height="16"/>
+  <object id="514" name="grass" gid="68" x="32" y="128" width="16" height="16"/>
+  <object id="515" name="grass" gid="68" x="16" y="48" width="16" height="16"/>
+  <object id="517" name="grass" gid="68" x="304" y="80" width="16" height="16"/>
+  <object id="519" name="grass" gid="68" x="288" y="96" width="16" height="16"/>
+  <object id="520" name="grass" gid="68" x="256" y="64" width="16" height="16"/>
+  <object id="521" name="grass" gid="68" x="224" y="177" width="16" height="16"/>
+  <object id="522" name="grass" gid="68" x="224" y="160" width="16" height="16"/>
+  <object id="523" name="grass" gid="68" x="240" y="160" width="16" height="16"/>
+  <object id="524" name="grass" gid="68" x="208" y="160" width="16" height="16"/>
+  <object id="525" name="grass" gid="68" x="192" y="144" width="16" height="16"/>
+  <object id="526" name="grass" gid="68" x="192" y="144" width="16" height="16"/>
+  <object id="527" name="grass" gid="68" x="160" y="144" width="16" height="16"/>
+  <object id="528" name="grass" gid="68" x="160" y="160" width="16" height="16"/>
+  <object id="529" name="grass" gid="68" x="112" y="192" width="16" height="16"/>
+  <object id="530" name="grass" gid="68" x="128" y="192" width="16" height="16"/>
+  <object id="531" name="grass" gid="68" x="112" y="176" width="16" height="16"/>
+  <object id="532" name="grass" gid="68" x="96" y="160" width="16" height="16"/>
+  <object id="533" name="grass" gid="68" x="80" y="128" width="16" height="16"/>
+  <object id="534" name="grass" gid="68" x="80" y="112" width="16" height="16"/>
+  <object id="535" name="grass" gid="68" x="64" y="112" width="16" height="16"/>
+  <object id="536" name="grass" gid="68" x="48" y="112" width="16" height="16"/>
+  <object id="537" name="grass" gid="68" x="16" y="272" width="16" height="16"/>
+  <object id="538" name="grass" gid="68" x="32" y="288" width="16" height="16"/>
+  <object id="539" name="grass" gid="68" x="32" y="256" width="16" height="16"/>
+  <object id="540" name="grass" gid="68" x="288" y="336" width="16" height="16"/>
+  <object id="541" name="grass" gid="68" x="272" y="336" width="16" height="16"/>
+  <object id="542" name="grass" gid="68" x="256" y="336" width="16" height="16"/>
+  <object id="543" name="grass" gid="68" x="256" y="352" width="16" height="16"/>
+  <object id="544" name="grass" gid="68" x="240" y="352" width="16" height="16"/>
+  <object id="545" name="grass" gid="68" x="224" y="352" width="16" height="16"/>
+  <object id="546" name="grass" gid="68" x="208" y="352" width="16" height="16"/>
+  <object id="547" name="grass" gid="68" x="192" y="352" width="16" height="16"/>
+  <object id="548" name="grass" gid="68" x="176" y="352" width="16" height="16"/>
+  <object id="549" name="grass" gid="68" x="176" y="336" width="16" height="16"/>
+  <object id="551" name="grass" gid="68" x="160" y="336" width="16" height="16"/>
+  <object id="555" name="grass" gid="68" x="304" y="288" width="16" height="16"/>
+  <object id="556" name="grass" gid="68" x="320" y="272" width="16" height="16"/>
+  <object id="557" name="grass" gid="68" x="304" y="272" width="16" height="16"/>
+  <object id="559" name="grass" gid="68" x="320" y="256" width="16" height="16"/>
+  <object id="560" name="grass" gid="68" x="352" y="272" width="16" height="16"/>
+  <object id="561" name="grass" gid="68" x="336" y="288" width="16" height="16"/>
+  <object id="562" name="grass" gid="68" x="368" y="256" width="16" height="16"/>
+  <object id="563" name="grass" gid="68" x="320" y="304" width="16" height="16"/>
+  <object id="564" name="grass" gid="68" x="96" y="112" width="16" height="16"/>
+  <object id="565" name="grass" gid="68" x="128" y="112" width="16" height="16"/>
+  <object id="566" name="grass" gid="68" x="112" y="112" width="16" height="16"/>
+  <object id="567" name="grass" gid="68" x="144" y="128" width="16" height="16"/>
+  <object id="568" name="grass" gid="68" x="144" y="112" width="16" height="16"/>
+  <object id="569" name="grass" gid="68" x="144" y="144" width="16" height="16"/>
+  <object id="570" name="grass" gid="68" x="176" y="96" width="16" height="16"/>
+  <object id="571" name="grass" gid="68" x="176" y="80" width="16" height="16"/>
+  <object id="572" name="grass" gid="68" x="144" y="96" width="16" height="16"/>
+  <object id="573" name="grass" gid="68" x="176" y="80" width="16" height="16"/>
+  <object id="574" name="grass" gid="68" x="208" y="80" width="16" height="16"/>
+  <object id="575" name="grass" gid="68" x="192" y="64" width="16" height="16"/>
+  <object id="576" name="grass" gid="68" x="224" y="64" width="16" height="16"/>
+  <object id="577" name="grass" gid="68" x="208" y="64" width="16" height="16"/>
+  <object id="578" name="grass" gid="68" x="240" y="64" width="16" height="16"/>
+  <object id="579" name="grass" gid="68" x="256" y="48" width="16" height="16"/>
+  <object id="580" name="grass" gid="68" x="272" y="48" width="16" height="16"/>
+  <object id="581" name="grass" gid="68" x="288" y="32" width="16" height="16"/>
+  <object id="582" name="wall" gid="42" x="368" y="288" width="16" height="16"/>
+  <object id="583" name="wall" gid="42" x="368" y="304" width="16" height="16"/>
+  <object id="584" name="wall" gid="42" x="368" y="320" width="16" height="16"/>
+  <object id="585" name="grass" gid="68" x="304" y="384" width="16" height="16"/>
+  <object id="586" name="grass" gid="68" x="304" y="368" width="16" height="16"/>
+  <object id="587" name="grass" gid="68" x="304" y="368" width="16" height="16"/>
  </objectgroup>
 </map>
