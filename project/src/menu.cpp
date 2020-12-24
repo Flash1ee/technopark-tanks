@@ -48,11 +48,11 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
         }
 
         case 2: {
-            // if (!bg.loadFromFile(BACKGROUND1_PATH)) {
-            //     throw std::exception();
-            // };
-            // this->background.setTexture(bg);
-            // background.setPosition(0, 0);
+            if (!bg.loadFromFile(DEVYATKA_PATH)) {
+                throw std::exception();
+            };
+            this->background.setTexture(bg);
+            background.setPosition(0, 0);
             if (!music.openFromFile(CHOOSE_MUSIC_PATH)) {
                 throw std::exception();
             };
@@ -192,7 +192,7 @@ int Menu::show(sf::RenderWindow& window) {
                             window.close();
                             return SECOND;
                         }
-                        if (currbutton == "Green bomba*s") {
+                        if (currbutton == "Green bombass") {
                             window.close();
                             return THIRD;
                         }
