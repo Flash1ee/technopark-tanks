@@ -284,7 +284,7 @@ class Player : public Tank {  //класс игрока
    public:
     Player(Level& mapObj, sf::String textureFile, sf::IntRect rect,
            sf::Vector2f pos, float speed, int hp, Direction dir)
-        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(4), m_visability(true)  {
+        : Tank(mapObj, textureFile, rect, pos, speed, hp, dir), m_count_for_kills(3), m_visability(true)  {
             visability.loadFromFile(VISABILITY_SOUND);
             visability_sound.setBuffer(visability);
         };
