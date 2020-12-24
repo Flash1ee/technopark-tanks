@@ -368,11 +368,12 @@ void Bullet::checkCollisionsObject(Player& p, DestructibleWalls* walls) {
 }
 
 void Bullet::checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other) {
-    for (auto &i : other) {
-        if (getRect().intersects(i.second->getRect())) {
-            m_life = 0;
-        }
-    }
+//    for (auto &[i, players] : other) {
+//        if (getRect().intersects(players->getRect())) {
+//           // players->setHp(players->getHp() - 19);
+//            m_life = 0;
+//        }
+//    }
 }
 
 void Bullet::checkCollisionsObject(DestructibleWalls* walls, Player &p) {
@@ -600,6 +601,7 @@ void Player::checkCollisionsBots(std::vector<Bots*> b) {
         }
     }
 }
+
 sf::IntRect Object::getRect() {
     return sf::IntRect(coords.x, coords.y, rect.width, rect.height);
 }
