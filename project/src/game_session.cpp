@@ -20,7 +20,7 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
     :
       m_window(sf::VideoMode(1920, 1080), window_title, sf::Style::Fullscreen),
       m_is_multiplayer(is_multiplayer) {
-    m_level.LoadFromFile(MAP_ONE);
+    m_level.LoadFromFile(MAP_TWO);
     MapObject player = m_level.GetFirstObject("player1");
     
 
@@ -614,6 +614,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
             if (this_player->getHp() <= 0) {
                 sounds.stop_all();
+                finish.stop();
                 if (wasted.GetTimer() == sf::Time::Zero) {
                     sounds.MainSoundStopped();
                     wasted.SetTimer(main_timer.getElapsedTime());
@@ -640,6 +641,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
                     sounds.play(FINISH);
                     destroy.SetTimer(main_timer.getElapsedTime());
                 }
+                sounds.stop_all();
                 destroy.update(m_window, main_timer.getElapsedTime());
                 was_count = true;
             }

@@ -292,9 +292,9 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
             }
         }
     for (int i = 0; i < b.size(); i++) {
-        if (getRect().intersects(b[i]->getRect())) {
+        if (getRect().intersects(b[i]->getRect()) && p.getHp() > 0) {
             auto probability = rand() % 100;
-            if (probability < 30) {
+            if (probability < 20) {
                 this->play();
             }
             else {
@@ -1259,18 +1259,19 @@ bool Sound::MainSoundStopped() {
 }
 
 void Sound::stop_all() {
-    ricochet_sound.stop();
-    sound.stop();
-    background_sound.stop();
+    ricochet_sound.pause();
+    sound.pause();
+    background_sound.pause();
     brick_sound.stop();
-    explosion_sound.stop();
-    fire_sound.stop();
-    gameover_sound.stop();
-    gamestart_sound.stop();
-    steel_sound.stop();
-    finish_sound.stop();
-    visability_sound.stop();
-    ricochet_sound.stop();
+    explosion_sound.pause();
+    fire_sound.pause();
+    gameover_sound.pause();
+    gamestart_sound.pause();
+    steel_sound.pause();
+    finish_sound.pause();
+    visability_sound.pause();
+    ricochet_sound.pause();
+    boss_sound.pause();
 }
 
 int Wall::getHp() const {
