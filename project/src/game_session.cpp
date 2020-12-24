@@ -279,7 +279,7 @@ int GameSession::Run() {
                 auto new_b = std::make_shared<Bullet>(m_level,
                                                       OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
                                                       bullet_pos, 0.3,
-                                                      bullet_dir, 1, is_bot);
+                                                      bullet_dir, 1, is_bot, m_user_id);
 
 
                 all_bullets.push_back(new_b);  // Copying is too expensive
@@ -310,7 +310,7 @@ int GameSession::Run() {
                     auto new_b = std::make_shared<Bullet>(m_level,
                                                           OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
                                                           bullet_pos, 0.3,
-                                                          bullet_dir, 1, is_bot);
+                                                          bullet_dir, 1, is_bot, m_user_id);
 
                     // sf::Packet packet;
                     // PlayerAction new_bullet_action = {-1, bullet_pos, bullet_dir,
@@ -455,7 +455,7 @@ int GameSession::Run() {
                                 Direction dir = action.direction;
                                 std::shared_ptr<Bullet> new_b(new Bullet(m_level,
                                                           OBJECT_IMAGE, BULLET_SOUND, sf::IntRect(323, 102, 4, 4),
-                                                          pos, 0.3, dir, 1, false));
+                                                          pos, 0.3, dir, 1, false, m_user_id));
 
                                 all_bullets.push_back(new_b);
 

@@ -214,8 +214,8 @@ class Brick : public Object {
 class Bullet : public Object {
 public:
     Bullet(Level& mapObj, sf::String textureFile, sf::String soundFile, sf::IntRect rect, sf::Vector2f pos,
-           float speed, Direction dir, int life, bool bot)
-        : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot) {
+           float speed, Direction dir, int life, bool bot, int id)
+        : Object(textureFile, rect, pos, speed, dir), m_life(life), m_is_bot(bot), m_id(id) {
         m_objects = mapObj.GetAllObjects("solid");
         };
     void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other);
@@ -228,6 +228,7 @@ public:
     int getLife() const;
     Direction getDir() const;
 private:
+    int m_id;
     int m_life;
     int m_is_bot;
     // int m_damage;
