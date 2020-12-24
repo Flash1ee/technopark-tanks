@@ -12,7 +12,8 @@ Object::Object(sf::String textureFile, sf::IntRect rect, sf::Vector2f pos,
     : coords(pos), rect(rect), dx(0), dy(0), speed(speed), dir(dir){
     this->image.loadFromFile(textureFile);
     this->image.createMaskFromColor(sf::Color(0, 0, 1));
-    this->image.createMaskFromColor(sf::Color(0, 0, 0));
+    // this->image.createMaskFromColor(sf::Color(256, 256, 256));
+    this->image.createMaskFromColor(sf::Color(255, 255, 255));
 
     this->texture.loadFromImage(this->image);
     this->sprite.setTexture(this->texture);
@@ -90,7 +91,7 @@ void Bullet::moveBots(float time, Player& p, DestructibleWalls* walls) {
     setPos();
 }
 
-void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls* walls) {
+void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<BotBoss*> boss) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -114,7 +115,7 @@ void Bullet::move(float time, Player&p, std::vector<Bots*> b, DestructibleWalls*
             break;
     }
 
-    this->checkCollisionsObject(time, p, b, walls);
+    this->checkCollisionsObject(time, p, b, walls, boss);
     this->checkCollisionsObject(walls, p);
     if (m_life == 1) {
         coords.x += dx * time;
@@ -279,17 +280,28 @@ void Tank::checkCollisionsWall(float x_old, float y_old, float x, float y, Destr
         }
     }
 }
-void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls) {
+void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<BotBoss*> boss) {
     for (auto &i : m_objects) {
             if (getRect().intersects(static_cast<sf::IntRect>(i.rect))) {
                 m_life = 0;
             }
         }
-
     for (int i = 0; i < b.size(); i++) {
         if (getRect().intersects(b[i]->getRect())) {
-            b[i]->setHp(b[i]->getHp() - 20);
+            auto probability = rand() % 100;
+            if (probability < 50) {
+                this->play();
+            }
+            else {
+                b[i]->setHp(b[i]->getHp() - 20);
+            }
             m_life = 0;
+        }
+    }
+    for (int i = 0; i < boss.size(); i++) {
+        if (getRect().intersects(boss[i]->getRect())) {
+            m_life = 0;
+            boss[i]->setHp(boss[i]->getHp() - 20);
         }
     }
 }
@@ -508,7 +520,7 @@ int Bullet::getLife() const {
     return this->m_life;
 }
 
-void Player::checkCollisionsBots(std::vector<Bots*> b) {
+void Player::checkCollisionsBots(std::vector<Bots*> b, std::vector<BotBoss*> boss) {
     for (auto &i : m_objects) {
         for (auto &it : b) {
             if (getRect().intersects(static_cast<sf::IntRect>(i.rect)) || getRect().intersects(it->getRect())) {
@@ -526,6 +538,26 @@ void Player::checkCollisionsBots(std::vector<Bots*> b) {
                 }
                 if (dx < 0) {
                     coords.x = it->getPos().x + rect.width;
+                    this->dx = 0;
+                }
+            }
+        }
+        for (int i = 0; i < boss.size(); i++) {
+            if (getRect().intersects(boss[i]->getRect())) {
+                if (dy > 0) {
+                    coords.y = boss[i]->getPos().y - rect.height;
+                    this->dy = 0;
+                }
+                if (dy < 0) {
+                    coords.y = boss[i]->getPos().y + rect.height;
+                    this->dy = 0;
+                }
+                if (dx > 0) {
+                    coords.x = boss[i]->getPos().x - rect.width;
+                    this->dx = 0;
+                }
+                if (dx < 0) {
+                    coords.x = boss[i]->getPos().x + rect.width;
                     this->dx = 0;
                 }
             }
@@ -548,14 +580,16 @@ int Object::comparisonPos(Player &p, std::vector<Bots*> b) {
     return b.size();
 }
 
-bool Object::comparisonPos(Player &p, BotBoss& boss) {
-    if (abs(p.coords.x - boss.coords.x) < 50) {
-        return true;
-    }
-    if (abs(p.coords.y - boss.coords.y) < 3) {
-        return true;
-    } else {
-        return false;
+bool Object::comparisonPos(Player &p, std::vector<BotBoss*> boss) {
+    for (int i = 0; i < boss.size(); i++) {
+        if (abs(p.coords.x - boss[i]->coords.x) < 50) {
+            return true;
+        }
+        if (abs(p.coords.y - boss[i]->coords.y) < 3) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -573,16 +607,17 @@ int Bots::checkCollisionsBase(std::vector<Bots *> b, DestructibleWalls *walls) {
     return b.size();
 }
 
-bool BotBoss::checkCollisionsBase(BotBoss& boss, DestructibleWalls *walls) {
+bool BotBoss::checkCollisionsBase(std::vector<BotBoss*> boss, DestructibleWalls *walls) {
     // std::cout << "Base:y" << walls->base_player[0]->coords.y << std::endl;
-
-    if (abs(walls->base_player[0]->coords.y - boss.coords.y) < 10) {
-        return true;
-    }
-    if (abs(walls->base_player[0]->coords.x - boss.coords.x) < 6) {
-        return true;
-    } else {
-        return false;
+    for (int i = 0; i < boss.size(); i++) {
+        if (abs(walls->base_player[i]->coords.y - boss[i]->coords.y) < 10) {
+            return true;
+        }
+        if (abs(walls->base_player[i]->coords.x - boss[i]->coords.x) < 6) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -853,13 +888,13 @@ void BotBoss::checkCollisionsWalls(float x_old, float y_old, float x, float y,
 }
 
 void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
-                              Player &p, std::vector<Bots*> b) {
+                              Player &p, std::vector<Bots*> b, std::vector<BotBoss*> boss) {
     std::random_device rd;
     std::uniform_int_distribution<int> uid(0, 3);
     for (auto &i : m_objects) {
         for (auto &it : b) {
             if ((getRect().intersects(static_cast<sf::IntRect>(i.rect)) &&
-                i.name == "solid") || (getRect().intersects(it->getRect())) && (getRect()) != it->getRect()) {
+                 i.name == "solid") || (getRect().intersects(it->getRect())) && (getRect()) != it->getRect()) {
                 if (dy > 0) {
                     coords.y = y_old;
                     this->dy = 0;
@@ -900,6 +935,30 @@ void Bots::checkCollisionsObjects(float x_old, float y_old, float dx, float dy,
                     coords.x = p.getPos().x + rect.width;
                     this->dx = 0;
                     dir = static_cast<Direction>(uid(rd));
+                }
+            }
+            for (int i = 0; i < boss.size(); i++) {
+                if (getRect().intersects(boss[i]->getRect())) {
+                    if (dy > 0) {
+                        coords.y = boss[i]->getPos().y - rect.height;
+                        this->dy = 0;
+                        dir = static_cast<Direction>(uid(rd));
+                    }
+                    if (dy < 0) {
+                        coords.y = boss[i]->getPos().y + rect.height;
+                        this->dy = 0;
+                        dir = static_cast<Direction>(uid(rd));
+                    }
+                    if (dx > 0) {
+                        coords.x = boss[i]->getPos().x - rect.width;
+                        this->dx = 0;
+                        dir = static_cast<Direction>(uid(rd));
+                    }
+                    if (dx < 0) {
+                        coords.x = boss[i]->getPos().x + rect.width;
+                        this->dx = 0;
+                        dir = static_cast<Direction>(uid(rd));
+                    }
                 }
             }
         }
@@ -982,7 +1041,7 @@ void BotBoss::checkCollisionsObjects(float x_old, float y_old, float dx, float d
     }
 }
 
-void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<std::shared_ptr<Bullet>> all_bullets) {
+void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<std::shared_ptr<Bullet>> all_bullets, std::vector<BotBoss*> boss) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -1010,7 +1069,7 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* 
     auto y_old = coords.y;
     coords.x += dx * time;
     coords.y += dy * time;
-   this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b);
+   this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b, boss);
 
     for (int i = 0; i < b.size(); i++) {
         if (comparisonPos(p, b) == i) {
@@ -1029,7 +1088,7 @@ void Bots::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* 
 
 }
 
-void BotBoss::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<std::shared_ptr<Bullet>> all_bullets,  BotBoss& boss) {
+void BotBoss::move(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<std::shared_ptr<Bullet>> all_bullets,  std::vector<BotBoss*> boss) {
     switch (dir) {
         case Direction::RIGHT:
             this->sprite.setRotation(90);
@@ -1059,15 +1118,16 @@ void BotBoss::move(float time, Player &p, std::vector<Bots*> b, DestructibleWall
     coords.y += dy * time;
     this->checkCollisionsObjects(x_old, y_old, dx, dy, p, b);
 
-    for (int i = 0; i < b.size(); i++) {
+    for (int i = 0; i < boss.size(); i++) {
         if (comparisonPos(p, boss)) {
-            boss.setShot(true);
+            boss[i]->setShot(true);
         }
     }
-    if (checkCollisionsBase(boss, walls)) {
-        boss.setShot(true);
+    for (int i = 0; i < boss.size(); i++) {
+        if (checkCollisionsBase(boss, walls)) {
+            boss[i]->setShot(true);
+        }
     }
-
     this->checkCollisionsWalls(x_old, y_old, dx, dy, walls);
     this->checkCollisionsBullet(x_old, y_old, dx, dy, all_bullets, p);
     setPos();
@@ -1096,28 +1156,30 @@ Sound::Sound() {
     steel.loadFromFile(SPAWN_SOUND);
     steel_sound.setBuffer(steel);
 
-    wasted.loadFromFile(WASTED_SOUND);
-    wasted_sound.setBuffer(wasted);
-
     finish.loadFromFile(FINISH_SOUND);
     finish_sound.setBuffer(finish);
 
-    win.loadFromFile(WIN_SOUND);
-    win_sound.setBuffer(win);
+    blood.loadFromFile(BLOOD_SOUND);
+    blood_sound.setBuffer(blood);
+    visability.loadFromFile(VISABILITY_SOUND);
+    visability_sound.setBuffer(visability);
+
+    ricochet.loadFromFile(RICOSCHET_SOUND);
+    ricochet_sound.setBuffer(ricochet);
 }
 void Sound::play(sound_action action) {
-    switch(action) {
+    switch (action) {
         case BACKGROUND:
             if (this->background_sound.getStatus() != sf::Sound::Playing) {
-            this->background_sound.play();
-            this->background_sound.setVolume(60);
-            this->background_sound.setPitch(0.8f);
+                this->background_sound.play();
+                this->background_sound.setVolume(60);
+                this->background_sound.setPitch(0.8f);
             }
             break;
         case BRICK:
             if (this->brick_sound.getStatus() != sf::Sound::Playing) {
-            this->brick_sound.play();
-            this->fire_sound.setVolume(100);
+                this->brick_sound.play();
+                this->fire_sound.setVolume(100);
             }
             break;
         case KILL:
@@ -1125,8 +1187,8 @@ void Sound::play(sound_action action) {
             break;
         case FIRE:
             if (this->fire_sound.getStatus() != sf::Sound::Playing) {
-            this->fire_sound.play();
-            this->fire_sound.setVolume(60);
+                this->fire_sound.play();
+                this->fire_sound.setVolume(60);
             }
             break;
         case GAME_OVER:
@@ -1141,21 +1203,25 @@ void Sound::play(sound_action action) {
                 this->steel_sound.play();
             }
             break;
-        case WASTED_S:
-            if (this->wasted_sound.getStatus() != sf::Sound::Playing) {
-                this->wasted_sound.play();
-            }
-            break;
         case FINISH:
             if (this->finish_sound.getStatus() != sf::Sound::Playing) {
                 this->finish_sound.play();
             }
             break;
-        case WIN_S:
-            if (this->win_sound.getStatus() != sf::Sound::Playing) {
-                this->win_sound.play();
+        case BLOOD:
+            if (this->blood_sound.getStatus() != sf::Sound::Playing) {
+                this->blood_sound.play();
+                case VISABILITY:
+                    if (this->visability_sound.getStatus() != sf::Sound::Playing) {
+                        this->visability_sound.play();
+                    }
+                break;
+                case RICOCHET:
+                    if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+                        this->ricochet_sound.play();
+                    }
+                break;
             }
-            break;
     }
 }
 bool Sound::MainSoundStopped() {
@@ -1179,5 +1245,22 @@ int BasePlayer::getBulletsToDeath() {
 int BaseEnemy::getBulletsToDeath() {
     return m_hp / 10;
 }
+void Bullet::play() {
+    if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+            this->ricochet_sound.play();
+    }
+}
+void Player::play_visability() {
+        if (this->visability_sound.getStatus() != sf::Sound::Playing) {
+            this->visability_sound.play();
+    }
+}
 
+void Player::set_visability(bool action) {
+    this->m_visability = action;
+}
+
+bool Player::get_visability() {
+    return this->m_visability;
+}
 

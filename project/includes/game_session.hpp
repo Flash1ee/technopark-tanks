@@ -14,7 +14,7 @@ class GameSession {
     ~GameSession();
 
     void WaitForOtherPlayers();
-    int Run();
+    int Run(sf::IntRect pl_rect);
     // void RunGame();
 
    private:
@@ -22,15 +22,6 @@ class GameSession {
     Client m_game_client;
     Cam m_cam;
     sf::Vector2f m_player_pos;
-    sf::Texture dead;
-    sf::Sprite m_dead;
-    sf::Texture win;
-    sf::Sprite m_win;
-    sf::Text bots_left;
-    sf::Text bots_base_hp;
-    sf::Text player_base_hp;
-    sf::Text m_left_bots;
-    sf::Font font;  
     sf::Music finish;
     bool m_is_multiplayer;
     sf::RenderWindow m_window;
