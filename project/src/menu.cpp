@@ -61,7 +61,7 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
                 buttons[i].setColor(charMenu[i].color);
                 buttons[i].setFont(font);
                 buttons[i].setString(charMenu[i].text);
-                buttons[i].setPosition(window.getSize().x / 2 - 100, 80 + height * (i));
+                buttons[i].setPosition(window.getSize().x - 400, 80 + height * (i));
             }
             this->buttons_texture.resize(1);
             this->buttons_sprite.resize(CHARACTER_COUNT);
