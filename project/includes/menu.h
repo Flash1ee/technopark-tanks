@@ -28,8 +28,8 @@
 #define CONTINUE 300
 #define MENU_ERROR -1000
 #define STOP_RUN -245
-#define MAIN_COUNT 4
-#define GAME_COUNT 3
+#define MAIN_COUNT 3
+#define GAME_COUNT 2
 #define MAP_COUNT 2
 #define CHARACTER_COUNT 4
 #define TEXT_MAP_ONE "../resources/map_one_text.png"
@@ -72,13 +72,11 @@ struct Button {
 const inline Button mainMenu[MAIN_COUNT] {
     {.text = "Single play", .color = sf::Color::White},
     {.text = "Multiplayer", .color = sf::Color::White},
-    {.text = "Top results", .color = sf::Color::White},
     {.text = "Exit", .color = sf::Color::White}
 };
 
 const inline Button gameMenu[GAME_COUNT] {
     {.text = "Countinue", .color = sf::Color::White},
-    {.text = "Show current stats", .color = sf::Color::White},
     {.text = "Back to main menu", .color = sf::Color::White}
 };
 
