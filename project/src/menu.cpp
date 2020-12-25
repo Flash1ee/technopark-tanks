@@ -82,8 +82,20 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
                 buttons[i].setColor(mapMenu[i].color);
                 buttons[i].setFont(font);
                 buttons[i].setString(mapMenu[i].text);
-                buttons[i].setPosition(window.getSize().x / 2 - 100, 200 + height * (i));
+                // buttons[i].setPosition(window.getSize().x - win, 300);
             }
+            buttons[0].setPosition(400, 300);
+            buttons[1].setPosition(1400, 300);
+            this->buttons_texture.resize(MAP_COUNT);
+            buttons_texture[0].loadFromFile(TEXT_MAP_ONE);
+            buttons_texture[1].loadFromFile(TEXT_MAP_TWO);
+            this->buttons_sprite.resize(MAP_COUNT);
+            buttons_sprite[0].setTexture(buttons_texture[0]);
+            buttons_sprite[1].setTexture(buttons_texture[1]);
+            buttons_sprite[0].setTextureRect(map_rects[0]);
+            buttons_sprite[0].setPosition(300, 400);
+            buttons_sprite[1].setPosition(1250, 400);
+            buttons_sprite[1].setTextureRect(map_rects[1]);
             break;
         }
 
@@ -211,12 +223,14 @@ int Menu::show(sf::RenderWindow& window) {
             if (event.type == sf::Event::KeyReleased) {
                 switch (event.key.code)
                 {
-                    case sf::Keyboard::Down: {
+                    case sf::Keyboard::Down:
+                    case sf::Keyboard::Right: {
                         this->moveDown();
                         break;
                     }
 
-                    case sf::Keyboard::Up: {
+                    case sf::Keyboard::Up:
+                    case sf::Keyboard::Left: {
                         this->moveUp();
                         break;
                     }
@@ -287,6 +301,9 @@ void Menu::draw(sf::RenderWindow& window) {
     window.draw(background);
     for (int i = 0; i < buttons.size(); i++) {
         window.draw(buttons[i]);
+        if (this->buttons_sprite.size() != 0) {
+            window.draw(buttons_sprite[i]);
+        }
     }
 }
 

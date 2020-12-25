@@ -32,6 +32,8 @@
 #define GAME_COUNT 3
 #define MAP_COUNT 2
 #define CHARACTER_COUNT 4
+#define TEXT_MAP_ONE "../resources/map_one_text.png"
+#define TEXT_MAP_TWO "../resources/map_two_text.png"
 #define FONT_PATH "../resources/20085.ttf"
 #define BACKGROUND_PATH "../resources/background.jpg"
 #define BACKGROUND1_PATH "../resources/background1.jpg"
@@ -41,11 +43,16 @@
 #define MORTAL_PATH "../resources/mortal.ogg"
 #define CHOOSE_MUSIC_PATH "../resources/character.ogg"
 
-const inline sf::IntRect pl_rects [4] {
+const inline sf::IntRect pl_rects [CHARACTER_COUNT] {
     {1, 2, 13, 13},
     {209, 128, 13, 13},
     {193, 129, 13, 13},
     {224, 129, 13, 13},
+};
+
+const inline sf::IntRect map_rects [MAP_COUNT] {
+    {0, 0, 429, 369},
+    {0, 0, 429, 369},
 };
 
 enum class MenuSelector {
@@ -92,7 +99,8 @@ class Menu {
         int selectedIndex;
         sf::Font font;
         std::vector <sf::Text> buttons;
-        std::vector <sf::Sprite> buttons_img;
+        std::vector <sf::Sprite> buttons_sprite;
+        std::vector <sf::Texture> buttons_texture;
         sf::Sprite background;
         sf::Texture bg;
         sf::Music music;
