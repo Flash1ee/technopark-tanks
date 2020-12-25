@@ -261,7 +261,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
 
         }
-        if ((this_player->getCount() < LEFT_BOTS_TO_SPAWN_BOT) && (botBoss.size() == 0)) {
+        if ((this_player->getCount() < LEFT_BOTS_TO_SPAWN_BOT) && (botBoss.size() == 0) && !wictory) {
             botBoss.push_back(new BotBoss(m_level, OBJECT_IMAGE, sf::IntRect(178, 129, 13, 13), boss_position, 0.03,
                                           HP * 2, Direction::UP));
             sounds.stop_all();
@@ -612,6 +612,9 @@ int GameSession::Run(sf::IntRect pl_rect) {
                 }
                 for (int i = 0; i < all_bots.size(); i++) {
                     all_bots[i]->setHp(0);
+                }
+                for (int i = 0; i < botBoss.size(); i++) {
+                    botBoss[i]->setHp(0);
                 }
                 wictory = true;
             }
