@@ -42,6 +42,7 @@
 #define PAUSE_MUSIC_PATH "../resources/pause_music.ogg"
 #define MORTAL_PATH "../resources/mortal.ogg"
 #define CHOOSE_MUSIC_PATH "../resources/character.ogg"
+#define CHOOSE_MAP_MUSIC_PATH "../resources/ch_map.ogg"
 
 const inline sf::IntRect pl_rects [CHARACTER_COUNT] {
     {1, 2, 13, 13},

@@ -104,6 +104,7 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
             buttons_sprite[0].setPosition(300, 400);
             buttons_sprite[1].setPosition(1250, 400);
             buttons_sprite[1].setTextureRect(map_rects[1]);
+            music.openFromFile(CHOOSE_MAP_MUSIC_PATH);
             break;
         }
 
@@ -272,18 +273,22 @@ int Menu::show(sf::RenderWindow& window) {
                         }
                         if (currbutton == "Le Tank") {
                             Menu maps(3, window);
+                            maps.music.setVolume(200);
                             return maps.show(window) + TANK;
                         }
                         if (currbutton == "Kolobok Ivanich") {
                             Menu maps(3, window);
+                            maps.music.setVolume(200);
                             return maps.show(window) + IVAN;
                         }
                         if (currbutton == "Green bombass") {
                             Menu maps(3, window);
+                            maps.music.setVolume(200);
                             return maps.show(window) + KRIP;
                         }
                         if (currbutton == "EL PROBLEMA") {
                             Menu maps(3, window);
+                            maps.music.setVolume(200);
                             return maps.show(window) + CAR;
                         }
                         if (currbutton == "Standart") {
