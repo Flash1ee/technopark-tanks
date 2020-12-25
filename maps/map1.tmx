@@ -633,8 +633,8 @@
   </data>
  </layer>
  <objectgroup id="5" name="collision">
-  <object id="121" name="spawn1" x="169.477" y="59.159" width="16" height="16"/>
-  <object id="122" name="spawn2" x="217.705" y="56.9546" width="16" height="16"/>
+  <object id="121" name="spawn1" x="119.477" y="35.659" width="16" height="16"/>
+  <object id="122" name="spawn2" x="269.455" y="32.2046" width="16" height="16"/>
   <object id="124" name="player1" gid="1" x="250.636" y="379.818" width="16" height="16"/>
   <object id="125" name="player3" gid="1" x="132.818" y="381.273" width="16" height="16"/>
   <object id="126" name="player3" gid="5" x="248.727" y="41.0909" width="16" height="16"/>
@@ -692,12 +692,10 @@
   <object id="185" name="brick" gid="17" x="64" y="80" width="16" height="16"/>
   <object id="186" name="brick" gid="17" x="64" y="96" width="16" height="16"/>
   <object id="187" name="brick" gid="17" x="48" y="96" width="16" height="16"/>
-  <object id="188" name="brick" gid="17" x="96" y="48" width="16" height="16"/>
   <object id="189" name="brick" gid="17" x="96" y="64" width="16" height="16"/>
   <object id="190" name="brick" gid="17" x="96" y="80" width="16" height="16"/>
   <object id="191" name="brick" gid="17" x="96" y="96" width="16" height="16"/>
   <object id="192" name="brick" gid="17" x="96" y="208" width="16" height="16"/>
-  <object id="201" name="brick" gid="17" x="128" y="64" width="16" height="16"/>
   <object id="202" name="brick" gid="17" x="128" y="80" width="16" height="16"/>
   <object id="203" name="brick" gid="17" x="128" y="96" width="16" height="16"/>
   <object id="204" name="brick" gid="17" x="176" y="288" width="16" height="16"/>
@@ -752,13 +750,10 @@
   <object id="258" name="brick" gid="17" x="256" y="160" width="16" height="16"/>
   <object id="259" name="brick" gid="17" x="288" y="176" width="16" height="16"/>
   <object id="260" name="brick" gid="17" x="304" y="176" width="16" height="16"/>
-  <object id="261" name="brick" gid="17" x="240" y="64" width="16" height="16"/>
   <object id="262" name="brick" gid="17" x="240" y="80" width="16" height="16"/>
   <object id="263" name="brick" gid="17" x="240" y="96" width="16" height="16"/>
-  <object id="264" name="brick" gid="17" x="272" y="64" width="16" height="16"/>
   <object id="265" name="brick" gid="17" x="272" y="80" width="16" height="16"/>
   <object id="266" name="brick" gid="17" x="272" y="96" width="16" height="16"/>
-  <object id="267" name="brick" gid="17" x="272" y="48" width="16" height="16"/>
   <object id="268" name="brick" gid="17" x="352" y="368" width="16" height="16"/>
   <object id="269" name="brick" gid="17" x="352" y="352" width="16" height="16"/>
   <object id="270" name="brick" gid="17" x="320" y="368" width="16" height="16"/>
