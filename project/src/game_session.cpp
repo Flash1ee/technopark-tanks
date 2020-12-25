@@ -604,6 +604,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
             if (walls.base_enemy[0]->getHp() <= 0) {
                 if (win.GetTimer() == sf::Time::Zero) {
                     finish.pause();
+                    sounds.stop_all();
                     win.SetTimer(main_timer.getElapsedTime());
                 }
                 if (win.update(m_window, m_cam.view, main_timer.getElapsedTime())) {

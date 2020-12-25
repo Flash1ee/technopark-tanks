@@ -295,10 +295,13 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
     for (int i = 0; i < b.size(); i++) {
         if (getRect().intersects(b[i]->getRect()) && p.getHp() > 0 && !m_is_bot) {
             auto probability = rand() % 100;
-            if (probability < 20) {
-                this->play();
+            if (probability < 30) {
+                if (this->ricochet_sound.getStatus() != sf::Sound::Playing) {
+                    this->play();
+                }
             }
             else {
+                this->ricochet_sound.stop();
                 b[i]->setHp(b[i]->getHp() - 20);
             }
             m_life = 0;
