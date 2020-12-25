@@ -110,6 +110,8 @@ int GameSession::Run() {
     }
     std::cout << "here" << std::endl;
 
+    bool won = false;
+
     Statistic stats(m_window);
     Sound sounds;
     sounds.play(GAME_START);
@@ -513,6 +515,7 @@ int GameSession::Run() {
                 if (other_player.second->getHp() > 0 ) {
                     m_window.draw(other_player.second->getSprite());
                 } else {
+                    won = true;
                     if (win_time == sf::Time::Zero) {
                         finish.pause();
                         sounds.play(WIN_S);
@@ -520,11 +523,10 @@ int GameSession::Run() {
                     }
                     if (main_timer.getElapsedTime().asSeconds() - win_time.asSeconds() < 5) {
                         m_win.setPosition(m_window.getView().getCenter().x - 100, m_window.getView().getCenter().y - 51);
-                        m_window.draw(m_win);
+                        // m_window.draw(m_win);
                     } else {
                         return STOP_RUN;
                     }
-
                 }
             }
 
@@ -665,7 +667,7 @@ int GameSession::Run() {
                 if (destroy_time == sf::Time::Zero) {
                     destroy_time = main_timer.getElapsedTime();
                     sounds.play(FINISH);
-                    finish.play();
+                    // finish.play();
                 }
                 if (main_timer.getElapsedTime().asSeconds() - destroy_time.asSeconds() < 4) {
                     bots_left.setPosition(m_window.getView().getCenter().x - 120, m_window.getView().getCenter().y - 30);
@@ -689,6 +691,9 @@ int GameSession::Run() {
                     }
                     wictory = true;
                 }
+            }
+            if (won) {
+                m_window.draw(m_win);
             }
             m_window.display();
         }
