@@ -1,6 +1,5 @@
 #include "menu.h"
 
-// Menu::Menu(MenuSelector selector, sf::RenderWindow& window) {
 Menu::Menu(int selector, sf::RenderWindow& window) {
     if (!this->font.loadFromFile(FONT_PATH)) {
         throw std::exception();
@@ -22,7 +21,7 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
                 buttons[i].setColor(mainMenu[i].color);
                 buttons[i].setFont(font);
                 buttons[i].setString(mainMenu[i].text);
-                buttons[i].setPosition(100, 50 + height * (i));
+                buttons[i].setPosition(100, 130 + height * (i));
             }
             break;
         }
@@ -42,7 +41,7 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
                 buttons[i].setColor(gameMenu[i].color);
                 buttons[i].setFont(font);
                 buttons[i].setString(gameMenu[i].text);
-                buttons[i].setPosition(0, 50 + height * (i));
+                buttons[i].setPosition(100, 200 + height * (i));
             }
             break;
         }
@@ -63,6 +62,15 @@ Menu::Menu(int selector, sf::RenderWindow& window) {
                 buttons[i].setFont(font);
                 buttons[i].setString(charMenu[i].text);
                 buttons[i].setPosition(window.getSize().x / 2 - 100, 80 + height * (i));
+            }
+            this->buttons_texture.resize(1);
+            this->buttons_sprite.resize(CHARACTER_COUNT);
+            buttons_texture[0].loadFromFile(OBJECT_IMAGE);
+            for (int i = 0; i < buttons_sprite.size(); i++) {
+                buttons_sprite[i].setTexture(buttons_texture[0]);
+                buttons_sprite[i].setTextureRect(pl_rects[i]);
+                buttons_sprite[i].setPosition(buttons[i].getPosition().x - 200, buttons[i].getPosition().y - 40);
+                buttons_sprite[i].setScale(10, 10);
             }
             break;
         }
