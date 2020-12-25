@@ -805,6 +805,6 @@
   <object id="323" name="grass" gid="68" x="80" y="144" width="16" height="16"/>
   <object id="324" name="grass" gid="68" x="80" y="160" width="16" height="16"/>
   <object id="325" name="grass" gid="68" x="80" y="176" width="16" height="16"/>
-  <object id="326" name="boss" x="152.5" y="56.25" width="17.5" height="19.5"/>
+  <object id="326" name="boss" x="137.25" y="100.25" width="17.5" height="19.5"/>
  </objectgroup>
 </map>
