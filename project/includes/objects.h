@@ -305,6 +305,8 @@ class Player : public Tank {  //класс игрока
     void play_visability();
     void set_visability(bool action);
     bool get_visability();
+    void stop_visability();
+
 
 
 };

@@ -264,6 +264,8 @@ int GameSession::Run(sf::IntRect pl_rect) {
         if ((this_player->getCount() < LEFT_BOTS_TO_SPAWN_BOT) && (botBoss.size() == 0)) {
             botBoss.push_back(new BotBoss(m_level, OBJECT_IMAGE, sf::IntRect(178, 129, 13, 13), boss_position, 0.03,
                                           HP * 2, Direction::UP));
+            sounds.stop_all();
+            this_player->stop_visability();
             sounds.play(BOSS);
             boss_text.SetTimer(main_timer.getElapsedTime());
         }
@@ -589,11 +591,11 @@ int GameSession::Run(sf::IntRect pl_rect) {
 
             if (this_player->getCount() <= 0) {
                 if (!was_count) {
+                    sounds.stop_all();
                     finish.play();
                     sounds.play(FINISH);
                     destroy.SetTimer(main_timer.getElapsedTime());
                 }
-                sounds.stop_all();
                 destroy.update(m_window, main_timer.getElapsedTime());
                 was_count = true;
             }

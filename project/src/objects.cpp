@@ -293,7 +293,7 @@ void Bullet::checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, 
             }
         }
     for (int i = 0; i < b.size(); i++) {
-        if (getRect().intersects(b[i]->getRect()) && p.getHp() > 0) {
+        if (getRect().intersects(b[i]->getRect()) && p.getHp() > 0 && !m_is_bot) {
             auto probability = rand() % 100;
             if (probability < 20) {
                 this->play();
@@ -1249,7 +1249,6 @@ void Sound::play(sound_action action) {
             break;
         case BOSS:
             if (this->boss_sound.getStatus() != sf::Sound::Playing) {
-                this->boss_sound.setVolume(40);
                 this->boss_sound.play();
             }
             break;
@@ -1319,6 +1318,9 @@ void Bots::SetShootTime(float time) {
     
 float Bots::GetShootTime() {
     return shoot_time;
+}
+void Player::stop_visability() {
+    this->visability_sound.stop();
 }
 
 

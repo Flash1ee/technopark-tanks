@@ -633,8 +633,8 @@
   </data>
  </layer>
  <objectgroup id="5" name="collision">
-  <object id="121" name="spawn1" x="118.727" y="24.909" width="16" height="16"/>
-  <object id="122" name="spawn2" x="296.455" y="25.4546" width="16" height="16"/>
+  <object id="121" name="spawn1" x="127.227" y="21.409" width="16" height="16"/>
+  <object id="122" name="spawn2" x="217.705" y="56.9546" width="16" height="16"/>
   <object id="124" name="player1" gid="1" x="250.636" y="379.818" width="16" height="16"/>
   <object id="125" name="player3" gid="1" x="132.818" y="381.273" width="16" height="16"/>
   <object id="126" name="player3" gid="5" x="248.727" y="41.0909" width="16" height="16"/>
