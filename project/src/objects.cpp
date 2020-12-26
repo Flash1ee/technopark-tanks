@@ -1266,19 +1266,19 @@ bool Sound::MainSoundStopped() {
 }
 
 void Sound::stop_all() {
-    ricochet_sound.pause();
-    sound.pause();
-    background_sound.pause();
+    ricochet_sound.stop();
+    sound.stop();
+    background_sound.stop();
     brick_sound.stop();
-    explosion_sound.pause();
-    fire_sound.pause();
-    gameover_sound.pause();
-    gamestart_sound.pause();
-    steel_sound.pause();
-    finish_sound.pause();
-    visability_sound.pause();
-    ricochet_sound.pause();
-    boss_sound.pause();
+    explosion_sound.stop();
+    fire_sound.stop();
+    gameover_sound.stop();
+    gamestart_sound.stop();
+    steel_sound.stop();
+    finish_sound.stop();
+    visability_sound.stop();
+    ricochet_sound.stop();
+    boss_sound.stop();
 }
 
 int Wall::getHp() const {
