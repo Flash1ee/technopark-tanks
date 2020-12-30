@@ -187,7 +187,7 @@ int GameSession::Run(sf::IntRect pl_rect) {
         time /= TIME_AS_FPS;
 
 
-        if (times.asSeconds() > SPAWN_BOT_TIME && sounds.MainSoundStopped() && count_bots < COUNT_BOTS_TO_KILL && !wictory) {
+        if (times.asSeconds() > SPAWN_BOT_TIME && sounds.MainSoundStopped() && count_bots < 1 && !wictory) {
             for (int i = 0; i < 2; i++) {
                 size_t ind = 0;
                 if (i % 2) {
