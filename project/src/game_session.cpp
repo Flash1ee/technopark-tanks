@@ -33,7 +33,6 @@ GameSession::GameSession(std::string window_title, std::string& map_path,
 GameSession::~GameSession() {};
 
 void GameSession::WaitForOtherPlayers() {
-    // encapsulation error
     sf::Packet packet;
 
     while (true) {
