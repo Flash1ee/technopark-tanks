@@ -15,39 +15,49 @@ Client::Client(std::string str_ip, int port) {
     Client(sf::IpAddress(str_ip), port);
 }
 
-sf::Vector2f Client::connectToServer(std::string server_ip, int server_port) {
-    m_ip_adress = server_ip;
-    m_port = server_port;
+bool Client::connectToServer() {
+   m_socket = std::make_shared<sf::TcpSocket>();
+    //std::cout << m_ip_adress.toString() << " " << m_port << std::endl;
+    m_ip_adress = SERVER_IP;
+    m_port = PORT;
 
-    m_socket = new sf::TcpSocket;
-    PlayerAction new_player_msg;
-
-    if (m_socket->connect(m_ip_adress, m_port) == sf::Socket::Done) {
+    if (m_socket->connect(m_ip_adress, m_port) == sf::Socket::Done)
+    {
         std::cout << "connected!" << std::endl;
         m_socket->setBlocking(false);
-        sf::Packet packet;
+        // sf::Packet packet;
 
-        while (m_socket->receive(packet) != sf::Socket::Done) {
-        }
-        if (packet.getDataSize() > 0) {
-            packet >> new_player_msg;
-            m_id = new_player_msg.player_id;
+        // while (m_socket->receive(packet) != sf::Socket::Done) { }
+        // if (packet.getDataSize() > 0)
+        // {
+        //     PlayerAction new_player_msg;
+        //     packet >> new_player_msg;
+        //     m_user_id = new_player_msg.player_id;
 
-            std::cout << "My ID is " << m_id << std::endl;
-        } else {
-            std::cout << "Cant get my ID" << std::endl;
-            throw std::runtime_error("Can't get user ID\n");
-        }
+        //     std::cout << "My ID is " << m_id << std::endl;
+        // }
+        // else
+        // {
+        //     throw std::runtime_error("Can't get user ID\n");
+        // }
 
-    } else {
-        std::cout << "can not connect!" << std::endl;
+    }
+    else 
+    {
         throw std::runtime_error("Can't connect to server\n");
     }
 
-    return new_player_msg.position;
+    return true;
+
 }
 
-Client::~Client() {}
+Client::~Client() {
+//    m_socket->disconnect();
+//    if (m_socket != nullptr) {
+//        delete m_socket;
+//    }
+//    std::cout << "Client disconnected" << std::endl;
+}
 
 void Client::RunClient() {
     std::this_thread::sleep_for(std::chrono::seconds(5));
@@ -57,9 +67,13 @@ void Client::RunClient() {
 }
 
 bool Client::SendToServer(sf::Packet& packet) {
-
-    sf::Socket::Status status;
-    do {
+    sf::Socket::Status status = sf::Socket::Done;
+    do
+    {
+        if(status == sf::Socket::Partial)
+        {
+            std::cout << "SendToServer: Partial" << std::endl;
+        }
         status = m_socket->send(packet);
 
     } while (status == sf::Socket::Partial);
@@ -72,14 +86,8 @@ bool Client::SendToServer(sf::Packet& packet) {
 }
 
 bool Client::RecieveFromServer(sf::Packet& packet) {
-    sf::Socket::Status status;
-    do {
-        status = m_socket->receive(packet);
-    } while (status == sf::Socket::Partial);
 
-    if (status == sf::Socket::Done)
-        return true;
+    while (m_socket->receive(packet) != sf::Socket::Done) {}
 
-    else
-        return false;
+    return true;
 }

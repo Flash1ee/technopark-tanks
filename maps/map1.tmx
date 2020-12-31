@@ -636,7 +636,7 @@
   <object id="121" name="spawn1" x="119.477" y="35.659" width="16" height="16"/>
   <object id="122" name="spawn2" x="269.455" y="32.2046" width="16" height="16"/>
   <object id="124" name="player1" gid="1" x="250.636" y="379.818" width="16" height="16"/>
-  <object id="125" name="player3" gid="1" x="132.818" y="381.273" width="16" height="16"/>
+  <object id="125" name="player2" gid="1" x="132.818" y="381.273" width="16" height="16"/>
   <object id="126" name="player3" gid="5" x="248.727" y="41.0909" width="16" height="16"/>
   <object id="127" name="player4" gid="5" x="142" y="40.3636" width="16" height="16"/>
   <object id="129" name="wall_enemy" gid="42" x="208" y="32" width="16" height="16"/>

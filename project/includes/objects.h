@@ -241,11 +241,17 @@ public:
         ricochet.loadFromFile(RICOSCHET_SOUND);
         ricochet_sound.setBuffer(ricochet);
         };
+    int m_id;
     void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<BotBoss*> boss);
+    void move(float time, Player& p, std::vector<Bots*> b, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other);
     void moveBots(float time, Player& p, DestructibleWalls* walls, std::vector<BotBoss*> boss, std::vector<Bots*> b);
     void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls, std::vector<BotBoss*> boss);
     void checkCollisionsObjectBots(Player& p, DestructibleWalls* walls, std::vector<BotBoss*> boss, std::vector<Bots*> b);
     void checkCollisionsObject(DestructibleWalls* walls, Player& p);
+    void checkCollisionsObject(float time, Player &p, std::vector<Bots*> b, DestructibleWalls* walls);
+    void checkCollisionsObject(Player& p, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other);
+    void checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other);
+    void moveBots(float time, Player& p, DestructibleWalls* walls, std::map<int, std::shared_ptr<Player>> other);
     void play();
     // void sound();
     int getLife() const;
@@ -300,6 +306,7 @@ class Player : public Tank {  //класс игрока
             visability_sound.setBuffer(visability);
         };
     void checkCollisionsBots(std::vector<Bots*> b, std::vector<BotBoss*> boss);
+    void checkCollisionsPlayers(std::map<int, std::shared_ptr<Player>> other);
     int getCount() const;
     void setCount(int count);
     void play_visability();

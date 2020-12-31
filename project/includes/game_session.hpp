@@ -6,6 +6,7 @@
 
 class GameSession {
    public:
+    int m_user_id;
     GameSession() = delete;
     explicit GameSession(std::string window_title, std::string& map_path,
                          std::string& player_skin, bool is_multiplayer,
@@ -15,6 +16,9 @@ class GameSession {
 
     void WaitForOtherPlayers();
     int Run(sf::IntRect pl_rect);
+    int single_play(GameSession &game, sf::IntRect pl_rect);
+    int multi_play(GameSession &game, sf::IntRect pl_rect);
+
     // void RunGame();
 
    private:

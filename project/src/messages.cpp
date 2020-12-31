@@ -20,15 +20,23 @@ sf::Packet& operator>>(sf::Packet& packet, PlayerActionType& msg_type) {
 }
 
 sf::Packet& operator<<(sf::Packet& packet, const PlayerAction& message) {
-    int int_type = message.msg_type;
-    return packet << message.player_id << message.position << int_type;
+    int int_msg_type = message.msg_type;
+    int int_dir = static_cast<int>(message.direction);
+
+    return packet << message.player_id << message.position << int_dir << int_msg_type;
 }
 
 sf::Packet& operator>>(sf::Packet& packet, PlayerAction& message) {
-    int int_type;
+    int int_msg_type;
+    int int_dir;
+
     packet >> message.player_id >> message.position;
-    packet >> int_type;
-    message.msg_type = static_cast<PlayerActionType>(int_type);
+    packet >> int_dir;
+    packet >> int_msg_type;
+
+    message.msg_type = static_cast<PlayerActionType>(int_msg_type);
+    message.direction = static_cast<Direction>(int_dir);
+
     return packet;
 }
 
@@ -45,10 +53,13 @@ sf::Packet& operator>>(sf::Packet& packet, GameActionType& msg_type) {
     return packet;
 }
 
-sf::Packet& operator<<(sf::Packet& packet, const PlayerActionVector& msg_vec) {
-    packet << msg_vec.size;
-
-    for (auto& msg : msg_vec.actions) {
+sf::Packet& operator << (sf::Packet& packet, const PlayerActionVector& msg_vec)
+{
+    int size = msg_vec.actions.size();
+    packet << size;
+    
+    for(auto& msg : msg_vec.actions)
+    {
         packet << msg;
     }
 
